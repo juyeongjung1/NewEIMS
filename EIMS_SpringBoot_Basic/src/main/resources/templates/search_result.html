@@ -28,8 +28,7 @@
                     <thead class="table-light">
                         <tr>
                             <th>社員番号</th>
-                            <th>氏名</th>
-                            <th>カナ</th>
+                            <th>氏名 (カナ)</th>
                             <th>性別</th>
                             <th>部署名</th>
                         </tr>
@@ -39,10 +38,9 @@
                             <td th:text="${emp.empno}"></td>
                             <td>
                                 <a th:href="@{/detail/{id}(id=${emp.empno})}" 
-                                   th:text="${emp.lname} + ' ' + ${emp.fname}"
+                                   th:text="${emp.lname} + ' ' + ${emp.fname} + ' (' + ${emp.lkana} + ' ' + ${emp.fkana} + ')'"
                                    class="text-decoration-none fw-bold"></a>
                             </td>
-                            <td th:text="${emp.lkana} + ' ' + ${emp.fkana}"></td>
                             <td th:text="${emp.gender == 1 ? '男性' : '女性'}"></td>
                             <td th:text="${emp.department.deptname}"></td>
                         </tr>
