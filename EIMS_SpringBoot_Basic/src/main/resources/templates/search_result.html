@@ -13,28 +13,30 @@
         </div>
     </nav>
     <div class="container">
-        <h2 class="mb-4">検索結果</h2>
+        <h2 class="mb-4">検索結果一覧</h2>
 
-        <!-- 0件制御 -->
-        <div th:if="${#lists.isEmpty(employees)}" class="alert alert-info shadow-sm" role="alert">
-            該当する社員は存在しません。
+        <!-- 検索結果が 0 件の場合のメッセージ表示 -->
+        <div th:if="${#lists.isEmpty(employees)}" class="alert alert-warning shadow-sm" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            該当する社員は存在しませんでした。
         </div>
 
-        <div th:if="${!#lists.isEmpty(employees)}" class="card shadow-sm">
+        <!-- 検索結果が存在する場合のみテーブルを表示 -->
+        <div th:unless="${#lists.isEmpty(employees)}" class="card shadow-sm">
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
                     <thead class="table-light">
                         <tr>
                             <th>社員番号</th>
-                            <th>氏名</th>
-                            <th>部署</th>
+                            <th>氏名（フリガナ）</th>
+                            <th>部署名</th>
                             <th class="text-center">操作</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="emp : ${employees}">
                             <td th:text="${emp.empno}"></td>
-                            <td th:text="${emp.lname} + ' ' + ${emp.fname}"></td>
+                            <td th:text="${emp.lname} + ' ' + ${emp.fname} + '(' + ${emp.lkana} + ' ' + ${emp.fkana} + ')'"></td>
                             <td th:text="${emp.department.deptname}"></td>
                             <td class="text-center">
                                 <a th:href="@{/detail/{id}(id=${emp.empno})}" class="btn btn-sm btn-outline-primary">詳細</a>
