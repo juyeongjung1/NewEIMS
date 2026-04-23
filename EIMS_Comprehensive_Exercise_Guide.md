@@ -1,8 +1,63 @@
-# 総合演習ガイド：社員情報管理システム (EIMS)
+<style>
+  @media print {
+    * {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    @page {
+      margin-top: 15mm;
+      margin-bottom: 15mm;
+      @bottom-center {
+        content: "- " counter(page) " -";
+        font-family: sans-serif;
+        font-size: 10pt;
+        color: #666;
+      }
+    }
+  }
+</style>
+
+<div align="center" style="margin-top: 100px; margin-bottom: 200px;">
+  <img src="images/trainocate_logo.png" width="350">
+  <br><br><br>
+  <h1 style="border: none; font-size: 2.5em; color: #1a365d;">アプリ総合演習ガイド</h1>
+  <h2 style="color: #666; font-weight: 300;">社員情報管理システム (EIMS)</h2>
+  <br><br><br><br><br><br>
+</div>
+
+<div style="page-break-before: always;"></div>
+
+## 目次
+
+- 1\. 演習概要 ...... p.3
+- 1.1 検索・表示機能の仕様定義 ...... p.3
+  - 1.1.1 検索機能 ...... p.3
+  - 1.1.2 検索結果一覧画面および社員詳細画面 ...... p.4
+  - 1.1.3 検索・表示における実装方針と簡略化指針 ...... p.5
+- 1.2 社員情報の登録機能 ...... p.6
+  - 1.2.1 登録機能 ...... p.6
+  - 1.2.2 登録画面・登録確認画面・登録完了画面 ...... p.7
+  - 1.2.3 登録における実装方針と簡略化指針 ...... p.8
+- 1.3 社員情報の更新機能 ...... p.9
+- 1.4 社員情報の削除機能 ...... p.9
+- 2\. 演習の進め方 ...... p.10
+- 3\. 画面遷移図 ...... p.11
+- 4\. データベース仕様 ...... p.12
+- 5\. ユースケース図 ...... p.13
+- 6\. 設計レベルクラス図 ...... p.14
+
+<div style="page-break-before: always;"></div>
+
+<div align="center" style="margin-bottom: 30px;">
+  <h1 style="border: none; font-size: 1.8em; color: #1a365d; margin-bottom: 5px;">アプリ総合演習ガイド</h1>
+  <span style="font-size: 1.2em; color: #666;">社員情報管理システム (EIMS)</span>
+</div>
 
 ## 1. 演習概要
 この演習では、社員情報を管理する Web ベースのアプリケーションを構築します。
 システム名は **EIMS (Employee Information Management System)** です。
+
+---
 
 ### 1.1 検索・表示機能の仕様定義
 人事部の管理者が特定の社員を特定し、その詳細情報を確認するための機能群です。
@@ -23,6 +78,8 @@
 ##### 【共通の挙動ルール】
 - **入力値の検証**: キーワードが null または空文字の場合は、遷移を行わず検索画面に留まること。
 
+<div style="page-break-before: always;"></div>
+
 #### 1.1.2 検索結果一覧画面および社員詳細画面
 検索の結果得られた情報を、以下のルールに従って表示する。
 
@@ -41,6 +98,8 @@
 - **共通の表示ルール**:
     - 氏名、カナを表示する際は、名字と名前の間を**半角スペース**で連結すること。
 
+<div style="page-break-before: always;"></div>
+
 #### 1.1.3 検索・表示における実装方針と簡略化指針
 チームの進捗状況に合わせ、以下のいずれかの方針を選択すること。
 
@@ -50,6 +109,8 @@
 | **0件時の制御** | メッセージ表示による分岐処理を実装 | 特になし（空の表を表示） |
 | **氏名検索範囲** | **氏** または **名** の 2 項目 OR 検索 | **氏（漢字）** のみの単一項目検索 |
 | **部署検索方式** | **部署名** をプルダウンで選択 | **部署コード** をテキストで入力 |
+
+<div style="page-break-before: always;"></div>
 
 ---
 
@@ -74,6 +135,8 @@
 - **社員番号**: データベースの自動採番機能（AUTO_INCREMENT）を使用する。入力項目には含めない。
 - **バリデーションエラー時**: 登録画面に戻り、エラーメッセージを表示する。入力済みの値は保持すること。
 
+<div style="page-break-before: always;"></div>
+
 #### 1.2.2 登録画面・登録確認画面・登録完了画面
 登録プロセスにおける各画面の仕様を以下に定義する。
 
@@ -90,6 +153,8 @@
     - **「続けて登録する」ボタン** および **「メニューに戻る」ボタン** を配置すること。
     - 「続けて登録する」ボタン押下時は、全項目が空欄の登録画面を表示すること。
 
+<div style="page-break-before: always;"></div>
+
 #### 1.2.3 登録における実装方針と簡略化指針
 チームの進捗状況に合わせ、以下のいずれかの方針を選択すること。
 
@@ -102,6 +167,8 @@
 | **部署の入力方式** | セレクトメニュー（部署名を選択） | テキスト入力（部署コードを入力） |
 | **バリデーション** | 全項目の入力チェックを実装 | バリデーションなし |
 
+<div style="page-break-before: always;"></div>
+
 ---
 
 ### 1.3 社員情報の更新機能
@@ -112,10 +179,32 @@
 ### 1.4 社員情報の削除機能
 （※後のステップで定義）
 
+<div style="page-break-before: always;"></div>
+
 ---
 
 ## 2. 演習の進め方
-（原本 Page 4 に準拠）
+以下の手順に従い、システムを構築すること。
+
+| 順序 | 作業 | 説明 | 成果物 |
+|---|---|---|---|
+| 1 | 要件定義の内容確認 | 各種ドキュメント（ユースケース、UIフロー等）を元に要件を理解する。 | （配布資料を利用） |
+| 2 | 設計の内容確認 | 設計レベルのクラス図を理解する。 | （配布資料を利用） |
+| 3 | プログラミング | 設計モデルどおりにコーディングする。 | ソースコード |
+| 4 | テスト | テストケースに基づきテストを行う。 | テスト結果報告書 |
+
+各工程で利用・作成する成果物は以下の通りです。
+
+| 工程 | 成果物 | 検索 | 登録 | 削除 | 変更 |
+|---|---|:---:|:---:|:---:|:---:|
+| 要件定義 | ユースケース図 / 仕様書 / UIフロー / 画面レイアウト | ※ | ※ | ※ | ※ |
+| 分析・設計 | クラス図（分析・設計） / シーケンス図 | ※ | ※ | ※ | ※ |
+| 実装 | ソースコード | ○ | ○ | ○ | ○ |
+| テスト | テストケース仕様書.xls | ○ | ○ | ○ | ○ |
+
+※：提供資料を利用。 ○：自身で作成。
+
+<div style="page-break-before: always;"></div>
 
 ---
 
@@ -143,4 +232,101 @@ flowchart TD
     UI_D -->|戻る| UI1
     UI3 -->|検索画面へ戻る| UI2
     UI6 -->|メニューへ戻る| UI1
+```
+
+<div style="page-break-before: always;"></div>
+
+---
+
+## 4. データベース仕様
+
+### 4.1 テーブルの関係性（実体関連図）
+```mermaid
+erDiagram
+    部署 ||--o{ 社員 : "所属"
+```
+
+### 4.2 DBレイアウト
+
+#### 【部署情報】(department)
+| Field | Type | Null | Key | 説明 |
+|---|---|---|---|---|
+| deptno | INTEGER | NOT NULL | PRI | 部署コード |
+| deptname | VARCHAR(10) | NOT NULL | | 部署名 |
+
+#### 【社員情報】(employee)
+| Field | Type | Null | Key | 説明 |
+|---|---|---|---|---|
+| empno | INTEGER | NOT NULL | PRI | 社員番号（自動採番） |
+| lname | VARCHAR(20) | NOT NULL | | 氏 |
+| fname | VARCHAR(20) | NOT NULL | | 名 |
+| lkana | VARCHAR(50) | NOT NULL | | 氏（カナ） |
+| fkana | VARCHAR(50) | NOT NULL | | 名（カナ） |
+| password | VARCHAR(30) | NOT NULL | | パスワード |
+| gender | INTEGER | NOT NULL | | 性別（1:男 2:女） |
+| deptno | INTEGER | NOT NULL | FOR | 部署コード |
+
+<div style="page-break-before: always;"></div>
+
+---
+
+## 5. ユースケース図
+```mermaid
+flowchart LR
+    管理者((人事部管理者))
+    
+    subgraph システム境界 [EIMS Web]
+        UC1([U001: 社員情報を検索する])
+        UC2([U002: 社員情報を登録する])
+        UC3([U003: 社員情報を削除する])
+        UC4([U004: 社員情報を変更する])
+    end
+    
+    DB[(データベース)]
+    
+    管理者 --- UC1
+    管理者 --- UC2
+    管理者 --- UC3
+    管理者 --- UC4
+    
+    UC1 --- DB
+    UC2 --- DB
+    UC3 --- DB
+    UC4 --- DB
+    
+    UC3 -.->|<<包含>>| UC1
+    UC4 -.->|<<包含>>| UC1
+```
+
+<div style="page-break-before: always;"></div>
+
+---
+
+## 6. 設計レベルクラス図
+```mermaid
+classDiagram
+    class EmployeeController {
+        <<コントローラ>>
+        +index() 文字列
+        +showInputPage() 文字列
+        +confirmRegistration() 文字列
+        +saveEmployee() 文字列
+    }
+    class EmployeeService {
+        <<インターフェース>>
+        +saveEmployee() 社員
+    }
+    class EmployeeServiceImpl {
+        <<サービス実装>>
+    }
+    class EmployeeForm {
+        <<フォーム>>
+    }
+    class Employee {
+        <<エンティティ>>
+    }
+    
+    EmployeeController -- 使用 --> EmployeeService
+    EmployeeServiceImpl ..|> EmployeeService : 実現
+    EmployeeController ..> EmployeeForm : 参照
 ```
