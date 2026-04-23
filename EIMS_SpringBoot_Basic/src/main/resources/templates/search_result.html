@@ -30,17 +30,17 @@
                             <th>社員番号</th>
                             <th>氏名（フリガナ）</th>
                             <th>部署名</th>
-                            <th class="text-center">操作</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr th:each="emp : ${employees}">
                             <td th:text="${emp.empno}"></td>
-                            <td th:text="${emp.lname} + ' ' + ${emp.fname} + '(' + ${emp.lkana} + ' ' + ${emp.fkana} + ')'"></td>
-                            <td th:text="${emp.department.deptname}"></td>
-                            <td class="text-center">
-                                <a th:href="@{/detail/{id}(id=${emp.empno})}" class="btn btn-sm btn-outline-primary">詳細</a>
+                            <td>
+                                <a th:href="@{/detail/{id}(id=${emp.empno})}" 
+                                   th:text="${emp.lname} + ' ' + ${emp.fname} + '(' + ${emp.lkana} + ' ' + ${emp.fkana} + ')'"
+                                   class="text-decoration-none fw-bold"></a>
                             </td>
+                            <td th:text="${emp.department.deptname}"></td>
                         </tr>
                     </tbody>
                 </table>
