@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<!--
+  トップページ。
+  ここから検索画面や登録画面へ遷移します。
+-->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Bootstrap CSSの読み込み -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <title>EIMS Web トップページ</title>
+    <style>
+        .list-group-item {
+            color: #007bff; /* リンクを青色に設定 */
+            text-decoration: none;
+        }
+        .list-group-item:hover {
+            text-decoration: underline; /* ホバー時に下線を表示 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">EIMS Web トップページ</h1>
+        <h2 class="mb-3">メニュー</h2>
+        <div class="list-group">
+            <!-- 検索画面へのリンク -->
+            <h3><a th:href="@{/search}" class="list-group-item list-group-item-action">■社員情報検索</a></h3>
+            <!-- 新規登録画面へのリンク -->
+            <h3><a th:href="@{/input}" class="list-group-item list-group-item-action">■社員情報登録</a></h3>
+        </div>
+    </div>
+    <!-- Bootstrap JSと依存関係の読み込み -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

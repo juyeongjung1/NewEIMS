@@ -1,0 +1,39 @@
+<!-- input_complete.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登録完了 - EIMS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-dark bg-dark shadow-sm mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold" th:href="@{/}">EIMS</a>
+        </div>
+    </nav>
+    <div class="container text-center py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-sm p-4">
+                    <div class="mb-4">
+                        <div class="display-1 text-success"><i class="bi bi-check-circle"></i></div>
+                        <h2 class="mt-3">登録完了</h2>
+                    </div>
+                    <p class="mb-4 text-muted">以下の社員情報を登録しました。</p>
+                    <div class="bg-light p-3 rounded mb-4 text-start">
+                        <ul class="list-unstyled mb-0">
+                            <li><strong>社員番号:</strong> <span th:text="${employee.empno}"></span></li>
+                            <li><strong>氏名:</strong> <span th:text="${employee.lname} + ' ' + ${employee.fname}"></span></li>
+                        </ul>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <a th:href="@{/}" class="btn btn-primary">メニューに戻る</a>
+                        <a th:href="@{/employeeList}" class="btn btn-outline-secondary">社員一覧へ</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

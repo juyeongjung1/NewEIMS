@@ -1,0 +1,43 @@
+<!-- delete_confirm.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>削除確認 - EIMS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-dark bg-dark shadow-sm mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold" th:href="@{/}">EIMS</a>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h2 class="mb-4">社員削除の確認</h2>
+                <div class="alert alert-danger shadow-sm mb-4">以下の社員情報を完全に削除します。よろしいですか？</div>
+                
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body p-4 text-center">
+                        <div class="mb-4">
+                            <span class="text-muted small">社員番号: </span>
+                            <span class="h4 fw-bold" th:text="${employee.empno}"></span>
+                        </div>
+                        <div class="h3 mb-2" th:text="${employee.lname} + ' ' + ${employee.fname}"></div>
+                        <div class="text-muted" th:text="${employee.department.deptname}"></div>
+                    </div>
+                    
+                    <div class="card-footer bg-white py-3 px-4 d-flex justify-content-center gap-3">
+                        <a th:href="@{/detail/{id}(id=${employee.empno})}" class="btn btn-outline-secondary px-4">キャンセル</a>
+                        <form th:action="@{/deleteEmployee}" method="post">
+                            <input type="hidden" name="empno" th:value="${employee.empno}">
+                            <button type="submit" class="btn btn-danger px-4">削除を実行する</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

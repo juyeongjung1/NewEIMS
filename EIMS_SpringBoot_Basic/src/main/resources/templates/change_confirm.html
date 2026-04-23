@@ -1,0 +1,71 @@
+<!-- change_confirm.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>変更内容確認 - EIMS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-dark bg-dark shadow-sm mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold" th:href="@{/}">EIMS</a>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h2 class="mb-4">変更内容の確認</h2>
+                <div class="alert alert-warning shadow-sm mb-4">社員情報を以下の内容で更新します。よろしいですか？</div>
+                
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body p-4">
+                        <table class="table table-bordered align-middle mb-0">
+                            <colgroup>
+                                <col style="width: 30%; background-color: #f8f9fa;">
+                                <col style="width: 70%;">
+                            </colgroup>
+                            <tr><th class="py-2 px-3">社員番号</th><td class="py-2 px-3 fw-bold" th:text="${employeeForm.empno}"></td></tr>
+                            <tr><th class="py-2 px-3">氏名</th><td class="py-2 px-3" th:text="${employeeForm.lname} + ' ' + ${employeeForm.fname}"></td></tr>
+                            <tr><th class="py-2 px-3">氏名（カナ）</th><td class="py-2 px-3" th:text="${employeeForm.lkana} + ' ' + ${employeeForm.fkana}"></td></tr>
+                            <tr><th class="py-2 px-3">パスワード</th><td class="py-2 px-3">********（表示されません）</td></tr>
+                            <tr><th class="py-2 px-3">性別</th><td class="py-2 px-3" th:text="${employeeForm.gender == 1 ? '男性' : '女性'}"></td></tr>
+                            <tr><th class="py-2 px-3">所属部署</th><td class="py-2 px-3" th:text="${department.deptname}"></td></tr>
+                        </table>
+                    </div>
+                    
+                    <div class="card-footer bg-white py-3 px-4 text-center">
+                        <div class="d-flex justify-content-center gap-3">
+                            <!-- 戻る用のフォーム -->
+                            <form th:action="@{/changeInput/{id}(id=${employeeForm.empno})}" th:object="${employeeForm}" method="post">
+                                <input type="hidden" th:field="*{empno}">
+                                <input type="hidden" th:field="*{lname}">
+                                <input type="hidden" th:field="*{fname}">
+                                <input type="hidden" th:field="*{lkana}">
+                                <input type="hidden" th:field="*{fkana}">
+                                <input type="hidden" th:field="*{password}">
+                                <input type="hidden" th:field="*{gender}">
+                                <input type="hidden" th:field="*{deptno}">
+                                <button type="submit" class="btn btn-outline-secondary px-4">修正する</button>
+                            </form>
+
+                            <!-- 保存用のフォーム -->
+                            <form th:action="@{/changeEmployee}" th:object="${employeeForm}" method="post">
+                                <input type="hidden" th:field="*{empno}">
+                                <input type="hidden" th:field="*{lname}">
+                                <input type="hidden" th:field="*{fname}">
+                                <input type="hidden" th:field="*{lkana}">
+                                <input type="hidden" th:field="*{fkana}">
+                                <input type="hidden" th:field="*{password}">
+                                <input type="hidden" th:field="*{gender}">
+                                <input type="hidden" th:field="*{deptno}">
+                                <button type="submit" class="btn btn-warning px-4 fw-bold">更新を確定する</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

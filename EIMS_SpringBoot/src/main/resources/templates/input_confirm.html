@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!--
+  入力内容の確認ページ。
+  ユーザーが入力した内容を表示し、問題なければ登録処理を行います。
+-->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>社員情報登録確認</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">社員情報登録確認</h1>
+        <p>以下の内容で社員情報を登録しますか？</p>
+        <!-- 確定ボタンで登録処理を行う -->
+        <form th:action="@{/saveEmployee}" th:object="${employeeForm}" method="post" class="mt-3">
+            <table class="table table-bordered">
+                <tr>
+                    <td>氏</td>
+                    <td><p th:text="*{lname}"></p></td>
+                </tr>
+                <tr>
+                    <td>名</td>
+                    <td><p th:text="*{fname}"></p></td>
+                </tr>
+                <tr>
+                    <td>氏（カナ）</td>
+                    <td><p th:text="*{lkana}"></p></td>
+                </tr>
+                <tr>
+                    <td>名（カナ）</td>
+                    <td><p th:text="*{fkana}"></p></td>
+                </tr>
+                <tr>
+                    <td>性別</td>
+                    <td><p th:text="*{gender == 1 ? '男性' : gender == 2 ? '女性' : '未選択'}"></p></td>
+                </tr>
+                <tr>
+                    <td>部署名</td>
+                    <td>
+                        <p th:text="${department != null} ? ${department.deptname} : '未選択'"></p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>パスワード</td>
+                    <td><p th:text="*{'●'.repeat(password.length)}"></p></td>
+                </tr>
+            </table>
+            <div class="form-group row">
+                <div class="col-sm-10 offset-sm-2">
+                    <button type="submit" class="btn btn-primary">登録確定</button>
+                </div>
+            </div>
+            <!-- 確認画面ではフォーム値が失われないよう hidden に保持 -->
+            <input type="hidden" th:field="*{lname}" />
+            <input type="hidden" th:field="*{fname}" />
+            <input type="hidden" th:field="*{lkana}" />
+            <input type="hidden" th:field="*{fkana}" />
+            <input type="hidden" th:field="*{gender}" />
+            <input type="hidden" th:field="*{deptno}" />
+            <input type="hidden" th:field="*{password}" />
+        </form>
+        <form th:action="@{/input}" method="get" class="mt-2">
+            <div class="form-group row">
+                <div class="col-sm-10 offset-sm-2">
+                    <button type="submit" class="btn btn-danger">取消</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title>書籍詳細</title>
+</head>
+<body>
+    <main layout:fragment="content">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <h2 class="mb-4">書籍詳細</h2>
+                
+                <!-- table-bordered: 格子状の枠線を引く -->
+                <table class="table table-bordered shadow-sm mb-4">
+                    <tbody>
+                        <tr>
+                            <!-- bg-light: セルの背景を薄いグレーにする、w-25: 幅を25%にする -->
+                            <th class="bg-light w-25">ID</th>
+                            <td th:text="${book.id}"></td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light">書籍名</th>
+                            <td th:text="${book.title}" class="fw-bold"></td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light">著者名</th>
+                            <td th:text="${book.author}"></td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light">価格</th>
+                            <td th:text="${book.price} + ' 円'"></td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light">ジャンル名</th>
+                            <td th:text="${book.genre != null ? book.genre.name : '（未設定）'}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- d-flex: ボタンを横並びにする、gap-2: ボタン間の隙間 -->
+                <div class="d-flex gap-2 align-items-center">
+                    <a th:href="@{/book/list}" class="btn btn-secondary">一覧に戻る</a>
+                    
+                    <!-- 更新画面への遷移（GET） -->
+                    <!-- d-inline: フォームをブロック要素からインライン要素にし、横並びを崩さないようにする -->
+                    <form th:action="@{/book/update/} + ${book.id}" method="get" class="d-inline">
+                        <button type="submit" class="btn btn-success">更新</button>
+                    </form>
+                    
+                    <!-- 削除処理の実行（POST推奨） -->
+                    <form th:action="@{/book/delete/} + ${book.id}" method="post" class="d-inline" onsubmit="return confirm('本当に削除しますか？');">
+                        <button type="submit" class="btn btn-danger">削除</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

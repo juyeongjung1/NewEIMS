@@ -1,0 +1,60 @@
+<!-- employee_detail.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>社員詳細 - EIMS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-dark bg-dark shadow-sm mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold" th:href="@{/}">EIMS</a>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <h2 class="mb-4">社員詳細</h2>
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body p-4">
+                        <table class="table table-bordered align-middle">
+                            <colgroup>
+                                <col style="width: 30%; background-color: #f8f9fa;">
+                                <col style="width: 70%;">
+                            </colgroup>
+                            <tr>
+                                <th class="py-3 px-4">社員番号</th>
+                                <td class="py-3 px-4 fw-bold" th:text="${employee.empno}"></td>
+                            </tr>
+                            <tr>
+                                <th class="py-3 px-4">氏名</th>
+                                <td class="py-3 px-4" th:text="${employee.lname} + ' ' + ${employee.fname}"></td>
+                            </tr>
+                            <tr>
+                                <th class="py-3 px-4">氏名（カナ）</th>
+                                <td class="py-3 px-4" th:text="${employee.lkana} + ' ' + ${employee.fkana}"></td>
+                            </tr>
+                            <tr>
+                                <th class="py-3 px-4">性別</th>
+                                <td class="py-3 px-4" th:text="${employee.gender == 1 ? '男性' : '女性'}"></td>
+                            </tr>
+                            <tr>
+                                <th class="py-3 px-4">所属部署</th>
+                                <td class="py-3 px-4" th:text="${employee.department.deptname}"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="card-footer bg-white py-3 px-4 d-flex justify-content-between">
+                        <a th:href="@{/employeeList}" class="btn btn-outline-secondary">一覧に戻る</a>
+                        <div>
+                            <a th:href="@{/changeInput/{id}(id=${employee.empno})}" class="btn btn-warning me-2">情報を変更する</a>
+                            <a th:href="@{/deleteConfirm/{id}(id=${employee.empno})}" class="btn btn-danger">削除する</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

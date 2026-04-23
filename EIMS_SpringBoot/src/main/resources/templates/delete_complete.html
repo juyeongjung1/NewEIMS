@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!--
+  削除完了ページ。
+  ここでは削除した社員情報を表示し、トップページへ戻るリンクのみ提供します。
+-->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>社員情報削除完了</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">社員情報削除完了</h1>
+          <p>以下の社員情報を削除しました。</p>
+        <form th:action="@{/input}" th:object="${employeeForm}" class="mt-3">
+            <table class="table table-bordered">
+                <tr>
+                    <td>社員番号</td>
+                    <td><p th:text="*{empno}"></p></td>
+                </tr>
+                <tr>
+                    <td>氏</td>
+                    <td><p th:text="*{lname}"></p></td>
+                </tr>
+                <tr>
+                    <td>名</td>
+                    <td><p th:text="*{fname}"></p></td>
+                </tr>
+                <tr>
+                    <td>氏（カナ）</td>
+                    <td><p th:text="*{lkana}"></p></td>
+                </tr>
+                <tr>
+                    <td>名（カナ）</td>
+                    <td><p th:text="*{fkana}"></p></td>
+                </tr>
+                <tr>
+                    <td>性別</td>
+                    <td><p th:text="*{gender == 1 ? '男性' : gender == 2 ? '女性' : '未選択'}"></p></td>
+                </tr>
+                <tr>
+                    <td>部署名</td>
+                    <td>
+                        <p th:text="${department != null} ? ${department.deptname} : '未選択'"></p>
+                    </td>
+                </tr>
+                
+            </table>
+            <div class="form-group row">
+                <div class="col-sm-10 offset-sm-2">
+                    <a th:href="@{/}" class="btn btn-secondary">トップページに戻る</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

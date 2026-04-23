@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title>書籍一覧</title>
+</head>
+<body>
+    <main layout:fragment="content">
+        <h2 class="mb-4">書籍一覧</h2>
+        <p>登録されている書籍の一覧です。書籍名をクリックすると詳細を確認できます。</p>
+
+        <!-- 【課題6.1追加】 検索結果が存在する場合のみテーブルを表示 -->
+        <!-- table-responsive: 横幅が狭い時にスクロールできるようにする -->
+        <div class="table-responsive" th:if="${!#lists.isEmpty(books)}">
+            <!-- table: テーブル基本、table-striped: 縞模様、table-hover: ホバー時に行を強調、align-middle: セル内の中央揃え -->
+            <table class="table table-striped table-hover align-middle">
+                <!-- table-dark: ヘッダーを黒背景にする -->
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>書籍名</th>
+                        <th>著者名</th>
+                        <th>価格</th>
+                        <th>ジャンル名</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="book : ${books}">
+                        <td th:text="${book.id}"></td>
+                        <td>
+                            <!-- fw-bold: 太字、text-decoration-none: リンクの下線を消す -->
+                            <a th:href="@{/book/detail/} + ${book.id}" th:text="${book.title}" class="fw-bold text-decoration-none"></a>
+                        </td>
+                        <td th:text="${book.author}"></td>
+                        <td th:text="${book.price} + ' 円'"></td>
+                        <td th:text="${book.genre != null ? book.genre.name : '不明'}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 【課題6.1追加】 検索結果が0件の場合のメッセージ表示 -->
+        <!-- alert-info: 青色の情報通知スタイル -->
+        <div th:if="${#lists.isEmpty(books)}" class="alert alert-info">
+            登録されている書籍はありません。
+        </div>
+
+        <div class="mt-4">
+            <a th:href="@{/book/index}" class="btn btn-secondary">メニューに戻る</a>
+        </div>
+    </main>
+</body>
+</html>

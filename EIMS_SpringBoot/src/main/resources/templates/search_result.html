@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<!--
+  検索結果一覧ページ。
+  検索条件に一致した社員を表形式で表示します。
+-->
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Search Results</title>
+	<!-- Bootstrap CSSの読み込み -->
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+	<style>
+
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<h1>検索結果</h1>
+                <div class="button-group mb-3">
+                        <!-- 検索画面とトップへ戻るリンク -->
+                        <a th:href="@{/search}" class="btn btn-success">検索画面に戻る</a>
+                        <a th:href="@{/}" class="btn btn-secondary">トップページに戻る</a>
+                </div>
+                <div th:if="${employees.size() > 0}">
+                        <!-- 件数を表示 -->
+                        <h2 th:text="'検索件数：' + ${employees.size()} + '件'"></h2>
+                        <div class="table-responsive">
+                                <table class="table table-bordered">
+					<thead class="text-center">
+						<tr>
+							<th>社員番号</th>
+							<th>氏名（フリガナ）</th>
+							<th>部署名</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+                                                <!-- 検索結果を1行ずつ表示 -->
+                                                <tr th:each="employee : ${employees}">
+                                                        <td th:text="${employee.empno}"></td>
+                                                        <td>
+                                                                <span th:text="${employee.lname} + ' ' + ${employee.fname}"></span>
+                                                                <span th:text="'（' + ${employee.lkana} + ' ' + ${employee.fkana} + '）'"></span>
+                                                        </td>
+                                                        <td th:text="${employee.department.deptname}"></td>
+                                                        <td class="text-center">
+                                                                <div class="btn-group" role="group">
+                                <!-- 変更ボタン -->
+                                <form th:action="@{/changeInput/}+ ${employee.empno}" method="get" style="display:inline;">
+                                        <button type="submit" class="btn btn-primary">変更</button>
+                                </form>
+                                <!-- 削除ボタン -->
+                                <form th:action="@{/deleteConfirm/}+ ${employee.empno}" method="get" style="display:inline;">
+                                                                        <button type="submit" class="btn btn-danger">削除</button>
+                                </form>
+                                                                </div>
+                                                        </td>
+                                                </tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div th:if="${employees.size() == 0}">
+			<h2>該当する社員は存在しませんでした。</h2>
+		</div>
+		<div class="button-group mb-3">
+			<a th:href="@{/search}" class="btn btn-success">検索画面に戻る</a>
+			<a th:href="@{/}" class="btn btn-secondary">トップページに戻る</a>
+		</div>
+	</div>
+
+	<!-- Bootstrap JSと依存関係の読み込み -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title>登録・更新完了</title>
+</head>
+<body>
+    <main layout:fragment="content">
+        <h2 class="mb-4">処理完了</h2>
+        <!-- alert-success: 緑色の成功通知スタイル -->
+        <div class="alert alert-success">
+            <p class="mb-0">以下の内容で書籍データを保存しました。</p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <!-- table-bordered: 格子状の枠線を引く、shadow-sm: 軽い影 -->
+                <table class="table table-bordered shadow-sm">
+                    <tbody>
+                        <tr>
+                            <th class="bg-light w-25">ID</th>
+                            <td th:text="${book.id}"></td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light">書籍名</th>
+                            <td th:text="${book.title}" class="fw-bold"></td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light">著者名</th>
+                            <td th:text="${book.author}"></td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light">価格</th>
+                            <td th:text="${book.price} + ' 円'"></td>
+                        </tr>
+                        <tr>
+                            <th class="bg-light">ジャンル名</th>
+                            <td th:text="${book.genre != null ? book.genre.name : '未設定'}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- text-center: 中身を中央寄せにする -->
+                <div class="mt-4 text-center">
+                    <!-- px-4: 左右のパディングを大きく取る -->
+                    <a th:href="@{/book/index}" class="btn btn-primary px-4">メニューに戻る</a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

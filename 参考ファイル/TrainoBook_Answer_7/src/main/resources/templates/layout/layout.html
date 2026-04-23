@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrainoBook</title>
+    <!-- Bootstrap CSS (CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light"> <!-- bg-light: 画面全体の背景を薄いグレーに設定 -->
+    <!-- Bootstrap の Navbar を利用してヘッダーを構築 -->
+    <header>
+        <!-- navbar: ナビゲーションバーの基本、navbar-expand-lg: 大画面で展開、navbar-dark bg-dark: ダーク系の配色、shadow-sm: 小さな影 -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+            <div class="container"> <!-- container: 中身を中央に寄せる -->
+                <a class="navbar-brand fw-bold" th:href="@{/book/index}">TrainoBook</a>
+                <!-- d-flex: 横並び、align-items-center: 上下中央揃え -->
+                <div class="d-flex align-items-center text-white-50 small">
+                    <div th:if="${session.userName != null}" class="me-3"> <!-- me-3: 右側にマージンを設定 -->
+                        <span>ようこそ、<strong class="text-white" th:text="${session.userName}"></strong> さん</span>
+                    </div>
+                    <!-- btn-outline-light: 白い枠線のボタン、btn-sm: 小さいサイズ -->
+                    <a th:if="${session.userName != null}" th:href="@{/logout}" class="btn btn-outline-light btn-sm">ログアウト</a>
+                    <a th:unless="${session.userName != null}" th:href="@{/}" class="btn btn-outline-light btn-sm">ログイン</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- my-5: 上下に大きなマージン(Margin Y-axis)を設定 -->
+    <div class="container my-5">
+        <!-- mainタグ自体にクラスを付与し、カード風のデザインにします。
+             p-4: 内側の余白、bg-white: 背景白、rounded: 角丸、shadow-sm: 軽い影 -->
+        <main layout:fragment="content" class="p-4 bg-white rounded shadow-sm">
+            <!-- 各画面の固有コンテンツがここに挿入される -->
+            <p>ここにコンテンツが表示されます。</p>
+        </main>
+    </div>
+
+    <!-- py-4: 上下にパディング、border-top: 上側に境界線、text-secondary: 文字をグレーに -->
+    <footer class="py-4 bg-white border-top text-center text-secondary">
+        <div class="container">
+            <p class="mb-0">&copy; 2026 Trainocate Book Management System</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap Bundle with Popper JS (CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

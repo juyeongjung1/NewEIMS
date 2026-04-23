@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title>ログイン</title>
+</head>
+<body>
+    <main layout:fragment="content">
+        <!-- row: グリッドシステムを開始 -->
+        <div class="row">
+            <!-- col-md-6: 中画面以上で12列中6列の幅、mx-auto: 左右マージンを自動設定して中央寄せ -->
+            <div class="col-md-6 mx-auto">
+                <h2>ログイン</h2>
+                <p>ユーザIDとパスワードを入力してログインしてください。</p>
+                
+                <!-- 【課題4.3追加】 認証エラー時のメッセージ表示 -->
+                <!-- alert: 警告枠の基本、alert-danger: 赤色の警告スタイル -->
+                <div th:if="${error}" class="alert alert-danger mb-3" th:text="${error}"></div>
+
+                <!-- 【課題2.1 - ステップ4】 ログイン用フォーム -->
+                <form th:action="@{/login}" method="post">
+                    <!-- mb-3: 下側にマージンを設定 -->
+                    <div class="mb-3">
+                        <!-- form-label: ラベル用のスタイル -->
+                        <label for="userId" class="form-label">ユーザID</label>
+                        <!-- form-control: 入力欄をモダンなデザインにし、幅を100%にする -->
+                        <input type="text" id="userId" name="userId" class="form-control" required placeholder="123456">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">パスワード</label>
+                        <input type="password" id="password" name="password" class="form-control" required>
+                    </div>
+                    <!-- btn: ボタンの基本、btn-primary: 青色のボタン、w-100: 幅100% -->
+                    <button type="submit" class="btn btn-primary w-100">ログイン</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

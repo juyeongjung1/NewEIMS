@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title>書籍情報の更新</title>
+</head>
+<body>
+    <main layout:fragment="content">
+        <!-- row: グリッド開始 -->
+        <div class="row">
+            <!-- 中画面以上で8列幅、mx-autoで中央寄せ -->
+            <div class="col-md-8 mx-auto">
+                <h2 class="mb-4">書籍情報の更新</h2>
+                <p>変更内容を入力してください。</p>
+
+                <!-- card: カードデザイン、p-4: 内側余白、shadow-sm: 軽い影 -->
+                <!-- 【課題4.1の解答】 th:object="${bookForm}" を用いる -->
+                <form th:action="@{/book/update/} + ${bookForm.id}" method="post" th:object="${bookForm}" class="card p-4 shadow-sm">
+                    
+                    <div class="mb-3">
+                        <label class="form-label">ID（変更不可）</label>
+                        <!-- form-control-plaintext: 入力枠を消してプレーンテキストに見せる、border-bottom: 下線を追加 -->
+                        <input type="text" th:field="*{id}" class="form-control-plaintext border-bottom" readonly>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="title" class="form-label">書籍名</label>
+                        <input type="text" id="title" th:field="*{title}" class="form-control">
+                        <!-- text-danger: エラーメッセージを赤文字にする -->
+                        <div th:errors="*{title}" class="text-danger small mt-1"></div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="author" class="form-label">著者名</label>
+                        <input type="text" id="author" th:field="*{author}" class="form-control">
+                        <div th:errors="*{author}" class="text-danger small mt-1"></div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="price" class="form-label">価格（円）</label>
+                        <input type="number" id="price" th:field="*{price}" class="form-control">
+                        <div th:errors="*{price}" class="text-danger small mt-1"></div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="genreId" class="form-label">ジャンル選択</label>
+                        <!-- form-select: セレクトボックス用のBootstrapスタイル -->
+                        <!-- 【課題6.2/6.4改修】 数値入力からセレクトボックスによる動的選択に変更 -->
+                        <select id="genreId" th:field="*{genreId}" class="form-select">
+                            <option th:each="g : ${genres}" th:value="${g.id}" th:text="${g.name}"></option>
+                        </select>
+                        <div th:errors="*{genreId}" class="text-danger small mt-1"></div>
+                    </div>
+                    
+                    <!-- d-flex gap-2: ボタンを横並びに配置 -->
+                    <div class="mt-4 d-flex gap-2">
+                        <a th:href="@{/book/detail/} + ${bookForm.id}" class="btn btn-secondary">詳細に戻る</a>
+                        <button type="submit" class="btn btn-success">更新する</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

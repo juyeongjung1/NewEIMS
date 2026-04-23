@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<!--
+  既存の社員情報を修正する入力画面。
+  変更後の内容は確認画面に送られます。
+-->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>社員情報登録確認</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+   <div class="container mt-5">
+        <h1 class="mb-4">社員情報変更</h1>
+        <p>変更内容を入力してください。</p>
+        <!-- 入力内容を確認画面へ送信 -->
+        <form th:action="@{/changeConfirm}" th:object="${employeeForm}" method="post" class="mt-3">
+            <table class="table">
+                <tr>
+                    <td>社員番号</td>
+                    <!-- 社員番号は変更不可のため readonly -->
+                    <td><input type="text" th:field="*{empno}" class="form-control" readonly /></td>
+                </tr>
+                <tr>
+                    <td>氏</td>
+                    <td><input type="text" th:field="*{lname}" class="form-control" /></td>
+                    <td><div th:errors="*{lname}" class="text-danger"></div></td>
+                </tr>
+                <tr>
+                    <td>名</td>
+                    <td><input type="text" th:field="*{fname}" class="form-control" /></td>
+                    <td><div th:errors="*{fname}" class="text-danger"></div></td>
+                </tr>
+                <tr>
+                    <td>氏（カナ）</td>
+                    <td><input type="text" th:field="*{lkana}" class="form-control" /></td>
+                    <td><div th:errors="*{lkana}" class="text-danger"></div></td>
+                </tr>
+                <tr>
+                    <td>名（カナ）</td>
+                    <td><input type="text" th:field="*{fkana}" class="form-control" /></td>
+                    <td><div th:errors="*{fkana}" class="text-danger"></div></td>
+                </tr>
+                <tr>
+                    <td>性別</td>
+                    <td>
+                        <div class="form-check form-check-inline">
+                            <!-- 男性を選択 -->
+                            <input class="form-check-input" type="radio" th:field="*{gender}" id="genderMale" value="1" />
+                            <label class="form-check-label" for="genderMale">男性</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <!-- 女性を選択 -->
+                            <input class="form-check-input" type="radio" th:field="*{gender}" id="genderFemale" value="2" />
+                            <label class="form-check-label" for="genderFemale">女性</label>
+                        </div>
+                    </td>
+                    <td><div th:errors="*{gender}" class="text-danger"></div></td>
+                </tr>
+                <tr>
+                    <td>部署名</td>
+                    <td>
+                        <!-- 所属部署をプルダウンから選択 -->
+                        <select th:field="*{deptno}" class="form-control">
+                            <option value="" disabled selected>選択してください</option>
+                            <!-- 部署一覧をループ表示 -->
+                            <option th:each="dept : ${departments}"
+                                    th:value="${dept.deptno}"
+                                    th:text="${dept.deptname}">
+                            </option>
+                        </select>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>パスワード</td>
+                    <!-- パスワード変更用。平文入力だが教育用の簡易実装 -->
+                    <td><input type="text" name = "password" class="form-control" /></td>
+                    <td><div th:errors="*{password}" class="text-danger"></div></td>
+                </tr>
+            </table>
+            <button type="submit" class="btn btn-primary">変更</button>
+            <button type="button" class="btn btn-secondary" onclick="history.back(-1)">取消</button>
+        </form>
+    </div>
+</body>
+</html>

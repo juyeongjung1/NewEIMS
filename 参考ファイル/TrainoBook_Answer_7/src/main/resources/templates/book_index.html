@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title>書籍管理メニュー</title>
+</head>
+<body>
+    <main layout:fragment="content">
+        <!-- mb-5: 下側に大きなマージンを設定 -->
+        <div class="mb-5">
+            <h2>メニュー</h2>
+            <p>行いたい操作を選択してください。</p>
+            <!-- d-flex: 横並び、gap-2: 要素間の隙間を設定 -->
+            <div class="d-flex gap-2">
+                <a th:href="@{/book/list}" class="btn btn-primary">全書籍リストの確認</a>
+                <a th:href="@{/book/form}" class="btn btn-outline-primary">書籍情報の登録</a>
+            </div>
+        </div>
+
+        <!-- mt-5: 上側に大きなマージンを設定 -->
+        <div class="mt-5">
+            <!-- border-bottom: 下線、pb-2: 下方向のパディング -->
+            <h3 class="border-bottom pb-2 mb-4">書籍を検索する</h3>
+            <!-- row: グリッド開始、g-4: グリッド内の要素間の隙間(Gutter)を設定 -->
+            <div class="row g-4">
+                <!-- 書籍名検索 -->
+                <!-- col-md-4: 中画面以上で12列中4列（1/3）の幅 -->
+                <section class="col-md-4">
+                    <!-- card: カードのデザイン、h-100: 高さを100%に揃える、shadow-sm: 軽い影 -->
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body"> <!-- card-body: カードの内側の余白領域 -->
+                            <h4 class="card-title h5 mb-3">書籍名で検索</h4>
+                            <form th:action="@{/book/search/title}" method="get">
+                                <div class="mb-3">
+                                    <input type="text" name="keyword" class="form-control" placeholder="キーワードを入力">
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">タイトルで検索</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 価格帯検索 -->
+                <section class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h4 class="card-title h5 mb-3">価格帯で検索</h4>
+                            <form th:action="@{/book/search/price}" method="get">
+                                <div class="mb-3">
+                                    <input type="number" name="minPrice" class="form-control mb-2" placeholder="最低価格">
+                                    <input type="number" name="maxPrice" class="form-control" placeholder="最高価格">
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">価格帯で検索</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 【課題6.3追加】複合検索（ジャンル名 ＋ 上限価格） -->
+                <section class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h4 class="card-title h5 mb-3">ジャンル名と価格で検索</h4>
+                            <form th:action="@{/book/search/complex}" method="get">
+                                <div class="mb-3">
+                                    <input type="text" name="genreName" class="form-control mb-2" placeholder="ジャンル名（例：プロ）">
+                                    <input type="number" name="maxPrice" class="form-control" placeholder="上限価格">
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">複合検索</button>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
