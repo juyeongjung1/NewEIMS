@@ -713,7 +713,64 @@ classDiagram
 ---
 
 ## 7. シーケンス図（分析レベル）
-（※後のステップで作成予定）
+
+分析レベルのシーケンス図では、各ユースケースが実現されるまでの「オブジェクト間のメッセージのやり取り（処理の流れ）」を時間軸に沿って定義します。
+
+### 7.1 UC001: 社員情報を検索する
+```mermaid
+sequenceDiagram
+    actor Admin as 人事部管理者
+    participant UI as 画面
+    participant Ctrl as EmployeeController
+    participant Emp as Employee(エンティティ)
+
+    Admin ->> UI: 検索条件を入力し、検索を指示
+    activate UI
+    UI ->> Ctrl: 検索処理を依頼
+    activate Ctrl
+    
+    Ctrl ->> Emp: 検索条件に合致する社員情報を取得
+    activate Emp
+    Emp -->> Ctrl: 社員情報リスト
+    deactivate Emp
+    
+    Ctrl -->> UI: 検索結果一覧を返す
+    deactivate Ctrl
+    
+    UI -->> Admin: 検索結果一覧画面を表示
+    deactivate UI
+```
+
+### 7.2 UC002: 社員情報を登録する
+```mermaid
+sequenceDiagram
+    actor Admin as 人事部管理者
+    participant UI as 画面
+    participant Ctrl as EmployeeController
+    participant Dept as Department(エンティティ)
+    participant Emp as Employee(エンティティ)
+
+    Admin ->> UI: 社員情報を入力し、登録を指示
+    activate UI
+    UI ->> Ctrl: 登録処理を依頼
+    activate Ctrl
+    
+    Ctrl ->> Dept: 表示用の部署情報を取得
+    activate Dept
+    Dept -->> Ctrl: 部署情報
+    deactivate Dept
+    
+    Ctrl ->> Emp: 新規社員情報の保存を指示
+    activate Emp
+    Emp -->> Ctrl: 保存完了
+    deactivate Emp
+    
+    Ctrl -->> UI: 登録完了を通知
+    deactivate Ctrl
+    
+    UI -->> Admin: 登録完了画面を表示
+    deactivate UI
+```
 
 <div style="page-break-before: always;"></div>
 
