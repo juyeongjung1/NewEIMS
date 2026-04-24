@@ -876,32 +876,127 @@ erDiagram
 ---
 
 ## 9. クラス図（設計レベル）
+
+本クラス図では、Spring Bootのアーキテクチャ（MVC・レイヤードアーキテクチャ）に基づき、実装予定の各クラス（Controller, Form, Service, Repository, Entity）と、それらの依存関係（DIによるインターフェースへの依存や実現関係）を定義します。
+
 ```mermaid
 classDiagram
+    %% =======================
+    %% Controller Layer
+    %% =======================
     class EmployeeController {
-        <<コントローラ>>
-        +index() 文字列
-        +showInputPage() 文字列
-        +confirmRegistration() 文字列
-        +saveEmployee() 文字列
+        <<Controller>>
+        -EmployeeService employeeService
+        -DepartmentService departmentService
+        +index(Model) String
+        +search(EmployeeForm, Model) String
+        +showDetail(Integer, Model) String
+        +showInputPage(EmployeeForm, Model) String
+        +confirmRegistration(EmployeeForm, BindingResult, Model) String
+        +saveEmployee(EmployeeForm, Model) String
+        +changeInput(Integer, EmployeeForm, Model) String
+        +changeConfirm(EmployeeForm, BindingResult, Model) String
+        +changeEmployee(EmployeeForm, Model) String
+        +deleteConfirm(Integer, Model) String
+        +deleteEmployee(Integer) String
     }
+
+    %% =======================
+    %% Form / DTO Layer
+    %% =======================
+    class EmployeeForm {
+        <<Form>>
+        -Integer empno
+        -String lname
+        -String fname
+        -String lkana
+        -String fkana
+        -String password
+        -Integer gender
+        -Integer deptno
+    }
+
+    %% =======================
+    %% Service Layer (Interface & Impl)
+    %% =======================
     class EmployeeService {
-        <<インターフェース>>
-        +saveEmployee() 社員
+        <<Interface>>
+        +findAll() List~Employee~
+        +findById(Integer) Employee
+        +findByDeptno(Integer) List~Employee~
+        +findByLnameOrFname(String) List~Employee~
+        +save(EmployeeForm) Employee
+        +update(EmployeeForm) Employee
+        +deleteById(Integer) void
     }
     class EmployeeServiceImpl {
-        <<サービス実装>>
-    }
-    class EmployeeForm {
-        <<フォーム>>
-    }
-    class Employee {
-        <<エンティティ>>
+        <<Service>>
+        -EmployeeRepository employeeRepository
+        -DepartmentRepository departmentRepository
     }
     
-    EmployeeController -- 使用 --> EmployeeService
-    EmployeeServiceImpl ..|> EmployeeService : 実現
+    class DepartmentService {
+        <<Interface>>
+        +findAll() List~Department~
+        +findById(Integer) Department
+    }
+    class DepartmentServiceImpl {
+        <<Service>>
+        -DepartmentRepository departmentRepository
+    }
+
+    %% =======================
+    %% Repository Layer
+    %% =======================
+    class EmployeeRepository {
+        <<Repository>>
+        +findByDeptno(Integer) List~Employee~
+        +findByLnameContainingOrFnameContaining(String, String) List~Employee~
+    }
+    class DepartmentRepository {
+        <<Repository>>
+    }
+
+    %% =======================
+    %% Entity Layer
+    %% =======================
+    class Employee {
+        <<Entity>>
+        -Integer empno
+        -String lname
+        -String fname
+        -String lkana
+        -String fkana
+        -String password
+        -Integer gender
+        -Integer deptno
+        -Department department
+    }
+    class Department {
+        <<Entity>>
+        -Integer deptno
+        -String deptname
+        -List~Employee~ employees
+    }
+
+    %% =======================
+    %% Relationships
+    %% =======================
+    EmployeeController ..> EmployeeService : 依存(DI)
+    EmployeeController ..> DepartmentService : 依存(DI)
     EmployeeController ..> EmployeeForm : 参照
+
+    EmployeeServiceImpl ..|> EmployeeService : 実現(implements)
+    DepartmentServiceImpl ..|> DepartmentService : 実現(implements)
+
+    EmployeeServiceImpl ..> EmployeeRepository : 依存(DI)
+    EmployeeServiceImpl ..> DepartmentRepository : 依存(DI)
+    DepartmentServiceImpl ..> DepartmentRepository : 依存(DI)
+
+    EmployeeRepository ..> Employee : 操作
+    DepartmentRepository ..> Department : 操作
+
+    Employee "*" --> "1" Department : 関連(ManyToOne)
 ```
 
 <div style="page-break-before: always;"></div>
