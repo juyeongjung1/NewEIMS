@@ -617,7 +617,7 @@ flowchart TD
 
 ## 5. 画面レイアウト図
 
-各画面のHTMLデザイン（スクリーンショット）を以下に示します。開発時はこれらのレイアウト仕様に準拠して実装してください。
+各画面のレイアウト仕様を以下に定義する。
 
 ### 5.1 共通・検索機能
 
@@ -675,7 +675,7 @@ flowchart TD
 
 ## 6. クラス図（分析レベル）
 
-分析レベルのクラス図では、システムに登場する概念を「バウンダリ（画面）」「コントロール（制御・管理）」「エンティティ（データ）」の3つの役割（BCEモデル）で整理し、実装の詳細（インターフェースやDBアクセスの仕組みなど）は排除して描画します。
+システムに登場する概念を「バウンダリ（画面）」「コントロール（制御・管理）」「エンティティ（データ）」の役割（BCEモデル）で定義する。
 
 ```mermaid
 classDiagram
@@ -714,7 +714,7 @@ classDiagram
 
 ## 7. シーケンス図（分析レベル）
 
-分析レベルのシーケンス図では、各ユースケースが実現されるまでの「オブジェクト間のメッセージのやり取り（処理の流れ）」を時間軸に沿って定義します。
+各ユースケースが実現されるまでのオブジェクト間のメッセージのやり取り（処理の流れ）を以下に定義する。
 
 ### 7.1 UC001: 社員情報を検索する
 ```mermaid
@@ -877,10 +877,10 @@ erDiagram
 
 ## 9. クラス図（設計レベル）
 
-本セクションでは、Spring Bootのアーキテクチャに基づき、各ユースケース（機能）の実装に必要なクラスとその依存関係を機能単位で定義します。受講者は、各機能を実装する際にこれらの図を参照し、必要なメソッドを追加してください。
+Spring Bootのアーキテクチャに基づき、各ユースケースの実装に必要なクラスとその依存関係を機能単位で定義する。
 
 ### 9.1 UC001: 社員情報を検索する
-検索機能の実装において必要なクラスとメソッドの構成です。
+検索機能におけるクラス構成を以下に定義する。
 ```mermaid
 classDiagram
     class EmployeeController {
@@ -940,7 +940,7 @@ classDiagram
 ```
 
 ### 9.2 UC002: 社員情報を登録する
-登録機能の実装において追加・使用するクラスとメソッドの構成です。
+登録機能におけるクラス構成を以下に定義する。
 ```mermaid
 classDiagram
     class EmployeeController {
@@ -993,7 +993,7 @@ classDiagram
 ```
 
 ### 9.3 UC003: 社員情報を変更する
-変更機能の実装において追加・使用するクラスとメソッドの構成です。
+変更機能におけるクラス構成を以下に定義する。
 ```mermaid
 classDiagram
     class EmployeeController {
@@ -1022,7 +1022,7 @@ classDiagram
 ```
 
 ### 9.4 UC004: 社員情報を削除する
-削除機能の実装において追加・使用するクラスとメソッドの構成です。
+削除機能におけるクラス構成を以下に定義する。
 ```mermaid
 classDiagram
     class EmployeeController {
@@ -1045,6 +1045,128 @@ classDiagram
     EmployeeServiceImpl ..|> EmployeeService : 実現
     EmployeeServiceImpl ..> EmployeeRepository : 依存(DI)
     EmployeeRepository ..> Employee : 操作
+```
+
+### 9.5 全体クラス図
+システム全体の網羅的なクラス構成および依存関係を以下に定義する。
+```mermaid
+classDiagram
+    %% =======================
+    %% Controller Layer
+    %% =======================
+    class EmployeeController {
+        <<Controller>>
+        -EmployeeService employeeService
+        -DepartmentService departmentService
+        +index(Model) String
+        +search(EmployeeForm, Model) String
+        +showDetail(Integer, Model) String
+        +showInputPage(EmployeeForm, Model) String
+        +confirmRegistration(EmployeeForm, BindingResult, Model) String
+        +saveEmployee(EmployeeForm, Model) String
+        +changeInput(Integer, EmployeeForm, Model) String
+        +changeConfirm(EmployeeForm, BindingResult, Model) String
+        +changeEmployee(EmployeeForm, Model) String
+        +deleteConfirm(Integer, Model) String
+        +deleteEmployee(Integer) String
+    }
+
+    %% =======================
+    %% Form / DTO Layer
+    %% =======================
+    class EmployeeForm {
+        <<Form>>
+        -Integer empno
+        -String lname
+        -String fname
+        -String lkana
+        -String fkana
+        -String password
+        -Integer gender
+        -Integer deptno
+    }
+
+    %% =======================
+    %% Service Layer (Interface & Impl)
+    %% =======================
+    class EmployeeService {
+        <<Interface>>
+        +findAll() List~Employee~
+        +findById(Integer) Employee
+        +findByDeptno(Integer) List~Employee~
+        +findByLnameOrFname(String) List~Employee~
+        +save(EmployeeForm) Employee
+        +update(EmployeeForm) Employee
+        +deleteById(Integer) void
+    }
+    class EmployeeServiceImpl {
+        <<Service>>
+        -EmployeeRepository employeeRepository
+        -DepartmentRepository departmentRepository
+    }
+    
+    class DepartmentService {
+        <<Interface>>
+        +findAll() List~Department~
+        +findById(Integer) Department
+    }
+    class DepartmentServiceImpl {
+        <<Service>>
+        -DepartmentRepository departmentRepository
+    }
+
+    %% =======================
+    %% Repository Layer
+    %% =======================
+    class EmployeeRepository {
+        <<Repository>>
+        +findByDeptno(Integer) List~Employee~
+        +findByLnameContainingOrFnameContaining(String, String) List~Employee~
+    }
+    class DepartmentRepository {
+        <<Repository>>
+    }
+
+    %% =======================
+    %% Entity Layer
+    %% =======================
+    class Employee {
+        <<Entity>>
+        -Integer empno
+        -String lname
+        -String fname
+        -String lkana
+        -String fkana
+        -String password
+        -Integer gender
+        -Integer deptno
+        -Department department
+    }
+    class Department {
+        <<Entity>>
+        -Integer deptno
+        -String deptname
+        -List~Employee~ employees
+    }
+
+    %% =======================
+    %% Relationships
+    %% =======================
+    EmployeeController ..> EmployeeService : 依存(DI)
+    EmployeeController ..> DepartmentService : 依存(DI)
+    EmployeeController ..> EmployeeForm : 参照
+
+    EmployeeServiceImpl ..|> EmployeeService : 実現
+    DepartmentServiceImpl ..|> DepartmentService : 実現
+
+    EmployeeServiceImpl ..> EmployeeRepository : 依存(DI)
+    EmployeeServiceImpl ..> DepartmentRepository : 依存(DI)
+    DepartmentServiceImpl ..> DepartmentRepository : 依存(DI)
+
+    EmployeeRepository ..> Employee : 操作
+    DepartmentRepository ..> Department : 操作
+
+    Employee "*" --> "1" Department : 関連(ManyToOne)
 ```
 
 <div style="page-break-before: always;"></div>
