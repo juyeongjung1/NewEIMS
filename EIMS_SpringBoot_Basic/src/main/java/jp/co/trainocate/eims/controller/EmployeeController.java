@@ -1,8 +1,8 @@
 package jp.co.trainocate.eims.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,11 +18,12 @@ import jp.co.trainocate.eims.service.DepartmentService;
 import jp.co.trainocate.eims.service.EmployeeService;
 
 @Controller
-@RequiredArgsConstructor
 public class EmployeeController {
 
-    private final EmployeeService employeeService;
-    private final DepartmentService departmentService;
+    @Autowired
+    private EmployeeService employeeService;
+    @Autowired
+    private DepartmentService departmentService;
 
     /** トップページを表示する */
     @GetMapping({"/", "/index"})
@@ -92,7 +93,7 @@ public class EmployeeController {
     }
 
     /** 登録画面を表示する */
-    @RequestMapping("/input") // GET（新規）と POST（確認画面からの戻り）の両方に対応
+    @GetMapping("/input")
     public String showInputPage(EmployeeForm employeeForm, Model model) {
         model.addAttribute("departments", departmentService.findAll());
         return "input";
@@ -134,7 +135,7 @@ public class EmployeeController {
     }
 
     /** 変更入力画面を表示する */
-    @RequestMapping("/changeInput/{empno}") // 戻り時の POST にも対応
+    @GetMapping("/changeInput/{empno}")
     public String changeInput(@PathVariable("empno") Integer empno, EmployeeForm employeeForm, Model model) {
         // 初回アクセス（GET）の場合のみ、DBからデータを取得してフォームにセット
         if (employeeForm.getLname() == null) {
