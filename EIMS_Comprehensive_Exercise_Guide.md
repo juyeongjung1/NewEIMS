@@ -674,7 +674,39 @@ flowchart TD
 ---
 
 ## 6. クラス図（分析レベル）
-（※後のステップで作成予定）
+
+分析レベルのクラス図では、システムに登場する概念を「バウンダリ（画面）」「コントロール（制御・管理）」「エンティティ（データ）」の3つの役割（BCEモデル）で整理し、実装の詳細（インターフェースやDBアクセスの仕組みなど）は排除して描画します。
+
+```mermaid
+classDiagram
+    %% バウンダリ（境界）クラス
+    class UI {
+        <<バウンダリ>>
+        画面 (トップ・検索・登録・詳細等)
+    }
+    
+    %% コントロール（制御）クラス
+    class EmployeeManager {
+        <<コントロール>>
+        社員情報管理機能
+    }
+    
+    %% エンティティ（実体）クラス
+    class Employee {
+        <<エンティティ>>
+        社員
+    }
+    class Department {
+        <<エンティティ>>
+        部署
+    }
+    
+    %% クラス間の関係（関連と依存）
+    UI --> EmployeeManager : 処理を依頼する
+    EmployeeManager --> Employee : 社員情報を操作する
+    EmployeeManager --> Department : 部署情報を参照する
+    Employee "*" --> "1" Department : 所属する
+```
 
 <div style="page-break-before: always;"></div>
 
