@@ -1,31 +1,30 @@
-<!-- search_result.html -->
+﻿<!-- search_result.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>検索結果 - EIMS</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="bg-light">
-    <nav class="navbar navbar-dark bg-dark shadow-sm mb-4">
-        <div class="container">
-            <a class="navbar-brand fw-bold" th:href="@{/}">EIMS</a>
+<body>
+    <nav>
+        <div>
+            <a th:href="@{/}">EIMS</a>
         </div>
     </nav>
-    <div class="container">
-        <h2 class="mb-4">検索結果一覧</h2>
+    <div>
+        <h2>検索結果一覧</h2>
 
         <!-- 検索結果が 0 件の場合のメッセージ表示 -->
-        <div th:if="${#lists.isEmpty(employees)}" class="alert alert-warning shadow-sm" role="alert">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <div th:if="${#lists.isEmpty(employees)}" role="alert">
+            <i></i>
             該当する社員は存在しませんでした。
         </div>
 
         <!-- 検索結果が存在する場合のみテーブルを表示 -->
-        <div th:unless="${#lists.isEmpty(employees)}" class="card shadow-sm">
-            <div class="table-responsive">
-                <table class="table table-hover mb-0">
-                    <thead class="table-light">
+        <div th:unless="${#lists.isEmpty(employees)}">
+            <div>
+                <table>
+                    <thead>
                         <tr>
                             <th>社員番号</th>
                             <th>氏名 (カナ)</th>
@@ -38,8 +37,7 @@
                             <td th:text="${emp.empno}"></td>
                             <td>
                                 <a th:href="@{/detail/{id}(id=${emp.empno})}" 
-                                   th:text="${emp.lname} + ' ' + ${emp.fname} + ' (' + ${emp.lkana} + ' ' + ${emp.fkana} + ')'"
-                                   class="text-decoration-none fw-bold"></a>
+                                   th:text="${emp.lname} + ' ' + ${emp.fname} + ' (' + ${emp.lkana} + ' ' + ${emp.fkana} + ')'"></a>
                             </td>
                             <td th:text="${emp.gender == 1 ? '男性' : '女性'}"></td>
                             <td th:text="${emp.department.deptname}"></td>
@@ -49,8 +47,8 @@
             </div>
         </div>
 
-        <div class="mt-4">
-            <a th:href="@{/search}" class="btn btn-outline-secondary">検索に戻る</a>
+        <div>
+            <a th:href="@{/search}">検索に戻る</a>
         </div>
     </div>
 </body>
