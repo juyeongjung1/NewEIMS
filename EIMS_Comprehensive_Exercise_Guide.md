@@ -729,28 +729,35 @@ sequenceDiagram
     UI ->> Ctrl: 検索処理を依頼
     activate Ctrl
     
-    Ctrl ->> Emp: 検索条件に合致する社員情報を取得
-    activate Emp
-    Emp -->> Ctrl: 社員情報リスト
-    deactivate Emp
-    
-    Ctrl -->> UI: 検索結果一覧を返す
-    deactivate Ctrl
-    
-    UI -->> Admin: 検索結果一覧画面を表示
-    
-    opt 詳細画面を表示する場合
-        Admin ->> UI: 一覧から社員を選択
-        UI ->> Ctrl: 詳細情報の取得を依頼
-        activate Ctrl
+    alt 社員番号で検索した場合
         Ctrl ->> Emp: 該当社員情報を取得
         activate Emp
-        Emp -->> Ctrl: 社員情報
+        Emp -->> Ctrl: 単一の社員情報
         deactivate Emp
         Ctrl -->> UI: 詳細情報を返す
-        deactivate Ctrl
         UI -->> Admin: 社員詳細画面を表示
+    else 氏名・部署で検索した場合
+        Ctrl ->> Emp: 検索条件に合致する社員情報を取得
+        activate Emp
+        Emp -->> Ctrl: 社員情報リスト
+        deactivate Emp
+        
+        Ctrl -->> UI: 検索結果一覧を返す
+        UI -->> Admin: 検索結果一覧画面を表示
+        
+        opt 詳細画面を表示する場合
+            Admin ->> UI: 一覧から社員を選択
+            UI ->> Ctrl: 詳細情報の取得を依頼
+            Ctrl ->> Emp: 該当社員情報を取得
+            activate Emp
+            Emp -->> Ctrl: 社員情報
+            deactivate Emp
+            Ctrl -->> UI: 詳細情報を返す
+            UI -->> Admin: 社員詳細画面を表示
+        end
     end
+    
+    deactivate Ctrl
     deactivate UI
 ```
 
@@ -1183,34 +1190,76 @@ sequenceDiagram
     actor Admin as 人事部管理者
     participant View as Thymeleaf(画面)
     participant Ctrl as EmployeeController
+    participant DSvc as DepartmentServiceImpl
     participant Svc as EmployeeServiceImpl
     participant Rep as EmployeeRepository
     participant Model as Model
 
-    Admin ->> View: 検索条件を入力、検索を指示
-    View ->> Ctrl: GET /search (EmployeeForm)
+    Admin ->> View: トップページから「検索」を選択
+    View ->> Ctrl: GET /search
     activate Ctrl
-    
-    Ctrl ->> Svc: findByLnameOrFname(キーワード)
-    activate Svc
-    Svc ->> Rep: findByLnameContainingOrFnameContaining()
-    activate Rep
-    Rep -->> Svc: List~Employee~
-    deactivate Rep
-    Svc -->> Ctrl: List~Employee~
-    deactivate Svc
-    
-    Ctrl ->> Model: addAttribute("employees", List)
-    activate Model
-    Model -->> Ctrl: 
-    deactivate Model
-    
-    Ctrl -->> View: return "search_result"
+    Ctrl ->> DSvc: findAll()
+    activate DSvc
+    DSvc -->> Ctrl: List~Department~
+    deactivate DSvc
+    Ctrl ->> Model: addAttribute("departments", List)
+    Ctrl -->> View: return "search"
     deactivate Ctrl
-    View -->> Admin: 検索結果一覧画面を表示
+    View -->> Admin: 検索条件入力画面を表示
     
-    opt 詳細画面の表示
-        Admin ->> View: 一覧から社員を選択
+    Admin ->> View: 検索条件を入力、検索を指示
+    
+    alt 氏名で検索した場合
+        View ->> Ctrl: GET /selectByEmpName (keyword)
+        activate Ctrl
+        Ctrl ->> Svc: findByEmpName(keyword)
+        activate Svc
+        Svc ->> Rep: findByLnameContainingOrFnameContaining()
+        activate Rep
+        Rep -->> Svc: List~Employee~
+        deactivate Rep
+        Svc -->> Ctrl: List~Employee~
+        deactivate Svc
+        Ctrl ->> Model: addAttribute("employees", List)
+        Ctrl -->> View: return "search_result"
+        deactivate Ctrl
+        View -->> Admin: 検索結果一覧画面を表示
+        
+    else 部署で検索した場合
+        View ->> Ctrl: GET /selectByDeptNo (deptno)
+        activate Ctrl
+        Ctrl ->> Svc: findByDeptno(deptno)
+        activate Svc
+        Svc ->> Rep: findByDeptno()
+        activate Rep
+        Rep -->> Svc: List~Employee~
+        deactivate Rep
+        Svc -->> Ctrl: List~Employee~
+        deactivate Svc
+        Ctrl ->> Model: addAttribute("employees", List)
+        Ctrl -->> View: return "search_result"
+        deactivate Ctrl
+        View -->> Admin: 検索結果一覧画面を表示
+        
+    else 社員番号で検索した場合
+        View ->> Ctrl: GET /selectByEmpNo (empno)
+        activate Ctrl
+        Ctrl ->> Svc: findById(empno)
+        activate Svc
+        Svc ->> Rep: findById()
+        activate Rep
+        Rep -->> Svc: Employee
+        deactivate Rep
+        Svc -->> Ctrl: Employee
+        deactivate Svc
+        Ctrl ->> Model: addAttribute("employee", Employee)
+        Ctrl -->> View: return "employee_detail"
+        deactivate Ctrl
+        View -->> Admin: 社員詳細画面を表示
+    end
+    
+    opt 一覧画面から詳細画面の表示
+        Admin ->> View: 一覧から社員氏名を選択
         View ->> Ctrl: GET /detail/{empno}
         activate Ctrl
         Ctrl ->> Svc: findById(empno)
@@ -1239,8 +1288,20 @@ sequenceDiagram
     participant Rep as EmployeeRepository
     participant Model as Model
 
+    Admin ->> View: トップページから「登録」を選択
+    View ->> Ctrl: GET /input
+    activate Ctrl
+    Ctrl ->> DSvc: findAll()
+    activate DSvc
+    DSvc -->> Ctrl: List~Department~
+    deactivate DSvc
+    Ctrl ->> Model: addAttribute("departments", List)
+    Ctrl -->> View: return "input"
+    deactivate Ctrl
+    View -->> Admin: 社員情報登録画面を表示
+
     Admin ->> View: 登録内容を入力、確認を指示
-    View ->> Ctrl: POST /confirm (EmployeeForm)
+    View ->> Ctrl: POST /inputConfirm (EmployeeForm)
     activate Ctrl
     
     Ctrl ->> DSvc: findById(form.getDeptno())
@@ -1254,7 +1315,7 @@ sequenceDiagram
     View -->> Admin: 登録確認画面を表示
     
     Admin ->> View: 登録を確定
-    View ->> Ctrl: POST /save (EmployeeForm)
+    View ->> Ctrl: POST /saveEmployee (EmployeeForm)
     activate Ctrl
     
     Ctrl ->> Svc: save(EmployeeForm)
@@ -1265,11 +1326,8 @@ sequenceDiagram
     deactivate Rep
     Svc -->> Ctrl: Employee
     deactivate Svc
+    Ctrl ->> Model: addAttribute("employee", Employee)
     
-    Ctrl -->> View: redirect:/complete
-    deactivate Ctrl
-    View ->> Ctrl: GET /complete
-    activate Ctrl
     Ctrl -->> View: return "input_complete"
     deactivate Ctrl
     View -->> Admin: 登録完了画面を表示
@@ -1281,19 +1339,24 @@ sequenceDiagram
     actor Admin as 人事部管理者
     participant View as Thymeleaf(画面)
     participant Ctrl as EmployeeController
+    participant DSvc as DepartmentServiceImpl
     participant Svc as EmployeeServiceImpl
     participant Rep as EmployeeRepository
     participant Model as Model
 
     note over Admin, View: 詳細画面が表示されている状態から開始
     Admin ->> View: 変更を指示
-    View ->> Ctrl: GET /change/{empno}
+    View ->> Ctrl: GET /changeInput/{empno}
     activate Ctrl
     Ctrl ->> Svc: findById(empno)
     activate Svc
     Svc -->> Ctrl: Employee
     deactivate Svc
-    Ctrl ->> Model: addAttribute("employeeForm", Form)
+    Ctrl ->> DSvc: findAll()
+    activate DSvc
+    DSvc -->> Ctrl: List~Department~
+    deactivate DSvc
+    Ctrl ->> Model: addAttribute("departments", List)
     Ctrl -->> View: return "change"
     deactivate Ctrl
     View -->> Admin: 変更画面を表示
@@ -1301,15 +1364,19 @@ sequenceDiagram
     Admin ->> View: 変更内容を入力、確認を指示
     View ->> Ctrl: POST /changeConfirm (EmployeeForm)
     activate Ctrl
+    Ctrl ->> DSvc: findById(form.getDeptno())
+    activate DSvc
+    DSvc -->> Ctrl: Department
+    deactivate DSvc
     Ctrl ->> Model: addAttribute("department", Department)
     Ctrl -->> View: return "change_confirm"
     deactivate Ctrl
     View -->> Admin: 変更確認画面を表示
     
     Admin ->> View: 変更を確定
-    View ->> Ctrl: POST /change (EmployeeForm)
+    View ->> Ctrl: POST /changeEmployee (EmployeeForm)
     activate Ctrl
-    Ctrl ->> Svc: update(EmployeeForm)
+    Ctrl ->> Svc: save(EmployeeForm)
     activate Svc
     Svc ->> Rep: save(Employee)
     activate Rep
@@ -1317,10 +1384,7 @@ sequenceDiagram
     deactivate Rep
     Svc -->> Ctrl: Employee
     deactivate Svc
-    Ctrl -->> View: redirect:/changeComplete
-    deactivate Ctrl
-    View ->> Ctrl: GET /changeComplete
-    activate Ctrl
+    Ctrl ->> Model: addAttribute("employee", Employee)
     Ctrl -->> View: return "change_complete"
     deactivate Ctrl
     View -->> Admin: 変更完了画面を表示
@@ -1350,7 +1414,7 @@ sequenceDiagram
     View -->> Admin: 削除確認画面を表示
     
     Admin ->> View: 削除を確定
-    View ->> Ctrl: POST /delete
+    View ->> Ctrl: POST /deleteEmployee
     activate Ctrl
     Ctrl ->> Svc: deleteById(empno)
     activate Svc
@@ -1360,10 +1424,6 @@ sequenceDiagram
     deactivate Rep
     Svc -->> Ctrl: void
     deactivate Svc
-    Ctrl -->> View: redirect:/deleteComplete
-    deactivate Ctrl
-    View ->> Ctrl: GET /deleteComplete
-    activate Ctrl
     Ctrl -->> View: return "delete_complete"
     deactivate Ctrl
     View -->> Admin: 削除完了画面を表示
