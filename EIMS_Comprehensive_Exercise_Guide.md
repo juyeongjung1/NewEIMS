@@ -1174,4 +1174,197 @@ classDiagram
 ---
 
 ## 10. シーケンス図（設計レベル）
-（※後のステップで作成予定）
+
+各ユースケースの具体的なメソッド呼び出し、およびMVCモデル間（View, Controller, Service, Repository）のデータの流れを以下に定義する。
+
+### 10.1 UC001: 社員情報を検索する
+```mermaid
+sequenceDiagram
+    actor Admin as 人事部管理者
+    participant View as Thymeleaf(画面)
+    participant Ctrl as EmployeeController
+    participant Svc as EmployeeServiceImpl
+    participant Rep as EmployeeRepository
+    participant Model as Model
+
+    Admin ->> View: 検索条件を入力、検索を指示
+    View ->> Ctrl: GET /search (EmployeeForm)
+    activate Ctrl
+    
+    Ctrl ->> Svc: findByLnameOrFname(キーワード)
+    activate Svc
+    Svc ->> Rep: findByLnameContainingOrFnameContaining()
+    activate Rep
+    Rep -->> Svc: List~Employee~
+    deactivate Rep
+    Svc -->> Ctrl: List~Employee~
+    deactivate Svc
+    
+    Ctrl ->> Model: addAttribute("employees", List)
+    activate Model
+    Model -->> Ctrl: 
+    deactivate Model
+    
+    Ctrl -->> View: return "search_result"
+    deactivate Ctrl
+    View -->> Admin: 検索結果一覧画面を表示
+    
+    opt 詳細画面の表示
+        Admin ->> View: 一覧から社員を選択
+        View ->> Ctrl: GET /detail/{empno}
+        activate Ctrl
+        Ctrl ->> Svc: findById(empno)
+        activate Svc
+        Svc ->> Rep: findById(empno)
+        activate Rep
+        Rep -->> Svc: Employee
+        deactivate Rep
+        Svc -->> Ctrl: Employee
+        deactivate Svc
+        Ctrl ->> Model: addAttribute("employee", Employee)
+        Ctrl -->> View: return "employee_detail"
+        deactivate Ctrl
+        View -->> Admin: 社員詳細画面を表示
+    end
+```
+
+### 10.2 UC002: 社員情報を登録する
+```mermaid
+sequenceDiagram
+    actor Admin as 人事部管理者
+    participant View as Thymeleaf(画面)
+    participant Ctrl as EmployeeController
+    participant DSvc as DepartmentServiceImpl
+    participant Svc as EmployeeServiceImpl
+    participant Rep as EmployeeRepository
+    participant Model as Model
+
+    Admin ->> View: 登録内容を入力、確認を指示
+    View ->> Ctrl: POST /confirm (EmployeeForm)
+    activate Ctrl
+    
+    Ctrl ->> DSvc: findById(form.getDeptno())
+    activate DSvc
+    DSvc -->> Ctrl: Department
+    deactivate DSvc
+    
+    Ctrl ->> Model: addAttribute("department", Department)
+    Ctrl -->> View: return "input_confirm"
+    deactivate Ctrl
+    View -->> Admin: 登録確認画面を表示
+    
+    Admin ->> View: 登録を確定
+    View ->> Ctrl: POST /save (EmployeeForm)
+    activate Ctrl
+    
+    Ctrl ->> Svc: save(EmployeeForm)
+    activate Svc
+    Svc ->> Rep: save(Employee)
+    activate Rep
+    Rep -->> Svc: Employee (登録済)
+    deactivate Rep
+    Svc -->> Ctrl: Employee
+    deactivate Svc
+    
+    Ctrl -->> View: redirect:/complete
+    deactivate Ctrl
+    View ->> Ctrl: GET /complete
+    activate Ctrl
+    Ctrl -->> View: return "input_complete"
+    deactivate Ctrl
+    View -->> Admin: 登録完了画面を表示
+```
+
+### 10.3 UC003: 社員情報を変更する
+```mermaid
+sequenceDiagram
+    actor Admin as 人事部管理者
+    participant View as Thymeleaf(画面)
+    participant Ctrl as EmployeeController
+    participant Svc as EmployeeServiceImpl
+    participant Rep as EmployeeRepository
+    participant Model as Model
+
+    note over Admin, View: 詳細画面が表示されている状態から開始
+    Admin ->> View: 変更を指示
+    View ->> Ctrl: GET /change/{empno}
+    activate Ctrl
+    Ctrl ->> Svc: findById(empno)
+    activate Svc
+    Svc -->> Ctrl: Employee
+    deactivate Svc
+    Ctrl ->> Model: addAttribute("employeeForm", Form)
+    Ctrl -->> View: return "change"
+    deactivate Ctrl
+    View -->> Admin: 変更画面を表示
+    
+    Admin ->> View: 変更内容を入力、確認を指示
+    View ->> Ctrl: POST /changeConfirm (EmployeeForm)
+    activate Ctrl
+    Ctrl ->> Model: addAttribute("department", Department)
+    Ctrl -->> View: return "change_confirm"
+    deactivate Ctrl
+    View -->> Admin: 変更確認画面を表示
+    
+    Admin ->> View: 変更を確定
+    View ->> Ctrl: POST /change (EmployeeForm)
+    activate Ctrl
+    Ctrl ->> Svc: update(EmployeeForm)
+    activate Svc
+    Svc ->> Rep: save(Employee)
+    activate Rep
+    Rep -->> Svc: Employee (更新済)
+    deactivate Rep
+    Svc -->> Ctrl: Employee
+    deactivate Svc
+    Ctrl -->> View: redirect:/changeComplete
+    deactivate Ctrl
+    View ->> Ctrl: GET /changeComplete
+    activate Ctrl
+    Ctrl -->> View: return "change_complete"
+    deactivate Ctrl
+    View -->> Admin: 変更完了画面を表示
+```
+
+### 10.4 UC004: 社員情報を削除する
+```mermaid
+sequenceDiagram
+    actor Admin as 人事部管理者
+    participant View as Thymeleaf(画面)
+    participant Ctrl as EmployeeController
+    participant Svc as EmployeeServiceImpl
+    participant Rep as EmployeeRepository
+    participant Model as Model
+
+    note over Admin, View: 詳細画面が表示されている状態から開始
+    Admin ->> View: 削除を指示
+    View ->> Ctrl: GET /deleteConfirm/{empno}
+    activate Ctrl
+    Ctrl ->> Svc: findById(empno)
+    activate Svc
+    Svc -->> Ctrl: Employee
+    deactivate Svc
+    Ctrl ->> Model: addAttribute("employee", Employee)
+    Ctrl -->> View: return "delete_confirm"
+    deactivate Ctrl
+    View -->> Admin: 削除確認画面を表示
+    
+    Admin ->> View: 削除を確定
+    View ->> Ctrl: POST /delete
+    activate Ctrl
+    Ctrl ->> Svc: deleteById(empno)
+    activate Svc
+    Svc ->> Rep: deleteById(empno)
+    activate Rep
+    Rep -->> Svc: void
+    deactivate Rep
+    Svc -->> Ctrl: void
+    deactivate Svc
+    Ctrl -->> View: redirect:/deleteComplete
+    deactivate Ctrl
+    View ->> Ctrl: GET /deleteComplete
+    activate Ctrl
+    Ctrl -->> View: return "delete_complete"
+    deactivate Ctrl
+    View -->> Admin: 削除完了画面を表示
+```
