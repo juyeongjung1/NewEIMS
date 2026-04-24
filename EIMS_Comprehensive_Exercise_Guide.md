@@ -533,13 +533,11 @@ flowchart LR
 ```mermaid
 flowchart TD
     UI1[UI1: トップページ] --> UI2[UI2: 検索条件入力画面]
-    UI1 --> UI_L[社員一覧画面]
     UI1 --> UI4[UI4: 社員情報登録画面]
     
     UI2 --> UI_D[UI_D: 社員詳細画面]
     UI2 --> UI3[UI3: 検索結果一覧画面]
     UI3 --> UI_D
-    UI_L --> UI_D
     
     UI4 --> UI5[UI5: 登録確認画面]
     UI5 --> UI6[UI6: 登録完了画面]
@@ -560,13 +558,11 @@ flowchart TD
 ```mermaid
 flowchart TD
     UI1[UI1: トップページ] -->|"社員の検索"| UI2[UI2: 検索条件入力画面]
-    UI1 -->|"一覧"| UI_L[社員一覧画面]
     
     UI2 -- "社員番号で検索" --> UI_D[UI_D: 社員詳細画面]
     UI2 -- "氏名・部署で検索" --> UI3[UI3: 検索結果一覧画面]
     
     UI3 -- "氏名+カナをクリック" --> UI_D
-    UI_L -- "氏名+カナをクリック" --> UI_D
     
     UI_D -->|"メニューへ戻る"| UI1
     UI3 -->|"検索画面へ戻る"| UI2
