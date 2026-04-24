@@ -315,11 +315,11 @@
 <tr><td>要件定義</td><td>ユースケース仕様書</td><td align="center">※</td><td align="center">※</td><td align="center">※</td><td align="center">※</td></tr>
 <tr><td>要件定義</td><td>UI フロー図</td><td align="center">※</td><td align="center">※</td><td align="center">※</td><td align="center">※</td></tr>
 <tr><td>要件定義</td><td>画面レイアウト図</td><td align="center">※</td><td align="center">※</td><td align="center">※</td><td align="center">※</td></tr>
+<tr><td>設計</td><td>データベース仕様</td><td colspan="4" align="center">※</td></tr>
 <tr><td>分析</td><td>クラス図（分析レベル）</td><td align="center">※</td><td align="center">※</td><td align="center">※</td><td align="center">※</td></tr>
 <tr><td>分析</td><td>シーケンス図（分析レベル）</td><td align="center">※</td><td align="center">※</td><td align="center">※</td><td align="center">※</td></tr>
 <tr><td>設計</td><td>クラス図（設計レベル）</td><td align="center">※</td><td align="center">※</td><td align="center">※</td><td align="center">※</td></tr>
 <tr><td>設計</td><td>シーケンス図（設計レベル）</td><td align="center">※</td><td align="center">※</td><td align="center">※</td><td align="center">※</td></tr>
-<tr><td>設計</td><td>データベース仕様</td><td colspan="4" align="center">※</td></tr>
 <tr><td>実装</td><td>ソースコード</td><td align="center">○</td><td align="center">○</td><td align="center">○</td><td align="center">○</td></tr>
 <tr><td>テスト</td><td>テストケース仕様書.xls</td><td align="center">○</td><td align="center">○</td><td align="center">○</td><td align="center">○</td></tr>
 <tr><td>テスト</td><td>テスト不具合報告書.xls</td><td align="center">○</td><td align="center">○</td><td align="center">○</td><td align="center">○</td></tr>
@@ -330,7 +330,7 @@
 - **「※」** ・・・ 本ドキュメントに収録、または提供される作成済みの資料を利用する。
 - **「○」** ・・・ 自身で作成する。作成にあたっては、提供されるフォーマット（書式）を利用する。
 
-また、データベースのテーブルレイアウトは確定済みである。「8. データベース仕様」を参照すること。
+また、データベースのテーブルレイアウトは確定済みである。「6. データベース仕様」を参照すること。
 
 <div style="page-break-before: always;"></div>
 
