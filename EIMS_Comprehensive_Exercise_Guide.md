@@ -288,9 +288,9 @@
 
 | 提供物 | 説明 |
 |---|---|
-| **スターターキットプロジェクト** | 必要なライブラリ（依存関係）およびリソースファイル（CSSなど）が設定済みの Spring Boot プロジェクト。このプロジェクトをベースに開発を開始すること。 |
-| **データベース構築ファイル** | テーブル作成スクリプトおよびテスト用初期データの投入スクリプト。講師の指示に従い、データベースのセットアップと接続確認を行うこと。 |
-| **各種設計ドキュメント** | ユースケース図、ユースケース仕様書、UIフロー図、画面レイアウト図、クラス図（分析・設計レベル）。 |
+| **スターターキットプロジェクト** | 必要なライブラリ（依存関係）およびリソースファイル（イメージファイル、Bootstrap関連ファイルなど）が設定済みの Spring Boot プロジェクト。このプロジェクトをベースに開発を開始すること。 |
+| **データベース構築ファイル** | テーブル作成スクリプトおよびテスト用初期データの投入スクリプト。講師の指示に従い、データベースのセットアップを行うこと。 |
+| **各種設計ドキュメント** | 本ドキュメント内に、ユースケース図、ユースケース仕様書、UIフロー図、画面レイアウト図、クラス図（分析・設計レベル）、シーケンス図を収録している。 |
 | **テストケース仕様書フォーマット** | テスト工程で使用する書式ファイル（.xls）。 |
 
 <div style="page-break-before: always;"></div>
@@ -298,23 +298,29 @@
 ### ドキュメントについて
 各工程で作成・利用する成果物は以下の表の通り。
 
-| 工程 | 成果物 | 社員情報検索 | 社員情報登録 | 社員情報削除 | 社員情報変更 |
-|---|---|:---:|:---:|:---:|:---:|
-| 要件定義 | ユースケース図 | ※ | | | |
-| 要件定義 | ユースケース仕様書 | ※ | ※ | ※ | ※ |
-| 要件定義 | UI フロー図 | ※ | ※ | ※ | ※ |
-| 要件定義 | 画面レイアウト図 | ※ | ※ | ※ | ※ |
-| 分析 | クラス図（分析レベル） | ※ | ※ | ※ | ※ |
-| 分析 | シーケンス図（分析レベル） | × | | | |
-| 設計 | クラス図（設計レベル） | ※ | ※ | ※ | ※ |
-| 設計 | シーケンス図（設計レベル） | × | | | |
-| 実装 | ソースコード | ○ | ○ | ○ | ○ |
-| テスト | テストケース仕様書.xls | ○ | ○ | ○ | ○ |
-| テスト | テスト不具合報告書.xls | ○ | ○ | ○ | ○ |
+<table>
+<thead>
+<tr>
+<th>工程</th><th>成果物</th><th>社員情報検索</th><th>社員情報登録</th><th>社員情報削除</th><th>社員情報変更</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>要件定義</td><td>ユースケース図</td><td colspan="4" align="center">※</td></tr>
+<tr><td>要件定義</td><td>ユースケース仕様書</td><td align="center">※</td><td align="center">※</td><td align="center">※</td><td align="center">※</td></tr>
+<tr><td>要件定義</td><td>UI フロー図</td><td align="center">※</td><td align="center">※</td><td align="center">※</td><td align="center">※</td></tr>
+<tr><td>要件定義</td><td>画面レイアウト図</td><td align="center">※</td><td align="center">※</td><td align="center">※</td><td align="center">※</td></tr>
+<tr><td>分析</td><td>クラス図（分析レベル）</td><td align="center">※</td><td align="center">※</td><td align="center">※</td><td align="center">※</td></tr>
+<tr><td>分析</td><td>シーケンス図（分析レベル）</td><td align="center">※</td><td align="center">※</td><td align="center">※</td><td align="center">※</td></tr>
+<tr><td>設計</td><td>クラス図（設計レベル）</td><td align="center">※</td><td align="center">※</td><td align="center">※</td><td align="center">※</td></tr>
+<tr><td>設計</td><td>シーケンス図（設計レベル）</td><td align="center">※</td><td align="center">※</td><td align="center">※</td><td align="center">※</td></tr>
+<tr><td>実装</td><td>ソースコード</td><td align="center">○</td><td align="center">○</td><td align="center">○</td><td align="center">○</td></tr>
+<tr><td>テスト</td><td>テストケース仕様書.xls</td><td align="center">○</td><td align="center">○</td><td align="center">○</td><td align="center">○</td></tr>
+<tr><td>テスト</td><td>テスト不具合報告書.xls</td><td align="center">○</td><td align="center">○</td><td align="center">○</td><td align="center">○</td></tr>
+</tbody>
+</table>
 
 表の見方は次の通り。
-- **「×」** ・・・ 実際の現場では部分的に作成するが、今回の演習では割愛する。
-- **「※」** ・・・ 提供される作成済みのドキュメントを利用する。
+- **「※」** ・・・ 本ドキュメントに収録、または提供される作成済みの資料を利用する。
 - **「○」** ・・・ 自身で作成する。作成にあたっては、提供されるフォーマット（書式）を利用する。
 
 また、データベースのテーブルレイアウトは確定済みである。「4. データベース仕様」を参照すること。
