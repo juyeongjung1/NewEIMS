@@ -738,6 +738,19 @@ sequenceDiagram
     deactivate Ctrl
     
     UI -->> Admin: 検索結果一覧画面を表示
+    
+    opt 詳細画面を表示する場合
+        Admin ->> UI: 一覧から社員を選択
+        UI ->> Ctrl: 詳細情報の取得を依頼
+        activate Ctrl
+        Ctrl ->> Emp: 該当社員情報を取得
+        activate Emp
+        Emp -->> Ctrl: 社員情報
+        deactivate Emp
+        Ctrl -->> UI: 詳細情報を返す
+        deactivate Ctrl
+        UI -->> Admin: 社員詳細画面を表示
+    end
     deactivate UI
 ```
 
@@ -769,6 +782,56 @@ sequenceDiagram
     deactivate Ctrl
     
     UI -->> Admin: 登録完了画面を表示
+    deactivate UI
+```
+
+### 7.3 UC003: 社員情報を変更する
+```mermaid
+sequenceDiagram
+    actor Admin as 人事部管理者
+    participant UI as 画面
+    participant Ctrl as EmployeeController
+    participant Emp as Employee(エンティティ)
+
+    Admin ->> UI: 変更内容を入力し、変更を指示
+    activate UI
+    UI ->> Ctrl: 変更処理を依頼
+    activate Ctrl
+    
+    Ctrl ->> Emp: 該当社員情報の更新を指示
+    activate Emp
+    Emp -->> Ctrl: 更新完了
+    deactivate Emp
+    
+    Ctrl -->> UI: 変更完了を通知
+    deactivate Ctrl
+    
+    UI -->> Admin: 変更完了画面を表示
+    deactivate UI
+```
+
+### 7.4 UC004: 社員情報を削除する
+```mermaid
+sequenceDiagram
+    actor Admin as 人事部管理者
+    participant UI as 画面
+    participant Ctrl as EmployeeController
+    participant Emp as Employee(エンティティ)
+
+    Admin ->> UI: 社員の削除を指示
+    activate UI
+    UI ->> Ctrl: 削除処理を依頼
+    activate Ctrl
+    
+    Ctrl ->> Emp: 該当社員情報の削除を指示
+    activate Emp
+    Emp -->> Ctrl: 削除完了
+    deactivate Emp
+    
+    Ctrl -->> UI: 削除完了を通知
+    deactivate Ctrl
+    
+    UI -->> Admin: 削除完了画面を表示
     deactivate UI
 ```
 
