@@ -21,23 +21,23 @@
                         <tbody>
                             <tr>
                                 <th class="table-info w-25">社員番号</th>
-                                <td th:text=""></td>
+                                <td th:text="${employee.empno}"></td>
                             </tr>
                             <tr>
                                 <th class="table-info">氏名</th>
-                                <td th:text=" + ' ' + "></td>
+                                <td th:text="${employee.lname} + ' ' + ${employee.fname}"></td>
                             </tr>
                             <tr>
                                 <th class="table-info">氏名（カナ）</th>
-                                <td th:text=" + ' ' + "></td>
+                                <td th:text="${employee.lkana} + ' ' + ${employee.fkana}"></td>
                             </tr>
                             <tr>
                                 <th class="table-info">性別</th>
-                                <td th:text=""></td>
+                                <td th:text="${employee.gender == 1 ? '男性' : '女性'}"></td>
                             </tr>
                             <tr>
                                 <th class="table-info">所属部署</th>
-                                <td th:text=""></td>
+                                <td th:text="${employee.department.deptname}"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -51,8 +51,8 @@
                 <a th:href="@{/search}" class="btn btn-secondary">検索画面に戻る</a>
             </div>
             <div>
-                <a th:href="@{/changeInput/{id}(id=)}" class="btn btn-warning me-2">情報を変更する</a>
-                <a th:href="@{/deleteConfirm/{id}(id=)}" class="btn btn-danger">削除する</a>
+                <a th:href="@{/changeInput/{id}(id=${employee.empno})}" class="btn btn-warning me-2">情報を変更する</a>
+                <a th:href="@{/deleteConfirm/{id}(id=${employee.empno})}" class="btn btn-danger">削除する</a>
             </div>
         </div>
     </div>

@@ -33,14 +33,14 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="emp : ">
-                            <td th:text=""></td>
+                        <tr th:each="emp : ${employees}">
+                            <td th:text="${emp.empno}"></td>
                             <td>
-                                <a th:href="@{/detail/{id}(id=)}" class="text-decoration-none"
-                                   th:text=" + ' ' +  + ' (' +  + ' ' +  + ')'"></a>
+                                <a th:href="@{/detail/{id}(id=${emp.empno})}" class="text-decoration-none"
+                                   th:text="${emp.lname} + ' ' + ${emp.fname} + ' (' + ${emp.lkana} + ' ' + ${emp.fkana} + ')'"></a>
                             </td>
-                            <td th:text=""></td>
-                            <td th:text=""></td>
+                            <td th:text="${emp.gender == 1 ? '男性' : '女性'}"></td>
+                            <td th:text="${emp.department.deptname}"></td>
                         </tr>
                     </tbody>
                 </table>
