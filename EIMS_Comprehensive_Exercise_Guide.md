@@ -52,9 +52,9 @@
   - 3.2 ユースケース仕様書
 - 4\. UIフロー図
 - 5\. 画面レイアウト図
-- 6\. クラス図（分析レベル）
-- 7\. シーケンス図（分析レベル）
-- 8\. データベース仕様
+- 6\. データベース仕様
+- 7\. クラス図（分析レベル）
+- 8\. シーケンス図（分析レベル）
 - 9\. クラス図（設計レベル）
 - 10\. シーケンス図（設計レベル）
 
@@ -674,7 +674,73 @@ flowchart TD
 
 ---
 
-## 6. クラス図（分析レベル）
+## 6. データベース仕様
+
+### 6.1 データベース概要
+
+| 項目 | 内容 |
+|---|---|
+| データベース名 | eimsdb |
+| DBMS | MySQL |
+| 文字コード | utf8mb4 |
+| 照合順序 | utf8mb4_unicode_ci |
+
+### 6.2 テーブルの関係性（実体関連図）
+```mermaid
+erDiagram
+    DEPARTMENT ||--o{ EMPLOYEE : "所属"
+    DEPARTMENT {
+        INTEGER deptno PK
+        VARCHAR deptname
+    }
+    EMPLOYEE {
+        INTEGER empno PK
+        VARCHAR lname
+        VARCHAR fname
+        VARCHAR lkana
+        VARCHAR fkana
+        VARCHAR password
+        INTEGER gender
+        INTEGER deptno FK
+    }
+```
+
+### 6.3 テーブル定義
+
+#### 【部署情報テーブル】(department)
+| Field | Type | Null | Key | Default | 説明 |
+|---|---|---|---|---|---|
+| deptno | INTEGER | NOT NULL | PRIMARY KEY | なし | 部署コード |
+| deptname | VARCHAR(10) | NOT NULL | | なし | 部署名 |
+
+#### 【社員情報テーブル】(employee)
+| Field | Type | Null | Key | Default | 説明 |
+|---|---|---|---|---|---|
+| empno | INTEGER | NOT NULL | PRIMARY KEY | AUTO_INCREMENT | 社員番号（自動採番） |
+| lname | VARCHAR(10) | NOT NULL | | なし | 氏 |
+| fname | VARCHAR(10) | NOT NULL | | なし | 名 |
+| lkana | VARCHAR(20) | NOT NULL | | なし | 氏（カナ） |
+| fkana | VARCHAR(20) | NOT NULL | | なし | 名（カナ） |
+| password | VARCHAR(20) | NOT NULL | | なし | パスワード |
+| gender | INTEGER | NOT NULL | | なし | 性別（1:男性 2:女性） |
+| deptno | INTEGER | NOT NULL | FOREIGN KEY | なし | 部署コード |
+
+**外部キー制約:**
+- 制約名: `fk_employee_department`
+- employee.deptno → department.deptno を参照
+
+### 6.4 初期データ仕様
+
+| テーブル | 件数 | 備考 |
+|---|---|---|
+| department | 6件 | 人事部(100)、経理部(200)、営業部(300)、総務部(400)、開発部(500)、企画部(600) |
+| employee | 60件 | テスト用サンプルデータ（社員番号 10001〜10060） |
+
+<div style="page-break-before: always;"></div>
+
+---
+
+## 7. クラス図（分析レベル）
 
 システムに登場する概念を「バウンダリ（画面）」「コントロール（制御・管理）」「エンティティ（データ）」の役割（BCEモデル）で定義する。
 
@@ -713,11 +779,11 @@ classDiagram
 
 ---
 
-## 7. シーケンス図（分析レベル）
+## 8. シーケンス図（分析レベル）
 
 各ユースケースが実現されるまでのオブジェクト間のメッセージのやり取り（処理の流れ）を以下に定義する。
 
-### 7.1 UC001: 社員情報を検索する
+### 8.1 UC001: 社員情報を検索する
 ```mermaid
 sequenceDiagram
     actor Admin as 人事部管理者
@@ -774,7 +840,7 @@ sequenceDiagram
     deactivate UI
 ```
 
-### 7.2 UC002: 社員情報を登録する
+### 8.2 UC002: 社員情報を登録する
 ```mermaid
 sequenceDiagram
     actor Admin as 人事部管理者
@@ -816,7 +882,7 @@ sequenceDiagram
     deactivate UI
 ```
 
-### 7.3 UC003: 社員情報を変更する
+### 8.3 UC003: 社員情報を変更する
 ```mermaid
 sequenceDiagram
     actor Admin as 人事部管理者
@@ -859,7 +925,7 @@ sequenceDiagram
     deactivate UI
 ```
 
-### 7.4 UC004: 社員情報を削除する
+### 8.4 UC004: 社員情報を削除する
 ```mermaid
 sequenceDiagram
     actor Admin as 人事部管理者
@@ -884,38 +950,6 @@ sequenceDiagram
     UI -->> Admin: 削除完了画面を表示
     deactivate UI
 ```
-
-<div style="page-break-before: always;"></div>
-
----
-
-## 8. データベース仕様
-
-### 8.1 テーブルの関係性（実体関連図）
-```mermaid
-erDiagram
-    部署 ||--o{ 社員 : "所属"
-```
-
-### 8.2 DBレイアウト
-
-#### 【部署情報】(department)
-| Field | Type | Null | Key | 説明 |
-|---|---|---|---|---|
-| deptno | INTEGER | NOT NULL | 主キー | 部署コード |
-| deptname | VARCHAR(10) | NOT NULL | | 部署名 |
-
-#### 【社員情報】(employee)
-| Field | Type | Null | Key | 説明 |
-|---|---|---|---|---|
-| empno | INTEGER | NOT NULL | 主キー | 社員番号（自動採番） |
-| lname | VARCHAR(10) | NOT NULL | | 氏 |
-| fname | VARCHAR(10) | NOT NULL | | 名 |
-| lkana | VARCHAR(20) | NOT NULL | | 氏（カナ） |
-| fkana | VARCHAR(20) | NOT NULL | | 名（カナ） |
-| password | VARCHAR(20) | NOT NULL | | パスワード |
-| gender | INTEGER | NOT NULL | | 性別（1:男 2:女） |
-| deptno | INTEGER | NOT NULL | 外部キー | 部署コード |
 
 <div style="page-break-before: always;"></div>
 
