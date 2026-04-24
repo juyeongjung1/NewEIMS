@@ -354,8 +354,8 @@ flowchart LR
     管理者 --- UC3
     管理者 --- UC4
     
-    UC3 -.->|<<include>>| UC1
-    UC4 -.->|<<include>>| UC1
+    UC3 -.->|"«include»"| UC1
+    UC4 -.->|"«include»"| UC1
 ```
 
 - **U003（削除）** および **U004（変更）** は、対象社員を特定するために **U001（検索）** を包含（include）する。
