@@ -793,7 +793,10 @@ sequenceDiagram
     participant Ctrl as EmployeeController
     participant Emp as Employee(エンティティ)
 
-    Admin ->> UI: 変更内容を入力し、変更を指示
+    note over Admin, UI: ※詳細画面が表示されている状態から開始
+    Admin ->> UI: 【詳細画面】から変更を指示
+    UI -->> Admin: 変更入力画面を表示
+    Admin ->> UI: 変更内容を入力し、確定を指示
     activate UI
     UI ->> Ctrl: 変更処理を依頼
     activate Ctrl
@@ -818,7 +821,8 @@ sequenceDiagram
     participant Ctrl as EmployeeController
     participant Emp as Employee(エンティティ)
 
-    Admin ->> UI: 社員の削除を指示
+    note over Admin, UI: ※詳細画面が表示されている状態から開始
+    Admin ->> UI: 【詳細画面】から削除を指示
     activate UI
     UI ->> Ctrl: 削除処理を依頼
     activate Ctrl
