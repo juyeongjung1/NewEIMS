@@ -347,32 +347,65 @@ flowchart LR
     管理者((人事部管理者))
     
     subgraph EIMS Web
-        UC1([U001: 社員情報を検索する])
-        UC2([U002: 社員情報を登録する])
-        UC3([U003: 社員情報を変更する])
-        UC4([U004: 社員情報を削除する])
+        UC1([UC001: 社員一覧を表示する])
+        UC2([UC002: 社員情報を検索する])
+        UC3([UC003: 社員情報を登録する])
+        UC4([UC004: 社員情報を変更する])
+        UC5([UC005: 社員情報を削除する])
     end
     
     管理者 --- UC1
     管理者 --- UC2
     管理者 --- UC3
     管理者 --- UC4
+    管理者 --- UC5
     
-    UC3 -.->|"«include»"| UC1
-    UC4 -.->|"«include»"| UC1
+    UC4 -.->|"«include»"| UC2
+    UC5 -.->|"«include»"| UC2
 ```
 
-- **U003（変更）** および **U004（削除）** は、対象社員を特定するために **U001（検索）** を包含（include）する。
+- **UC004（変更）** および **UC005（削除）** は、対象社員を特定するために **UC002（検索）** を包含（include）する。
 
 <div style="page-break-before: always;"></div>
 
 ### 3.2 ユースケース仕様書
 
-#### UC001: 社員情報を検索する
+#### UC001: 社員一覧を表示する
 
 | 項目 | 内容 |
 |---|---|
 | **ユースケースID** | UC001 |
+| **ユースケース名** | 社員一覧を表示する |
+| **目的** | EIMSデータベースに登録されている全社員の一覧を表示する。 |
+| **アクター** | 人事部管理者 |
+| **前提条件** | なし |
+
+**事前条件:**
+- EIMS データベースに社員テーブルと部署テーブルが作成されていること。
+- EIMS データベースが正常に起動していること。
+
+**基本フロー:**
+1. [人事部管理者]は、システムに「社員一覧」を指示する。
+2. システムは、EIMSデータベースから全社員情報を取得し、社員一覧画面を表示する。
+3. [人事部管理者]は、表示された一覧を確認し、ユースケースを終了する。（代替フロー alt3-1, alt3-2 参照）
+
+**代替フロー:**
+- **alt3-1.** 基本フロー3で[人事部管理者]が一覧の氏名+カナをクリックした場合、システムは対象社員の「社員詳細画面」を表示する。
+- **alt3-2.** 基本フロー3で[人事部管理者]はトップページに遷移することができる。
+
+**事後条件:**
+- 社員一覧画面が表示されていること。
+- 一覧の表は「社員番号」「氏名+カナ」「性別」「部署名」の4列で構成され、「氏」・「名」および「氏(カナ)」・「名(カナ)」は半角スペース区切りで連結されていること。
+
+**特記事項:** 特になし。
+
+<div style="page-break-before: always;"></div>
+
+#### UC002: 社員情報を検索する
+
+| 項目 | 内容 |
+|---|---|
+| **ユースケースID** | UC002 |
 | **ユースケース名** | 社員情報を検索する |
 | **目的** | 社員番号による検索と、氏・名の部分一致検索と、部署名検索を行い、該当する社員情報の一覧を表示する。 |
 | **アクター** | 人事部管理者 |
@@ -406,11 +439,11 @@ flowchart LR
 
 <div style="page-break-before: always;"></div>
 
-#### UC002: 社員情報を登録する
+#### UC003: 社員情報を登録する
 
 | 項目 | 内容 |
 |---|---|
-| **ユースケースID** | UC002 |
+| **ユースケースID** | UC003 |
 | **ユースケース名** | 社員情報を登録する |
 | **目的** | 氏、名、氏（カナ）、名（カナ）、性別、部署、パスワードを入力して、一人分の社員情報を登録する。社員番号はシステムが自動採番する。 |
 | **アクター** | 人事部管理者 |
@@ -449,15 +482,15 @@ flowchart LR
 
 <div style="page-break-before: always;"></div>
 
-#### UC003: 社員情報を変更する
+#### UC004: 社員情報を変更する
 
 | 項目 | 内容 |
 |---|---|
-| **ユースケースID** | UC003 |
+| **ユースケースID** | UC004 |
 | **ユースケース名** | 社員情報を変更する |
 | **目的** | 既存の社員情報を変更し、EIMSデータベースを更新する。社員番号は変更不可とする。 |
 | **アクター** | 人事部管理者 |
-| **前提条件** | UC001（検索）により対象社員が特定されていること。 |
+| **前提条件** | UC002（検索）により対象社員が特定されていること。 |
 
 **事前条件:**
 - EIMS データベースに社員テーブルと部署テーブルが作成されていること。
@@ -490,15 +523,15 @@ flowchart LR
 
 <div style="page-break-before: always;"></div>
 
-#### UC004: 社員情報を削除する
+#### UC005: 社員情報を削除する
 
 | 項目 | 内容 |
 |---|---|
-| **ユースケースID** | UC004 |
+| **ユースケースID** | UC005 |
 | **ユースケース名** | 社員情報を削除する |
 | **目的** | 指定された社員の情報をEIMSデータベースから物理削除する。 |
 | **アクター** | 人事部管理者 |
-| **前提条件** | UC001（検索）により対象社員が特定されていること。 |
+| **前提条件** | UC002（検索）により対象社員が特定されていること。 |
 
 **事前条件:**
 - EIMS データベースに社員テーブルと部署テーブルが作成されていること。
@@ -532,10 +565,13 @@ flowchart LR
 ### 4.1 全体UIフロー図
 ```mermaid
 flowchart TD
-    UI1[UI1: トップページ] --> UI2[UI2: 検索条件入力画面]
+    UI1[UI1: トップページ] --> UI_L[UI_L: 社員一覧画面]
+    UI1 --> UI2[UI2: 検索条件入力画面]
     UI1 --> UI4[UI4: 社員情報登録画面]
     
-    UI2 --> UI_D[UI_D: 社員詳細画面]
+    UI_L --> UI_D[UI_D: 社員詳細画面]
+    
+    UI2 --> UI_D
     UI2 --> UI3[UI3: 検索結果一覧画面]
     UI3 --> UI_D
     
@@ -557,7 +593,17 @@ flowchart TD
 
 ### 4.2 機能別UIフロー図
 
-#### UC001: 社員情報を検索する
+#### UC001: 社員一覧を表示する
+```mermaid
+flowchart TD
+    UI1[UI1: トップページ] -->|"社員一覧"| UI_L[UI_L: 社員一覧画面]
+    
+    UI_L -- "氏名+カナをクリック" --> UI_D[UI_D: 社員詳細画面]
+    
+    UI_L -->|"トップページへ戻る"| UI1
+```
+
+#### UC002: 社員情報を検索する
 ```mermaid
 flowchart TD
     UI1[UI1: トップページ] -->|"社員の検索"| UI2[UI2: 検索条件入力画面]
@@ -574,7 +620,7 @@ flowchart TD
     UI_D -->|"検索画面へ戻る"| UI2
 ```
 
-#### UC002: 社員情報を登録する
+#### UC003: 社員情報を登録する
 ```mermaid
 flowchart TD
     UI1[UI1: トップページ] -->|"社員の登録"| UI4[UI4: 社員情報登録画面]
@@ -587,7 +633,7 @@ flowchart TD
     UI6 -->|"トップページへ戻る"| UI1
 ```
 
-#### UC003: 社員情報を変更する
+#### UC004: 社員情報を変更する
 ```mermaid
 flowchart TD
     UI_D[UI_D: 社員詳細画面] -- "変更" --> UI9[UI9: 変更画面]
@@ -600,7 +646,7 @@ flowchart TD
     UI11 -->|"検索画面へ戻る"| UI2[UI2: 検索条件入力画面]
 ```
 
-#### UC004: 社員情報を削除する
+#### UC005: 社員情報を削除する
 ```mermaid
 flowchart TD
     UI_D[UI_D: 社員詳細画面] -- "削除" --> UI7[UI7: 削除確認画面]
@@ -783,7 +829,42 @@ classDiagram
 
 各ユースケースが実現されるまでのオブジェクト間のメッセージのやり取り（処理の流れ）を以下に定義する。
 
-### 8.1 UC001: 社員情報を検索する
+### 8.1 UC001: 社員一覧を表示する
+```mermaid
+sequenceDiagram
+    actor Admin as 人事部管理者
+    participant UI as 画面
+    participant Ctrl as EmployeeController
+    participant Emp as Employee(エンティティ)
+
+    Admin ->> UI: 社員一覧の表示を要求
+    activate UI
+    UI ->> Ctrl: 一覧表示を依頼
+    activate Ctrl
+    Ctrl ->> Emp: 全社員情報を取得
+    activate Emp
+    Emp -->> Ctrl: 社員情報リスト
+    deactivate Emp
+    Ctrl -->> UI: 一覧情報を返す
+    deactivate Ctrl
+    UI -->> Admin: 社員一覧画面を表示
+    
+    opt 詳細画面を表示する場合
+        Admin ->> UI: 一覧から社員を選択
+        UI ->> Ctrl: 詳細情報の取得を依頼
+        activate Ctrl
+        Ctrl ->> Emp: 該当社員情報を取得
+        activate Emp
+        Emp -->> Ctrl: 社員情報
+        deactivate Emp
+        Ctrl -->> UI: 詳細情報を返す
+        deactivate Ctrl
+        UI -->> Admin: 社員詳細画面を表示
+    end
+    deactivate UI
+```
+
+### 8.2 UC002: 社員情報を検索する
 ```mermaid
 sequenceDiagram
     actor Admin as 人事部管理者
@@ -840,7 +921,7 @@ sequenceDiagram
     deactivate UI
 ```
 
-### 8.2 UC002: 社員情報を登録する
+### 8.3 UC003: 社員情報を登録する
 ```mermaid
 sequenceDiagram
     actor Admin as 人事部管理者
@@ -882,7 +963,7 @@ sequenceDiagram
     deactivate UI
 ```
 
-### 8.3 UC003: 社員情報を変更する
+### 8.4 UC004: 社員情報を変更する
 ```mermaid
 sequenceDiagram
     actor Admin as 人事部管理者
@@ -925,7 +1006,7 @@ sequenceDiagram
     deactivate UI
 ```
 
-### 8.4 UC004: 社員情報を削除する
+### 8.5 UC005: 社員情報を削除する
 ```mermaid
 sequenceDiagram
     actor Admin as 人事部管理者
@@ -959,7 +1040,37 @@ sequenceDiagram
 
 Spring Bootのアーキテクチャに基づき、各ユースケースの実装に必要なクラスとその依存関係を機能単位で定義する。
 
-### 9.1 UC001: 社員情報を検索する
+### 9.1 UC001: 社員一覧を表示する
+一覧表示機能におけるクラス構成を以下に定義する。
+```mermaid
+classDiagram
+    class EmployeeController {
+        <<Controller>>
+        +showEmployeeList(Model) String
+        +showDetail(Integer, Model) String
+    }
+    class EmployeeService {
+        <<Interface>>
+        +findAll() List~Employee~
+        +findById(Integer) Employee
+    }
+    class EmployeeServiceImpl {
+        <<Service>>
+        +findAll() List~Employee~
+        +findById(Integer) Employee
+    }
+    class EmployeeRepository {
+        <<Repository>>
+    }
+    class Employee { <<Entity>> }
+
+    EmployeeController ..> EmployeeService : 依存(DI)
+    EmployeeServiceImpl ..|> EmployeeService : 実現
+    EmployeeServiceImpl ..> EmployeeRepository : 依存(DI)
+    EmployeeRepository ..> Employee : 操作
+```
+
+### 9.2 UC002: 社員情報を検索する
 検索機能におけるクラス構成を以下に定義する。
 ```mermaid
 classDiagram
@@ -1019,7 +1130,7 @@ classDiagram
     DepartmentRepository ..> Department : 操作
 ```
 
-### 9.2 UC002: 社員情報を登録する
+### 9.3 UC003: 社員情報を登録する
 登録機能におけるクラス構成を以下に定義する。
 ```mermaid
 classDiagram
@@ -1072,7 +1183,7 @@ classDiagram
     EmployeeRepository ..> Employee : 操作
 ```
 
-### 9.3 UC003: 社員情報を変更する
+### 9.4 UC004: 社員情報を変更する
 変更機能におけるクラス構成を以下に定義する。
 ```mermaid
 classDiagram
@@ -1101,7 +1212,7 @@ classDiagram
     EmployeeRepository ..> Employee : 操作
 ```
 
-### 9.4 UC004: 社員情報を削除する
+### 9.5 UC005: 社員情報を削除する
 削除機能におけるクラス構成を以下に定義する。
 ```mermaid
 classDiagram
@@ -1127,7 +1238,7 @@ classDiagram
     EmployeeRepository ..> Employee : 操作
 ```
 
-### 9.5 全体クラス図
+### 9.6 全体クラス図
 システム全体の網羅的なクラス構成および依存関係を以下に定義する。
 ```mermaid
 classDiagram
@@ -1257,7 +1368,52 @@ classDiagram
 
 各ユースケースの具体的なメソッド呼び出し、およびMVCモデル間（View, Controller, Service, Repository）のデータの流れを以下に定義する。
 
-### 10.1 UC001: 社員情報を検索する
+### 10.1 UC001: 社員一覧を表示する
+```mermaid
+sequenceDiagram
+    actor Admin as 人事部管理者
+    participant View as Thymeleaf(画面)
+    participant Ctrl as EmployeeController
+    participant Svc as EmployeeServiceImpl
+    participant Rep as EmployeeRepository
+    participant Model as Model
+
+    Admin ->> View: トップページから「社員一覧」を選択
+    View ->> Ctrl: GET /employeeList
+    activate Ctrl
+    Ctrl ->> Svc: findAll()
+    activate Svc
+    Svc ->> Rep: findAll()
+    activate Rep
+    Rep -->> Svc: List~Employee~
+    deactivate Rep
+    Svc -->> Ctrl: List~Employee~
+    deactivate Svc
+    Ctrl ->> Model: addAttribute("employees", List)
+    Ctrl -->> View: return "employee_list"
+    deactivate Ctrl
+    View -->> Admin: 社員一覧画面を表示
+    
+    opt 一覧画面から詳細画面の表示
+        Admin ->> View: 一覧から社員氏名を選択
+        View ->> Ctrl: GET /detail/{empno}
+        activate Ctrl
+        Ctrl ->> Svc: findById(empno)
+        activate Svc
+        Svc ->> Rep: findById(empno)
+        activate Rep
+        Rep -->> Svc: Employee
+        deactivate Rep
+        Svc -->> Ctrl: Employee
+        deactivate Svc
+        Ctrl ->> Model: addAttribute("employee", Employee)
+        Ctrl -->> View: return "employee_detail"
+        deactivate Ctrl
+        View -->> Admin: 社員詳細画面を表示
+    end
+```
+
+### 10.2 UC002: 社員情報を検索する
 ```mermaid
 sequenceDiagram
     actor Admin as 人事部管理者
@@ -1350,7 +1506,7 @@ sequenceDiagram
     end
 ```
 
-### 10.2 UC002: 社員情報を登録する
+### 10.3 UC003: 社員情報を登録する
 ```mermaid
 sequenceDiagram
     actor Admin as 人事部管理者
@@ -1406,7 +1562,7 @@ sequenceDiagram
     View -->> Admin: 登録完了画面を表示
 ```
 
-### 10.3 UC003: 社員情報を変更する
+### 10.4 UC004: 社員情報を変更する
 ```mermaid
 sequenceDiagram
     actor Admin as 人事部管理者
@@ -1463,7 +1619,7 @@ sequenceDiagram
     View -->> Admin: 変更完了画面を表示
 ```
 
-### 10.4 UC004: 社員情報を削除する
+### 10.5 UC005: 社員情報を削除する
 ```mermaid
 sequenceDiagram
     actor Admin as 人事部管理者
