@@ -46,11 +46,15 @@
   - 1.4.1 削除機能 ...... p.12
   - 1.4.2 削除確認画面・削除完了画面 ...... p.13
   - 1.4.3 削除における実装方針と簡略化指針 ...... p.13
-- 2\. 演習の進め方 ...... p.10
-- 3\. 画面遷移図 ...... p.11
-- 4\. データベース仕様 ...... p.12
-- 5\. ユースケース図 ...... p.13
-- 6\. 設計レベルクラス図 ...... p.14
+- 2\. 演習の進め方
+- 3\. ユースケース図
+- 4\. UIフロー図
+- 5\. 画面レイアウト図
+- 6\. クラス図（分析レベル）
+- 7\. シーケンス図（分析レベル）
+- 8\. データベース仕様
+- 9\. クラス図（設計レベル）
+- 10\. シーケンス図（設計レベル）
 
 <div style="page-break-before: always;"></div>
 
@@ -313,6 +317,7 @@
 <tr><td>分析</td><td>シーケンス図（分析レベル）</td><td align="center">※</td><td align="center">※</td><td align="center">※</td><td align="center">※</td></tr>
 <tr><td>設計</td><td>クラス図（設計レベル）</td><td align="center">※</td><td align="center">※</td><td align="center">※</td><td align="center">※</td></tr>
 <tr><td>設計</td><td>シーケンス図（設計レベル）</td><td align="center">※</td><td align="center">※</td><td align="center">※</td><td align="center">※</td></tr>
+<tr><td>設計</td><td>データベース仕様</td><td colspan="4" align="center">※</td></tr>
 <tr><td>実装</td><td>ソースコード</td><td align="center">○</td><td align="center">○</td><td align="center">○</td><td align="center">○</td></tr>
 <tr><td>テスト</td><td>テストケース仕様書.xls</td><td align="center">○</td><td align="center">○</td><td align="center">○</td><td align="center">○</td></tr>
 <tr><td>テスト</td><td>テスト不具合報告書.xls</td><td align="center">○</td><td align="center">○</td><td align="center">○</td><td align="center">○</td></tr>
@@ -323,13 +328,45 @@
 - **「※」** ・・・ 本ドキュメントに収録、または提供される作成済みの資料を利用する。
 - **「○」** ・・・ 自身で作成する。作成にあたっては、提供されるフォーマット（書式）を利用する。
 
-また、データベースのテーブルレイアウトは確定済みである。「4. データベース仕様」を参照すること。
+また、データベースのテーブルレイアウトは確定済みである。「8. データベース仕様」を参照すること。
 
 <div style="page-break-before: always;"></div>
 
 ---
 
-## 3. 画面遷移図
+## 3. ユースケース図
+```mermaid
+flowchart LR
+    管理者((人事部管理者))
+    
+    subgraph システム境界 [EIMS Web]
+        UC1([U001: 社員情報を検索する])
+        UC2([U002: 社員情報を登録する])
+        UC3([U003: 社員情報を削除する])
+        UC4([U004: 社員情報を変更する])
+    end
+    
+    DB[(データベース)]
+    
+    管理者 --- UC1
+    管理者 --- UC2
+    管理者 --- UC3
+    管理者 --- UC4
+    
+    UC1 --- DB
+    UC2 --- DB
+    UC3 --- DB
+    UC4 --- DB
+    
+    UC3 -.->|<<包含>>| UC1
+    UC4 -.->|<<包含>>| UC1
+```
+
+<div style="page-break-before: always;"></div>
+
+---
+
+## 4. UIフロー図
 ```mermaid
 flowchart TD
     UI1[UI1: トップページ] --> UI2[UI2: 検索条件入力画面]
@@ -374,15 +411,36 @@ flowchart TD
 
 ---
 
-## 4. データベース仕様
+## 5. 画面レイアウト図
+（※各画面のスクリーンショットを後のステップで挿入予定）
 
-### 4.1 テーブルの関係性（実体関連図）
+<div style="page-break-before: always;"></div>
+
+---
+
+## 6. クラス図（分析レベル）
+（※後のステップで作成予定）
+
+<div style="page-break-before: always;"></div>
+
+---
+
+## 7. シーケンス図（分析レベル）
+（※後のステップで作成予定）
+
+<div style="page-break-before: always;"></div>
+
+---
+
+## 8. データベース仕様
+
+### 8.1 テーブルの関係性（実体関連図）
 ```mermaid
 erDiagram
     部署 ||--o{ 社員 : "所属"
 ```
 
-### 4.2 DBレイアウト
+### 8.2 DBレイアウト
 
 #### 【部署情報】(department)
 | Field | Type | Null | Key | 説明 |
@@ -406,39 +464,7 @@ erDiagram
 
 ---
 
-## 5. ユースケース図
-```mermaid
-flowchart LR
-    管理者((人事部管理者))
-    
-    subgraph システム境界 [EIMS Web]
-        UC1([U001: 社員情報を検索する])
-        UC2([U002: 社員情報を登録する])
-        UC3([U003: 社員情報を削除する])
-        UC4([U004: 社員情報を変更する])
-    end
-    
-    DB[(データベース)]
-    
-    管理者 --- UC1
-    管理者 --- UC2
-    管理者 --- UC3
-    管理者 --- UC4
-    
-    UC1 --- DB
-    UC2 --- DB
-    UC3 --- DB
-    UC4 --- DB
-    
-    UC3 -.->|<<包含>>| UC1
-    UC4 -.->|<<包含>>| UC1
-```
-
-<div style="page-break-before: always;"></div>
-
----
-
-## 6. 設計レベルクラス図
+## 9. クラス図（設計レベル）
 ```mermaid
 classDiagram
     class EmployeeController {
@@ -466,3 +492,10 @@ classDiagram
     EmployeeServiceImpl ..|> EmployeeService : 実現
     EmployeeController ..> EmployeeForm : 参照
 ```
+
+<div style="page-break-before: always;"></div>
+
+---
+
+## 10. シーケンス図（設計レベル）
+（※後のステップで作成予定）
