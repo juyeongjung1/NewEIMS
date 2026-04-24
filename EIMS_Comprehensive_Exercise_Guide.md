@@ -335,32 +335,30 @@
 ---
 
 ## 3. ユースケース図
+
+社員情報管理
+
 ```mermaid
 flowchart LR
     管理者((人事部管理者))
     
-    subgraph システム境界 [EIMS Web]
+    subgraph EIMS Web
         UC1([U001: 社員情報を検索する])
         UC2([U002: 社員情報を登録する])
         UC3([U003: 社員情報を削除する])
         UC4([U004: 社員情報を変更する])
     end
     
-    DB[(データベース)]
-    
     管理者 --- UC1
     管理者 --- UC2
     管理者 --- UC3
     管理者 --- UC4
     
-    UC1 --- DB
-    UC2 --- DB
-    UC3 --- DB
-    UC4 --- DB
-    
-    UC3 -.->|<<包含>>| UC1
-    UC4 -.->|<<包含>>| UC1
+    UC3 -.->|<<include>>| UC1
+    UC4 -.->|<<include>>| UC1
 ```
+
+- **U003（削除）** および **U004（変更）** は、対象社員を特定するために **U001（検索）** を包含（include）する。
 
 <div style="page-break-before: always;"></div>
 
