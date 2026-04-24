@@ -686,7 +686,7 @@ classDiagram
     }
     
     %% コントロール（制御）クラス
-    class EmployeeManager {
+    class EmployeeController {
         <<コントロール>>
         社員情報管理機能
     }
@@ -702,9 +702,9 @@ classDiagram
     }
     
     %% クラス間の関係（関連と依存）
-    UI --> EmployeeManager : 処理を依頼する
-    EmployeeManager --> Employee : 社員情報を操作する
-    EmployeeManager --> Department : 部署情報を参照する
+    UI --> EmployeeController : 処理を依頼する
+    EmployeeController --> Employee : 社員情報を操作する
+    EmployeeController --> Department : 部署情報を参照する
     Employee "*" --> "1" Department : 所属する
 ```
 
