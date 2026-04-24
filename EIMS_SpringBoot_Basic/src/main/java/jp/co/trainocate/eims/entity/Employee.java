@@ -25,23 +25,23 @@ public class Employee {
     private Integer empno;
 	
     /** 氏 */
-    @Column(length = 20, nullable = false)
+    @Column(length = 10, nullable = false)
     private String lname;
 	
     /** 名 */
-    @Column(length = 20, nullable = false)
+    @Column(length = 10, nullable = false)
     private String fname;
 	
     /** 氏(カナ) */
-    @Column(length = 50, nullable = false)
+    @Column(length = 20, nullable = false)
     private String lkana;
 	
     /** 名(カナ) */
-    @Column(length = 50, nullable = false)
+    @Column(length = 20, nullable = false)
     private String fkana;
 	
     /** パスワード */
-    @Column(length = 30, nullable = false)
+    @Column(length = 20, nullable = false)
     private String password;
 	
     /** 性別 1:男性 2:女性 */

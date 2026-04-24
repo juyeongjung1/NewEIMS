@@ -27,17 +27,17 @@ public class EmployeeForm {
 
     /** 氏（カナ） */
     @NotBlank(message = "氏（カナ）は必須項目です")
-    @Size(max = 10, message = "氏（カナ）は10文字以内で入力してください")
+    @Size(max = 20, message = "氏（カナ）は20文字以内で入力してください")
     private String lkana;
 
     /** 名（カナ） */
     @NotBlank(message = "名（カナ）は必須項目です")
-    @Size(max = 10, message = "名（カナ）は10文字以内で入力してください")
+    @Size(max = 20, message = "名（カナ）は20文字以内で入力してください")
     private String fkana;
 
     /** パスワード */
     @NotBlank(message = "パスワードは必須項目です")
-    @Size(max = 8, message = "パスワードは8文字以内で入力してください")
+    @Size(min = 4, max = 16, message = "パスワードは4文字以上16文字以内で入力してください")
     private String password;
 
     /** 性別 1:男性 2:女性 */
