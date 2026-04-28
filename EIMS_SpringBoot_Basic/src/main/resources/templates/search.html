@@ -14,45 +14,33 @@
     <div class="container">
         <h2 class="text-primary mb-4">社員検索</h2>
         
-        <div class="bg-white p-4 rounded border mb-4">
-            <div class="row mb-4">
-                <div class="col-md-4">
-                    <div class="p-3 bg-light rounded border">
-                        <h5 class="mb-3 text-secondary">社員番号で検索</h5>
-                        <form th:action="@{/selectByEmpNo}" method="get">
-                            <div class="mb-3">
-                                <input type="number" name="empno" class="form-control" placeholder="社員番号を入力" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">検索</button>
-                        </form>
-                    </div>
+        <div class="mb-4 p-4 bg-white rounded border">
+            <h5 class="mb-3 text-secondary">社員番号で検索</h5>
+            <form th:action="@{/selectByEmpNo}" method="get" class="mb-4">
+                <div class="mb-2">
+                    <input type="number" name="empno" class="form-control w-50" placeholder="社員番号を入力" required>
                 </div>
-                <div class="col-md-4">
-                    <div class="p-3 bg-light rounded border">
-                        <h5 class="mb-3 text-secondary">名字で検索</h5>
-                        <form th:action="@{/selectByEmpName}" method="get">
-                            <div class="mb-3">
-                                <input type="text" name="keyword" class="form-control" placeholder="名字を入力（部分一致）" required>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">検索</button>
-                        </form>
-                    </div>
+                <button type="submit" class="btn btn-primary">検索</button>
+            </form>
+
+            <h5 class="mb-3 text-secondary border-top pt-4">名字で検索</h5>
+            <form th:action="@{/selectByEmpName}" method="get" class="mb-4">
+                <div class="mb-2">
+                    <input type="text" name="keyword" class="form-control w-50" placeholder="名字を入力（部分一致）" required>
                 </div>
-                <div class="col-md-4">
-                    <div class="p-3 bg-light rounded border">
-                        <h5 class="mb-3 text-secondary">部署で検索</h5>
-                        <form th:action="@{/selectByDeptNo}" method="get">
-                            <div class="mb-3">
-                                <select name="deptno" class="form-control" required>
-                                    <option value="">部署を選択してください</option>
-                                    <option th:each="dept : ${departments}" th:value="${dept.deptno}" th:text="${dept.deptname}"></option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-primary w-100">検索</button>
-                        </form>
-                    </div>
+                <button type="submit" class="btn btn-primary">検索</button>
+            </form>
+
+            <h5 class="mb-3 text-secondary border-top pt-4">部署で検索</h5>
+            <form th:action="@{/selectByDeptNo}" method="get">
+                <div class="mb-2">
+                    <select name="deptno" class="form-control w-50" required>
+                        <option value="">部署を選択してください</option>
+                        <option th:each="dept : ${departments}" th:value="${dept.deptno}" th:text="${dept.deptname}"></option>
+                    </select>
                 </div>
-            </div>
+                <button type="submit" class="btn btn-primary">検索</button>
+            </form>
         </div>
         
         <div class="mb-5">

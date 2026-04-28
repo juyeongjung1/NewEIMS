@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -15,12 +15,10 @@
         <h2 class="text-primary mb-4">社員詳細</h2>
 
         <div class="bg-white p-4 rounded border mb-4">
-            <div class="row">
-                <div class="col-md-6 mx-auto">
                     <table class="table table-bordered mb-0">
                         <tbody>
                             <tr>
-                                <th class="table-info w-25">社員番号</th>
+                                <th class="table-info">社員番号</th>
                                 <td th:text="${employee.empno}"></td>
                             </tr>
                             <tr>
@@ -41,8 +39,6 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>
-            </div>
         </div>
 
         <div class="mb-5">
