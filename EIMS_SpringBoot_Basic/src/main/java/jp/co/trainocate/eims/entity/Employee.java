@@ -70,5 +70,9 @@ public class Employee {
         this.password = password;
         this.gender = gender;
         this.department = department;
+        // departmentが渡された場合、deptNo（FK列）も同期させる
+        if (department != null) {
+            this.deptNo = department.getDeptNo();
+        }
     }
 }
