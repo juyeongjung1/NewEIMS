@@ -18,23 +18,23 @@
                     <table class="table table-bordered mb-0">
                         <tbody>
                             <tr>
-                                <th class="table-info">社員番号</th>
+                                <th>社員番号</th>
                                 <td th:text="${employee.empno}"></td>
                             </tr>
                             <tr>
-                                <th class="table-info">氏名</th>
+                                <th>氏名</th>
                                 <td th:text="${employee.lname} + ' ' + ${employee.fname}"></td>
                             </tr>
                             <tr>
-                                <th class="table-info">氏名（カナ）</th>
+                                <th>氏名（カナ）</th>
                                 <td th:text="${employee.lkana} + ' ' + ${employee.fkana}"></td>
                             </tr>
                             <tr>
-                                <th class="table-info">性別</th>
+                                <th>性別</th>
                                 <td th:text="${employee.gender == 1 ? '男性' : '女性'}"></td>
                             </tr>
                             <tr>
-                                <th class="table-info">所属部署</th>
+                                <th>所属部署</th>
                                 <td th:text="${employee.department.deptname}"></td>
                             </tr>
                         </tbody>
