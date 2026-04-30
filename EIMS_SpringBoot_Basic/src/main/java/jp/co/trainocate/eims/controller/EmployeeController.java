@@ -10,6 +10,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import jakarta.validation.Valid;
 import jp.co.trainocate.eims.entity.Employee;
@@ -93,7 +95,7 @@ public class EmployeeController {
     }
 
     /** 登録画面を表示する */
-    @GetMapping("/input")
+    @RequestMapping(value = "/input", method = {RequestMethod.GET, RequestMethod.POST})
     public String showInputPage(EmployeeForm employeeForm, Model model) {
         model.addAttribute("departments", departmentService.findAll());
         return "input";
@@ -135,7 +137,7 @@ public class EmployeeController {
     }
 
     /** 変更入力画面を表示する */
-    @GetMapping("/changeInput/{empNo}")
+    @RequestMapping(value = "/changeInput/{empNo}", method = {RequestMethod.GET, RequestMethod.POST})
     public String changeInput(@PathVariable("empNo") Integer empNo, EmployeeForm employeeForm, Model model) {
         // 初回アクセス（GET）の場合のみ、DBからデータを取得してフォームにセット
         if (employeeForm.getLastName() == null) {
