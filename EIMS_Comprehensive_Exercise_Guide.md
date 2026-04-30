@@ -681,17 +681,32 @@ flowchart TD
 ![トップページ](./images/UI1_top.png)
 
 #### UI_L: 社員一覧画面
-![社員一覧画面](./images/UI_L_employee_list.png)
+社員全員のリストが表示されます。データ量が多いため、画面の上部とスクロールした最下部の2枚の画像を以下に示します。
 
-#### UI2: 検索条件入力画面
-![検索条件入力画面（社員番号検索）](./images/UI2_search_empno_input.png)
-![検索条件入力画面（氏名検索）](./images/UI2_search_name_input.png)
-![検索条件入力画面（所属部署検索）](./images/UI2_search_dept_input.png)
+**【画面上部】**
+![社員一覧画面（上段）](./images/UI_L_employee_list_top.png)
 
-#### UI3: 検索結果一覧画面
-![検索結果（社員番号ヒット時：詳細画面へ遷移）](./images/UI3_search_empno_result.png)
-![検索結果（氏名検索時）](./images/UI3_search_name_result.png)
-![検索結果（所属部署検索時）](./images/UI3_search_dept_result.png)
+**【画面下部】**
+![社員一覧画面（下段）](./images/UI_L_employee_list_bottom.png)
+
+#### UI2・UI3: 検索機能の実行例（Before / After）
+
+検索機能では、入力した条件に応じて結果の表示先が異なります。それぞれの検索パターンにおける「検索条件入力時（Before）」と「検索結果（After）」の流れを以下に示します。
+
+**【パターン1】 社員番号による検索**
+社員番号 `10001` を指定して検索を実行します。社員番号は一意であるため、結果が1件に特定され、**「社員詳細画面」へ直接遷移**します。
+![社員番号検索（入力時）](./images/UI2_search_empno_input.png)
+![社員番号検索（結果：詳細画面へ遷移）](./images/UI3_search_empno_result.png)
+
+**【パターン2】 氏名・氏名（カナ）による検索**
+名前に `田` を含む社員を検索します。複数の該当者が存在する可能性があるため、**「検索結果一覧画面」へ遷移**し、ヒットした社員のリストを表示します。
+![氏名検索（入力時）](./images/UI2_search_name_input.png)
+![氏名検索（結果：一覧表示）](./images/UI3_search_name_result.png)
+
+**【パターン3】 所属部署による検索**
+プルダウンから `人事部` を選択して検索を実行します。選択した部署に所属する全社員が**「検索結果一覧画面」**にリスト表示されます。
+![所属部署検索（入力時）](./images/UI2_search_dept_input.png)
+![所属部署検索（結果：一覧表示）](./images/UI3_search_dept_result.png)
 
 #### UI_D: 社員詳細画面
 ![社員詳細画面](./images/UI_D_employee_detail.png)
@@ -701,12 +716,15 @@ flowchart TD
 ### 5.2 登録機能
 
 #### UI4: 社員情報登録画面
+新規に社員情報（山田太郎さん）を入力した状態の画面です。社員番号は自動採番されるため、入力項目にはありません。
 ![社員情報登録画面](./images/UI4_input.png)
 
 #### UI5: 登録確認画面
+入力した内容に間違いがないかを確認する画面です。
 ![登録確認画面](./images/UI5_input_confirm.png)
 
 #### UI6: 登録完了画面
+登録処理が成功したことを通知する画面です。
 ![登録完了画面](./images/UI6_input_complete.png)
 
 <div style="page-break-before: always;"></div>
@@ -714,12 +732,15 @@ flowchart TD
 ### 5.3 変更機能
 
 #### UI9: 変更画面
+対象社員（10050番）の情報を変更します。ここでは例として姓を「大竹（変更）」に修正しています。
 ![変更画面](./images/UI9_change.png)
 
 #### UI10: 変更確認画面
+修正した内容（変更後の姓など）を確定前に確認する画面です。
 ![変更確認画面](./images/UI10_change_confirm.png)
 
 #### UI11: 変更完了画面
+情報の更新処理が成功したことを通知する画面です。
 ![変更完了画面](./images/UI11_change_complete.png)
 
 <div style="page-break-before: always;"></div>
@@ -727,9 +748,11 @@ flowchart TD
 ### 5.4 削除機能
 
 #### UI7: 削除確認画面
+対象社員（10050番）をデータベースから本当に削除してよいかを確認する画面です。
 ![削除確認画面](./images/UI7_delete_confirm.png)
 
 #### UI8: 削除完了画面
+削除処理が成功したことを通知する画面です。
 ![削除完了画面](./images/UI8_delete_complete.png)
 
 <div style="page-break-before: always;"></div>
