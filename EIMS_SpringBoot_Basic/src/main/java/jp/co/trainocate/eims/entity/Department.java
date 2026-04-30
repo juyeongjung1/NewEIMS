@@ -11,14 +11,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "department")
 public class Department {
     /** 部署番号 */
@@ -33,4 +31,10 @@ public class Department {
     /** 部署に所属する社員一覧 */
     @OneToMany(mappedBy = "department")
     private List<Employee> employees;
+
+    // テスト用のコンストラクタ
+    public Department(Integer deptNo, String deptName) {
+        this.deptNo = deptNo;
+        this.deptName = deptName;
+    }
 }

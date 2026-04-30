@@ -56,9 +56,9 @@ class EmployeeControllerTest {
 	void testShowSearchPage_normal() throws Exception {
 		// ① テスト用のモックデータ（偽データ）を定義します。
 		List<Department> mockDepartments = List.of(
-				new Department(100, "人事部", null),
-				new Department(200, "経理部", null),
-				new Department(300, "営業部", null)
+				new Department(100, "人事部"),
+				new Department(200, "経理部"),
+				new Department(300, "営業部")
 		);
 		// ② 偽物のServiceが呼ばれたら、用意したモックデータを返すように設定（スタブ設定）します。
 		Mockito.when(departmentService.findAll()).thenReturn(mockDepartments);
@@ -79,10 +79,10 @@ class EmployeeControllerTest {
 	@DisplayName("氏名キーワード検索APIのテスト_正常系")
 	void testSelectByEmpName_normal() throws Exception {
 		// ① モックデータの準備
-		Department mockDept = new Department(100, "人事部", null);
+		Department mockDept = new Department(100, "人事部");
 		List<Employee> mockEmployees = List.of(
-				new Employee(10001, "山田", "陽翔", "ヤマダ", "ヒナタ", "password", 1, mockDept.getDeptNo(), mockDept),
-				new Employee(10002, "中田", "結衣", "ナカタ", "ユイ", "password", 2, mockDept.getDeptNo(), mockDept)
+				new Employee(10001, "山田", "陽翔", "ヤマダ", "ヒナタ", "password", 1, mockDept),
+				new Employee(10002, "中田", "結衣", "ナカタ", "ユイ", "password", 2, mockDept)
 		);
 		// ② スタブ設定
 		Mockito.when(employeeService.findByEmpName("田")).thenReturn(mockEmployees);
@@ -117,8 +117,8 @@ class EmployeeControllerTest {
 	@DisplayName("社員番号を指定して取得するAPIのテスト_正常系")
 	void testSelectByEmpNo_normal() throws Exception {
 		// ① 引数に「10001」が渡されたときに、モックデータを返すよう設定します。
-		Department mockDept = new Department(100, "人事部", null);
-		Employee mockEmployee = new Employee(10001, "山田", "陽翔", "ヤマダ", "ヒナタ", "password", 1, mockDept.getDeptNo(), mockDept);
+		Department mockDept = new Department(100, "人事部");
+		Employee mockEmployee = new Employee(10001, "山田", "陽翔", "ヤマダ", "ヒナタ", "password", 1, mockDept);
 		Mockito.when(employeeService.findById(10001)).thenReturn(mockEmployee);
 
 		// ② URLパラメータ（?empNo=10001）を付与してGETリクエストを送信します。
@@ -126,7 +126,7 @@ class EmployeeControllerTest {
 				.andExpect(status().isOk())
 				.andExpect(view().name("employee_detail"))
 				.andExpect(model().attributeExists("employee"))
-				.andExpect(model().attribute("employee", hasProperty("lastName", is("山田")))) // 取得した商品のlastNameが"山田"か確認
+				.andExpect(model().attribute("employee", hasProperty("lastName", is("山田")))) // 取得した社員のlastNameが"山田"か確認
 				.andExpect(model().attribute("employee", hasProperty("department", hasProperty("deptName", is("人事部")))));
 	}
 
@@ -153,9 +153,9 @@ class EmployeeControllerTest {
 	void testShowInputPage_normal() throws Exception {
 		// ① 登録画面のセレクトボックス（プルダウン）用に部署リストのモックを用意します
 		List<Department> mockDepartments = List.of(
-				new Department(100, "人事部", null),
-				new Department(200, "経理部", null),
-				new Department(300, "営業部", null)
+				new Department(100, "人事部"),
+				new Department(200, "経理部"),
+				new Department(300, "営業部")
 		);
 		Mockito.when(departmentService.findAll()).thenReturn(mockDepartments);
 
@@ -169,7 +169,7 @@ class EmployeeControllerTest {
 	@Test
 	@DisplayName("登録確認APIのテスト_正常系")
 	void testConfirmRegistration_normal() throws Exception {
-		Department mockDept = new Department(100, "人事部", null);
+		Department mockDept = new Department(100, "人事部");
 		Mockito.when(departmentService.findById(100)).thenReturn(mockDept);
 
 		mockMvc.perform(post("/inputConfirm")
@@ -238,8 +238,8 @@ class EmployeeControllerTest {
 	@Test
 	@DisplayName("削除確認画面の表示テスト_正常系")
 	void testDeleteConfirm_normal() throws Exception {
-		Department mockDept = new Department(100, "人事部", null);
-		Employee mockEmployee = new Employee(10001, "山田", "陽翔", "ヤマダ", "ヒナタ", "password", 1, mockDept.getDeptNo(), mockDept);
+		Department mockDept = new Department(100, "人事部");
+		Employee mockEmployee = new Employee(10001, "山田", "陽翔", "ヤマダ", "ヒナタ", "password", 1, mockDept);
 		Mockito.when(employeeService.findById(10001)).thenReturn(mockEmployee);
 
 		mockMvc.perform(get("/deleteConfirm/10001"))
@@ -253,12 +253,12 @@ class EmployeeControllerTest {
 	@DisplayName("変更入力画面の表示テスト_正常系")
 	void testChangeInput_normal() throws Exception {
 		// 初期表示のために、DBから既存データを取得するシミュレーション
-		Department mockDept = new Department(100, "人事部", null);
-		Employee mockEmployee = new Employee(10001, "山田", "陽翔", "ヤマダ", "ヒナタ", "password", 1, mockDept.getDeptNo(), mockDept);
+		Department mockDept = new Department(100, "人事部");
+		Employee mockEmployee = new Employee(10001, "山田", "陽翔", "ヤマダ", "ヒナタ", "password", 1, mockDept);
 		List<Department> mockDepartments = List.of(
-				new Department(100, "人事部", null),
-				new Department(200, "経理部", null),
-				new Department(300, "営業部", null)
+				new Department(100, "人事部"),
+				new Department(200, "経理部"),
+				new Department(300, "営業部")
 		);
 		Mockito.when(employeeService.findById(10001)).thenReturn(mockEmployee);
 		Mockito.when(departmentService.findAll()).thenReturn(mockDepartments);

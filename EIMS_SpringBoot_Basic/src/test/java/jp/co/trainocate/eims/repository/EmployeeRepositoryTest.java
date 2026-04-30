@@ -47,17 +47,33 @@ class EmployeeRepositoryTest {
 	    entityManager.createNativeQuery("ALTER TABLE employee AUTO_INCREMENT = 1").executeUpdate();
 
 	    // 部署マスタを登録
-	    Department jinji  = deptRepo.save(new Department(110, "人事部", null));
-	    Department keiri  = deptRepo.save(new Department(120, "経理部", null));
+	    Department jinji  = deptRepo.save(new Department(110, "人事部"));
+	    Department keiri  = deptRepo.save(new Department(120, "経理部"));
 
 	    // 社員データ登録
-	    emp1 = new Employee(null, "山田", "陽翔", "ヤマダ", "ヒナタ", "password", 1, jinji.getDeptNo(), jinji);
+	    // ★ Repositoryテストでは実DBにINSERTするため、deptNoをsetterで別途セットする
+	    emp1 = new Employee();
+	    emp1.setLastName("山田"); emp1.setFirstName("陽翔");
+	    emp1.setLastKana("ヤマダ"); emp1.setFirstKana("ヒナタ");
+	    emp1.setPassword("password"); emp1.setGender(1);
+	    emp1.setDepartment(jinji);
+	    emp1.setDeptNo(jinji.getDeptNo());
 	    emp1 = empRepo.save(emp1);
 
-	    emp2 = new Employee(null, "中田", "結衣", "ナカタ", "ユイ", "password", 2, keiri.getDeptNo(), keiri);
+	    emp2 = new Employee();
+	    emp2.setLastName("中田"); emp2.setFirstName("結衣");
+	    emp2.setLastKana("ナカタ"); emp2.setFirstKana("ユイ");
+	    emp2.setPassword("password"); emp2.setGender(2);
+	    emp2.setDepartment(keiri);
+	    emp2.setDeptNo(keiri.getDeptNo());
 	    emp2 = empRepo.save(emp2);
 
-	    emp3 = new Employee(null, "鈴木", "大翔", "スズキ", "ヒロト", "password", 1, jinji.getDeptNo(), jinji);
+	    emp3 = new Employee();
+	    emp3.setLastName("鈴木"); emp3.setFirstName("大翔");
+	    emp3.setLastKana("スズキ"); emp3.setFirstKana("ヒロト");
+	    emp3.setPassword("password"); emp3.setGender(1);
+	    emp3.setDepartment(jinji);
+	    emp3.setDeptNo(jinji.getDeptNo());
 	    emp3 = empRepo.save(emp3);
 	}
 
