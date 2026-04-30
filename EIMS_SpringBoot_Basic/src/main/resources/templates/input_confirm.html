@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -17,7 +17,6 @@
         <div class="bg-white p-4 rounded border mb-4">
             <table class="table table-bordered mb-4">
                 <tbody>
-                    <tr><th>社員番号</th><td th:text="${employeeForm.empno}"></td></tr>
                     <tr><th>氏名</th><td th:text="${employeeForm.lname} + ' ' + ${employeeForm.fname}"></td></tr>
                     <tr><th>氏名（カナ）</th><td th:text="${employeeForm.lkana} + ' ' + ${employeeForm.fkana}"></td></tr>
                     <tr><th>パスワード</th><td>********（非表示）</td></tr>
@@ -27,7 +26,6 @@
             </table>
             <div class="d-flex gap-2">
                 <form th:action="@{/input}" th:object="${employeeForm}" method="post">
-                    <input type="hidden" th:field="*{empno}">
                     <input type="hidden" th:field="*{lname}">
                     <input type="hidden" th:field="*{fname}">
                     <input type="hidden" th:field="*{lkana}">
@@ -37,8 +35,7 @@
                     <input type="hidden" th:field="*{deptno}">
                     <button type="submit" class="btn btn-secondary">修正する</button>
                 </form>
-                <form th:action="@{/insertEmployee}" th:object="${employeeForm}" method="post">
-                    <input type="hidden" th:field="*{empno}">
+                <form th:action="@{/saveEmployee}" th:object="${employeeForm}" method="post">
                     <input type="hidden" th:field="*{lname}">
                     <input type="hidden" th:field="*{fname}">
                     <input type="hidden" th:field="*{lkana}">

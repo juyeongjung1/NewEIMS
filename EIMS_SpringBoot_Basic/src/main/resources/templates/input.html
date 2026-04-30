@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -15,11 +15,7 @@
         <h2 class="text-primary mb-4">社員情報登録</h2>
         <div class="bg-white p-4 rounded border mb-4">
             <form th:action="@{/inputConfirm}" th:object="${employeeForm}" method="post">
-                <div class="mb-3">
-                    <label class="form-label fw-bold">社員番号</label>
-                    <input type="number" th:field="*{empno}" class="form-control w-50" required>
-                    <div th:errors="*{empno}" class="text-danger mt-1"></div>
-                </div>
+
                 <div class="mb-3">
                     <label class="form-label fw-bold">氏名</label>
                     <div class="d-flex gap-2">

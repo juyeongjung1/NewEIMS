@@ -684,10 +684,14 @@ flowchart TD
 ![社員一覧画面](./images/UI_L_employee_list.png)
 
 #### UI2: 検索条件入力画面
-![検索条件入力画面](./images/UI2_search.png)
+![検索条件入力画面（社員番号検索）](./images/UI2_search_empno_input.png)
+![検索条件入力画面（氏名検索）](./images/UI2_search_name_input.png)
+![検索条件入力画面（所属部署検索）](./images/UI2_search_dept_input.png)
 
 #### UI3: 検索結果一覧画面
-![検索結果一覧画面](./images/UI3_search_result.png)
+![検索結果（社員番号ヒット時：詳細画面へ遷移）](./images/UI3_search_empno_result.png)
+![検索結果（氏名検索時）](./images/UI3_search_name_result.png)
+![検索結果（所属部署検索時）](./images/UI3_search_dept_result.png)
 
 #### UI_D: 社員詳細画面
 ![社員詳細画面](./images/UI_D_employee_detail.png)
