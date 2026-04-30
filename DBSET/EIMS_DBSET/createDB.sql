@@ -1,7 +1,5 @@
 -- ===== DB作成 =====
-CREATE DATABASE IF NOT EXISTS eimsdb
-  CHARACTER SET utf8mb4
-  COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE IF NOT EXISTS eimsdb;
 
 USE eimsdb;
 
