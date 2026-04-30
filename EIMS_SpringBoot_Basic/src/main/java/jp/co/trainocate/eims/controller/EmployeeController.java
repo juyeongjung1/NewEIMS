@@ -47,11 +47,11 @@ public class EmployeeController {
 
     /** 社員番号で検索 */
     @GetMapping("/selectByEmpNo")
-    public String selectByEmpNo(Integer empno, Model model) {
-        if (empno == null) {
+    public String selectByEmpNo(Integer empNo, Model model) {
+        if (empNo == null) {
             return "search";
         }
-        Employee employee = employeeService.findById(empno);
+        Employee employee = employeeService.findById(empNo);
         if (employee != null) {
             // ヒットした場合は詳細画面を直接表示
             model.addAttribute("employee", employee);
@@ -75,19 +75,19 @@ public class EmployeeController {
 
     /** 部署番号で検索 */
     @GetMapping("/selectByDeptNo")
-    public String selectByDeptNo(Integer deptno, Model model) {
-        if (deptno == null) {
+    public String selectByDeptNo(Integer deptNo, Model model) {
+        if (deptNo == null) {
             return "search";
         }
-        List<Employee> employees = employeeService.findByDeptno(deptno);
+        List<Employee> employees = employeeService.findByDeptNo(deptNo);
         model.addAttribute("employees", employees);
         return "search_result";
     }
 
     /** 社員詳細を表示する */
-    @GetMapping("/detail/{empno}")
-    public String showDetail(@PathVariable("empno") Integer empno, Model model) {
-        Employee employee = employeeService.findById(empno);
+    @GetMapping("/detail/{empNo}")
+    public String showDetail(@PathVariable("empNo") Integer empNo, Model model) {
+        Employee employee = employeeService.findById(empNo);
         model.addAttribute("employee", employee);
         return "employee_detail";
     }
@@ -107,7 +107,7 @@ public class EmployeeController {
             return "input";
         }
         // 部署名を表示するために部署情報を取得
-        model.addAttribute("department", departmentService.findById(employeeForm.getDeptno()));
+        model.addAttribute("department", departmentService.findById(employeeForm.getDeptNo()));
         return "input_confirm";
     }
 
@@ -120,34 +120,34 @@ public class EmployeeController {
     }
 
     /** 削除確認画面を表示する */
-    @GetMapping("/deleteConfirm/{empno}")
-    public String deleteConfirm(@PathVariable("empno") Integer empno, Model model) {
-        Employee employee = employeeService.findById(empno);
+    @GetMapping("/deleteConfirm/{empNo}")
+    public String deleteConfirm(@PathVariable("empNo") Integer empNo, Model model) {
+        Employee employee = employeeService.findById(empNo);
         model.addAttribute("employee", employee);
         return "delete_confirm";
     }
 
     /** 社員を削除する */
     @PostMapping("/deleteEmployee")
-    public String deleteEmployee(Integer empno) {
-        employeeService.deleteById(empno);
+    public String deleteEmployee(Integer empNo) {
+        employeeService.deleteById(empNo);
         return "delete_complete";
     }
 
     /** 変更入力画面を表示する */
-    @GetMapping("/changeInput/{empno}")
-    public String changeInput(@PathVariable("empno") Integer empno, EmployeeForm employeeForm, Model model) {
+    @GetMapping("/changeInput/{empNo}")
+    public String changeInput(@PathVariable("empNo") Integer empNo, EmployeeForm employeeForm, Model model) {
         // 初回アクセス（GET）の場合のみ、DBからデータを取得してフォームにセット
-        if (employeeForm.getLname() == null) {
-            Employee employee = employeeService.findById(empno);
-            employeeForm.setEmpno(employee.getEmpno());
-            employeeForm.setLname(employee.getLname());
-            employeeForm.setFname(employee.getFname());
-            employeeForm.setLkana(employee.getLkana());
-            employeeForm.setFkana(employee.getFkana());
+        if (employeeForm.getLName() == null) {
+            Employee employee = employeeService.findById(empNo);
+            employeeForm.setEmpNo(employee.getEmpNo());
+            employeeForm.setLName(employee.getLName());
+            employeeForm.setFName(employee.getFName());
+            employeeForm.setLKana(employee.getLKana());
+            employeeForm.setFKana(employee.getFKana());
             employeeForm.setPassword(employee.getPassword());
             employeeForm.setGender(employee.getGender());
-            employeeForm.setDeptno(employee.getDeptno());
+            employeeForm.setDeptNo(employee.getDeptNo());
         }
 
         model.addAttribute("departments", departmentService.findAll());
@@ -161,7 +161,7 @@ public class EmployeeController {
             model.addAttribute("departments", departmentService.findAll());
             return "change";
         }
-        model.addAttribute("department", departmentService.findById(employeeForm.getDeptno()));
+        model.addAttribute("department", departmentService.findById(employeeForm.getDeptNo()));
         return "change_confirm";
     }
 
@@ -173,4 +173,3 @@ public class EmployeeController {
         return "change_complete";
     }
 }
-

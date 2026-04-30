@@ -19,15 +19,15 @@
                         <tbody>
                             <tr>
                                 <th>社員番号</th>
-                                <td th:text="${employee.empno}"></td>
+                                <td th:text="${employee.empNo}"></td>
                             </tr>
                             <tr>
                                 <th>氏名</th>
-                                <td th:text="${employee.lname} + ' ' + ${employee.fname}"></td>
+                                <td th:text="${employee.lName} + ' ' + ${employee.fName}"></td>
                             </tr>
                             <tr>
-                                <th>氏名（カナ）</th>
-                                <td th:text="${employee.lkana} + ' ' + ${employee.fkana}"></td>
+                                <th>氏名�E�カナ！E/th>
+                                <td th:text="${employee.lKana} + ' ' + ${employee.fKana}"></td>
                             </tr>
                             <tr>
                                 <th>性別</th>
@@ -35,7 +35,7 @@
                             </tr>
                             <tr>
                                 <th>所属部署</th>
-                                <td th:text="${employee.department.deptname}"></td>
+                                <td th:text="${employee.department.deptName}"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -43,12 +43,12 @@
 
         <div class="mb-5">
             <div class="mb-3">
-                <a th:href="@{/employeeList}" class="btn btn-secondary me-2">一覧に戻る</a>
-                <a th:href="@{/search}" class="btn btn-secondary">検索画面に戻る</a>
+                <a th:href="@{/employeeList}" class="btn btn-secondary me-2">一覧に戻めE/a>
+                <a th:href="@{/search}" class="btn btn-secondary">検索画面に戻めE/a>
             </div>
             <div>
-                <a th:href="@{/changeInput/{id}(id=${employee.empno})}" class="btn btn-warning me-2">情報を変更する</a>
-                <a th:href="@{/deleteConfirm/{id}(id=${employee.empno})}" class="btn btn-danger">削除する</a>
+                <a th:href="@{/changeInput/{id}(id=${employee.empNo})}" class="btn btn-warning me-2">惁E��を変更する</a>
+                <a th:href="@{/deleteConfirm/{id}(id=${employee.empNo})}" class="btn btn-danger">削除する</a>
             </div>
         </div>
     </div>

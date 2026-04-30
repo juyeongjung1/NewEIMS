@@ -18,27 +18,27 @@ import lombok.Data;
 @Data
 @Table(name = "employee")
 public class Employee {
-    // 主キーに自動採番を使用
+    /** 社員番号 */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    /** 社員番号 */
-    private Integer empno;
+    @Column(name = "emp_no")
+    private Integer empNo;
 	
     /** 氏 */
-    @Column(length = 10, nullable = false)
-    private String lname;
+    @Column(name = "l_name", length = 10, nullable = false)
+    private String lName;
 	
     /** 名 */
-    @Column(length = 10, nullable = false)
-    private String fname;
+    @Column(name = "f_name", length = 10, nullable = false)
+    private String fName;
 	
     /** 氏(カナ) */
-    @Column(length = 20, nullable = false)
-    private String lkana;
+    @Column(name = "l_kana", length = 20, nullable = false)
+    private String lKana;
 	
     /** 名(カナ) */
-    @Column(length = 20, nullable = false)
-    private String fkana;
+    @Column(name = "f_kana", length = 20, nullable = false)
+    private String fKana;
 	
     /** パスワード */
     @Column(length = 20, nullable = false)
@@ -49,12 +49,12 @@ public class Employee {
     private Integer gender;
 	
     /** 部署番号 (外部キー) */
-    @Column(name="deptno")
-    private Integer deptno;
+    @Column(name = "dept_no")
+    private Integer deptNo;
 	
     /** 所属部署 */
     @ManyToOne
-    @JoinColumn(name = "deptno", referencedColumnName = "deptno", insertable = false, updatable = false)
+    @JoinColumn(name = "dept_no", referencedColumnName = "dept_no", insertable = false, updatable = false)
     private Department department;
 	
 }

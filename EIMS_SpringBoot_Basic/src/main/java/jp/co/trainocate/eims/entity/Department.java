@@ -8,8 +8,6 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -19,14 +17,14 @@ import lombok.Data;
 @Data
 @Table(name = "department")
 public class Department {
-    // 主キーの部署番号。自動採番を使用
-    @Id
     /** 部署番号 */
-    private Integer deptno;
+    @Id
+    @Column(name = "dept_no")
+    private Integer deptNo;
 	
     /** 部署名 */
-    @Column(length = 10, nullable = false)
-    private String deptname;
+    @Column(name = "dept_name", length = 10, nullable = false)
+    private String deptName;
 	
     /** 部署に所属する社員一覧 */
     @OneToMany(mappedBy = "department")

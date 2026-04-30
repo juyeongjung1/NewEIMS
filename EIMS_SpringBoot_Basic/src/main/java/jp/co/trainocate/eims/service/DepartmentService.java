@@ -18,8 +18,8 @@ public interface DepartmentService {
 
     /**
      * 主キーである部署番号を指定して部署情報を取得します。
-     * @param deptno 部署番号
+     * @param deptNo 部署番号
      * @return 部署エンティティ。存在しない場合は null
      */
-    Department findById(Integer deptno);
+    Department findById(Integer deptNo);
 }

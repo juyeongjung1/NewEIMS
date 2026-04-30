@@ -18,10 +18,10 @@ public interface EmployeeService {
 
     /**
      * 社員番号を指定して 1 件取得します。
-     * @param empno 社員番号
+     * @param empNo 社員番号
      * @return 該当する社員リスト
      */
-    List<Employee> findByEmpno(Integer empno);
+    List<Employee> findByEmpNo(Integer empNo);
 
     /**
      * 氏名（氏または名）による部分一致検索を行います。
@@ -32,17 +32,17 @@ public interface EmployeeService {
 
     /**
      * 部署番号を基に従業員を検索します。
-     * @param deptno 部署番号
+     * @param deptNo 部署番号
      * @return 社員のリスト
      */
-    List<Employee> findByDeptno(Integer deptno);
+    List<Employee> findByDeptNo(Integer deptNo);
 
     /**
      * 社員番号を指定して 1 件取得します（詳細画面用）。
-     * @param empno 社員番号
+     * @param empNo 社員番号
      * @return 従業員エンティティ
      */
-    Employee findById(Integer empno);
+    Employee findById(Integer empNo);
 
     /**
      * 社員情報を保存します。
@@ -53,8 +53,8 @@ public interface EmployeeService {
 
     /**
      * 社員番号を指定して 1 件削除します。
-     * @param empno 社員番号
+     * @param empNo 社員番号
      */
-    void deleteById(Integer empno);
+    void deleteById(Integer empNo);
 
 }

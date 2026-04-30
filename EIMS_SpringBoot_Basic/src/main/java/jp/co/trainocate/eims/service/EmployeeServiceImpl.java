@@ -2,7 +2,6 @@ package jp.co.trainocate.eims.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jp.co.trainocate.eims.entity.Employee;
@@ -22,49 +21,48 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> findByEmpno(Integer empno) {
-        return employeeRepository.findByEmpno(empno);
+    public List<Employee> findByEmpNo(Integer empNo) {
+        return employeeRepository.findByEmpNo(empNo);
     }
 
     @Override
     public List<Employee> findByEmpName(String keyword) {
-        return employeeRepository.findByLnameContainingOrFnameContaining(keyword, keyword);
+        return employeeRepository.findByLNameContainingOrFNameContaining(keyword, keyword);
     }
 
     @Override
-    public List<Employee> findByDeptno(Integer deptno) {
-        return employeeRepository.findByDeptno(deptno);
+    public List<Employee> findByDeptNo(Integer deptNo) {
+        return employeeRepository.findByDeptNo(deptNo);
     }
 
     @Override
-    public Employee findById(Integer empno) {
-        return employeeRepository.findById(empno).orElse(null);
+    public Employee findById(Integer empNo) {
+        return employeeRepository.findById(empNo).orElse(null);
     }
 
     @Override
     public Employee save(EmployeeForm employeeForm) {
         Employee employee = new Employee();
         // 更新の場合は既存のエンティティを取得
-        if (employeeForm.getEmpno() != null) {
-            employee = employeeRepository.findById(employeeForm.getEmpno()).orElse(new Employee());
+        if (employeeForm.getEmpNo() != null) {
+            employee = employeeRepository.findById(employeeForm.getEmpNo()).orElse(new Employee());
         }
 
         // フォームからエンティティへ手動で詰め替え
-        employee.setEmpno(employeeForm.getEmpno());
-        employee.setLname(employeeForm.getLname());
-        employee.setFname(employeeForm.getFname());
-        employee.setLkana(employeeForm.getLkana());
-        employee.setFkana(employeeForm.getFkana());
+        employee.setEmpNo(employeeForm.getEmpNo());
+        employee.setLName(employeeForm.getLName());
+        employee.setFName(employeeForm.getFName());
+        employee.setLKana(employeeForm.getLKana());
+        employee.setFKana(employeeForm.getFKana());
         employee.setPassword(employeeForm.getPassword());
         employee.setGender(employeeForm.getGender());
-        employee.setDeptno(employeeForm.getDeptno());
+        employee.setDeptNo(employeeForm.getDeptNo());
 
         return employeeRepository.save(employee);
     }
 
     @Override
-    public void deleteById(Integer empno) {
-        employeeRepository.deleteById(empno);
+    public void deleteById(Integer empNo) {
+        employeeRepository.deleteById(empNo);
     }
 }
-

@@ -10,31 +10,31 @@ DROP TABLE IF EXISTS employee;
 DROP TABLE IF EXISTS department;
 
 CREATE TABLE department (
-  deptno   INTEGER,
-  deptname VARCHAR(10) NOT NULL,
-  PRIMARY KEY (deptno)
+  dept_no   INTEGER,
+  dept_name VARCHAR(10) NOT NULL,
+  PRIMARY KEY (dept_no)
 ) ENGINE=InnoDB;
 
 -- ===== 社員テーブル（role / delete_flg 追加版）=====
 CREATE TABLE employee (
-  empno      INTEGER      NOT NULL AUTO_INCREMENT,
-  lname      VARCHAR(10)  NOT NULL,
-  fname      VARCHAR(10)  NOT NULL,
-  lkana      VARCHAR(20)  NOT NULL,
-  fkana      VARCHAR(20)  NOT NULL,
+  emp_no     INTEGER      NOT NULL AUTO_INCREMENT,
+  l_name     VARCHAR(10)  NOT NULL,
+  f_name     VARCHAR(10)  NOT NULL,
+  l_kana     VARCHAR(20)  NOT NULL,
+  f_kana     VARCHAR(20)  NOT NULL,
   password   VARCHAR(20)  NOT NULL,
   gender     INTEGER      NOT NULL,
-  deptno     INTEGER      NOT NULL,
+  dept_no    INTEGER      NOT NULL,
   role       INTEGER      DEFAULT 0,         -- 0:一般 / 1:管理者
   delete_flg INTEGER      DEFAULT 0,         -- 0:在籍 / 1:退職
-  PRIMARY KEY (empno),
+  PRIMARY KEY (emp_no),
   CONSTRAINT fk_employee_department
-    FOREIGN KEY (deptno) REFERENCES department(deptno)
+    FOREIGN KEY (dept_no) REFERENCES department(dept_no)
 ) ENGINE=InnoDB;
 
 -- ===== 初期データ投入 =====
 -- 部署
-INSERT INTO department (deptno, deptname) VALUES
+INSERT INTO department (dept_no, dept_name) VALUES
 (100, '人事部'),
 (200, '経理部'),
 (300, '営業部'),
@@ -43,7 +43,7 @@ INSERT INTO department (deptno, deptname) VALUES
 (600, '総務部');
 
 -- 社員（氏名を明示。role / delete_flg は既定値0が入る）
-INSERT INTO employee (empno, lname, fname, lkana, fkana, password, gender, deptno) VALUES
+INSERT INTO employee (emp_no, l_name, f_name, l_kana, f_kana, password, gender, dept_no) VALUES
 (10001, '長嶋', '陽翔', 'ナガシマ', 'ヒナタ', 'password', 1, 100),
 (10002, '中田', '結衣', 'ナカタ', 'ユイ', 'password', 2, 400),
 (10003, '松井', '大翔', 'マツイ', 'ヒロト', 'password', 1, 100),
@@ -109,11 +109,11 @@ INSERT INTO employee (empno, lname, fname, lkana, fkana, password, gender, deptn
 -- 管理者（10001）の role=1
 UPDATE employee
   SET role = 1
-WHERE empno = 10001;
+WHERE emp_no = 10001;
 
 -- 退職者（10043, 10045）の delete_flg=1
 UPDATE employee
   SET delete_flg = 1
-WHERE empno IN (10043, 10045);
+WHERE emp_no IN (10043, 10045);
 
 quit

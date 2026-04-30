@@ -2,7 +2,6 @@ package jp.co.trainocate.eims.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jp.co.trainocate.eims.entity.Department;
@@ -21,8 +20,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     @Override
-    public Department findById(Integer deptno) {
-        return departmentRepository.findById(deptno).orElse(null);
+    public Department findById(Integer deptNo) {
+        return departmentRepository.findById(deptNo).orElse(null);
     }
 }
-
