@@ -1780,7 +1780,8 @@ sequenceDiagram
 | CT-C-006 | 番号検索 | GET /selectByEmpNo (該当なし) | search_result ビューが返され、画面に「一致する社員は見つかりませんでした」と表示されること。 |
 | CT-C-007 | 登録画面 | GET /input | 部署リストが Model に設定され、input ビューが返されること。 |
 | CT-C-008 | 登録確認 | POST /inputConfirm (正常) | 入力内容が保持され、input_confirm ビューが返されること。 |
-| CT-C-009 | 登録確認 | POST /inputConfirm (エラー) | バリデーションエラーが発生し、input ビュー（入力画面）に戻ること。 |
-| CT-C-010 | 登録実行 | POST /saveEmployee | 社員情報が保存され、採番された社員番号とともに input_complete ビューが返されること。 |
-| CT-C-011 | 削除確認 | GET /deleteConfirm/{id} | 指定した社員情報が Model に設定され、delete_confirm ビューが返されること。 |
-| CT-C-012 | 変更画面 | GET /changeInput/{id} | 既存の社員情報と部署リストが Model に設定され、change ビューが返されること。 |
+| CT-C-009 | 登録確認 | POST /inputConfirm (必須エラー) | 必須項目未入力時に、input ビューに戻りエラーが表示されること。 |
+| CT-C-010 | 登録確認 | POST /inputConfirm (サイズエラー) | 文字数制限違反時に、input ビューに戻りエラーが表示されること。 |
+| CT-C-011 | 登録実行 | POST /saveEmployee | 社員情報が保存され、採番された社員番号とともに input_complete ビューが返されること。 |
+| CT-C-012 | 削除確認 | GET /deleteConfirm/{id} | 指定した社員情報が Model に設定され、delete_confirm ビューが返されること。 |
+| CT-C-013 | 変更画面 | GET /changeInput/{id} | 既存の社員情報と部署リストが Model に設定され、change ビューが返されること。 |

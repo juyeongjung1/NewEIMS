@@ -187,9 +187,9 @@ class EmployeeControllerTest {
 	}
 
 	@Test
-	@DisplayName("登録確認APIのテスト_異常系(バリデーションエラー)")
-	void testConfirmRegistration_validationError() throws Exception {
-		// 必須項目を空にしてバリデーションエラーを発生させる状況をシミュレーションします
+	@DisplayName("登録確認APIのテスト_異常系(必須項目未入力)")
+	void testConfirmRegistration_error_required() throws Exception {
+		// ① 必須項目を空にしてバリデーションエラーを発生させる状況をシミュレーションします
 		mockMvc.perform(post("/inputConfirm")
 				.param("lastName", "")
 				.param("firstName", "")
@@ -203,6 +203,23 @@ class EmployeeControllerTest {
 				// EmployeeFormの各フィールドにエラーが格納されていることを検証します
 				.andExpect(model().attributeHasFieldErrors(
 						"employeeForm", "lastName", "firstName", "lastKana", "firstKana", "password", "gender"));
+	}
+
+	@Test
+	@DisplayName("登録確認APIのテスト_異常系(文字数制限違反)")
+	void testConfirmRegistration_error_size() throws Exception {
+		// ② 文字数制限（最大・最小）を超える値を入力してエラーを発生させます
+		mockMvc.perform(post("/inputConfirm")
+				.param("lastName", "あいうえおかきくけこさしすせそ") // 10文字超
+				.param("firstName", "あいうえおかきくけこさしすせそ") // 10文字超
+				.param("lastKana", "アイウエオカキクケコサシスセソタチツテトナニヌネノ") // 20文字超
+				.param("firstKana", "アイウエオカキクケコサシスセソタチツテトナニヌネノ") // 20文字超
+				.param("password", "abc") // 4文字未満
+				.param("gender", "1"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("input"))
+				.andExpect(model().attributeHasFieldErrors(
+						"employeeForm", "lastName", "firstName", "lastKana", "firstKana", "password"));
 	}
 
 	@Test
