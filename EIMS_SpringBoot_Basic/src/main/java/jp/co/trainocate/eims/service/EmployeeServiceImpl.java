@@ -27,7 +27,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<Employee> findByEmpName(String keyword) {
-        return employeeRepository.findByLNameContainingOrFNameContaining(keyword, keyword);
+        return employeeRepository.findByLastNameContainingOrFirstNameContaining(keyword, keyword);
     }
 
     @Override
@@ -50,10 +50,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         // フォームからエンティティへ手動で詰め替え
         employee.setEmpNo(employeeForm.getEmpNo());
-        employee.setLName(employeeForm.getLName());
-        employee.setFName(employeeForm.getFName());
-        employee.setLKana(employeeForm.getLKana());
-        employee.setFKana(employeeForm.getFKana());
+        employee.setLastName(employeeForm.getLastName());
+        employee.setFirstName(employeeForm.getFirstName());
+        employee.setLastKana(employeeForm.getLastKana());
+        employee.setFirstKana(employeeForm.getFirstKana());
         employee.setPassword(employeeForm.getPassword());
         employee.setGender(employeeForm.getGender());
         employee.setDeptNo(employeeForm.getDeptNo());

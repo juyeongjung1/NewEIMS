@@ -23,20 +23,20 @@
                 <div class="mb-3">
                     <label class="form-label fw-bold">氏名</label>
                     <div class="d-flex gap-2">
-                        <input type="text" th:field="*{lName}" class="form-control" placeholder="姁E required>
-                        <input type="text" th:field="*{fName}" class="form-control" placeholder="吁E required>
+                        <input type="text" th:field="*{lastName}" class="form-control" placeholder="姁E required>
+                        <input type="text" th:field="*{firstName}" class="form-control" placeholder="吁E required>
                     </div>
-                    <div th:errors="*{lName}" class="text-danger mt-1"></div>
-                    <div th:errors="*{fName}" class="text-danger mt-1"></div>
+                    <div th:errors="*{lastName}" class="text-danger mt-1"></div>
+                    <div th:errors="*{firstName}" class="text-danger mt-1"></div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold">氏名�E�カナ！E/label>
                     <div class="d-flex gap-2">
-                        <input type="text" th:field="*{lKana}" class="form-control" placeholder="セイ" required>
-                        <input type="text" th:field="*{fKana}" class="form-control" placeholder="メイ" required>
+                        <input type="text" th:field="*{lastKana}" class="form-control" placeholder="セイ" required>
+                        <input type="text" th:field="*{firstKana}" class="form-control" placeholder="メイ" required>
                     </div>
-                    <div th:errors="*{lKana}" class="text-danger mt-1"></div>
-                    <div th:errors="*{fKana}" class="text-danger mt-1"></div>
+                    <div th:errors="*{lastKana}" class="text-danger mt-1"></div>
+                    <div th:errors="*{firstKana}" class="text-danger mt-1"></div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold">パスワーチE/label>

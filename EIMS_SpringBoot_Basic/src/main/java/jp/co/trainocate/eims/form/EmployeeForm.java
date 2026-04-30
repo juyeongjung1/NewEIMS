@@ -18,22 +18,22 @@ public class EmployeeForm {
     /** 氏 */
     @NotBlank(message = "氏は必須項目です")
     @Size(max = 10, message = "氏は10文字以内で入力してください")
-    private String lName;
+    private String lastName;
 
     /** 名 */
     @NotBlank(message = "名は必須項目です")
     @Size(max = 10, message = "名は10文字以内で入力してください")
-    private String fName;
+    private String firstName;
 
     /** 氏（カナ） */
     @NotBlank(message = "氏（カナ）は必須項目です")
     @Size(max = 20, message = "氏（カナ）は20文字以内で入力してください")
-    private String lKana;
+    private String lastKana;
 
     /** 名（カナ） */
     @NotBlank(message = "名（カナ）は必須項目です")
     @Size(max = 20, message = "名（カナ）は20文字以内で入力してください")
-    private String fKana;
+    private String firstKana;
 
     /** パスワード */
     @NotBlank(message = "パスワードは必須項目です")

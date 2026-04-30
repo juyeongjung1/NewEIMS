@@ -34,7 +34,7 @@
                             <td th:text="${emp.empNo}"></td>
                             <td>
                                 <a th:href="@{/detail/{id}(id=${emp.empNo})}" class="text-decoration-none"
-                                   th:text="${emp.lName} + ' ' + ${emp.fName} + ' (' + ${emp.lKana} + ' ' + ${emp.fKana} + ')'"></a>
+                                   th:text="${emp.lastName} + ' ' + ${emp.firstName} + ' (' + ${emp.lastKana} + ' ' + ${emp.firstKana} + ')'"></a>
                             </td>
                             <td th:text="${emp.gender == 1 ? '男性' : '女性'}"></td>
                             <td th:text="${emp.department.deptName}"></td>

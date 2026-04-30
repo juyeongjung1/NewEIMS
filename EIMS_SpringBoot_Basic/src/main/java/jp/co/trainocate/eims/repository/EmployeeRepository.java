@@ -19,12 +19,12 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
     List<Employee> findByEmpNo(Integer empNo);
 
     /**
-     * 氏(lName) または 名(fName) による部分一致検索を行います。
-     * @param lName 検索キーワード（氏）
-     * @param fName 検索キーワード（名）
+     * 氏(lastName) または 名(firstName) による部分一致検索を行います。
+     * @param lastName 検索キーワード（氏）
+     * @param firstName 検索キーワード（名）
      * @return 該当する社員リスト
      */
-    List<Employee> findByLNameContainingOrFNameContaining(String lName, String fName);
+    List<Employee> findByLastNameContainingOrFirstNameContaining(String lastName, String firstName);
 
     /**
      * 部署番号を基に従業員を検索します。

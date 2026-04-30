@@ -18,8 +18,8 @@
             <table class="table table-bordered mb-4">
                 <tbody>
                     <tr><th>遉ｾ蜩｡逡ｪ蜿ｷ</th><td th:text="${employeeForm.empNo}"></td></tr>
-                    <tr><th>豌丞錐</th><td th:text="${employeeForm.lName} + ' ' + ${employeeForm.fName}"></td></tr>
-                    <tr><th>豌丞錐・医き繝奇ｼ・/th><td th:text="${employeeForm.lKana} + ' ' + ${employeeForm.fKana}"></td></tr>
+                    <tr><th>豌丞錐</th><td th:text="${employeeForm.lastName} + ' ' + ${employeeForm.firstName}"></td></tr>
+                    <tr><th>豌丞錐・医き繝奇ｼ・/th><td th:text="${employeeForm.lastKana} + ' ' + ${employeeForm.firstKana}"></td></tr>
                     <tr><th>繝代せ繝ｯ繝ｼ繝・/th><td>********・磯撼陦ｨ遉ｺ・・/td></tr>
                     <tr><th>諤ｧ蛻･</th><td th:text="${employeeForm.gender == 1 ? '逕ｷ諤ｧ' : '螂ｳ諤ｧ'}"></td></tr>
                     <tr><th>謇螻樣Κ鄂ｲ</th><td th:text="${department.deptName}"></td></tr>
@@ -28,10 +28,10 @@
             <div class="d-flex gap-2">
                 <form th:action="@{/changeInput/{id}(id=${employeeForm.empNo})}" th:object="${employeeForm}" method="post">
                     <input type="hidden" th:field="*{empNo}">
-                    <input type="hidden" th:field="*{lName}">
-                    <input type="hidden" th:field="*{fName}">
-                    <input type="hidden" th:field="*{lKana}">
-                    <input type="hidden" th:field="*{fKana}">
+                    <input type="hidden" th:field="*{lastName}">
+                    <input type="hidden" th:field="*{firstName}">
+                    <input type="hidden" th:field="*{lastKana}">
+                    <input type="hidden" th:field="*{firstKana}">
                     <input type="hidden" th:field="*{password}">
                     <input type="hidden" th:field="*{gender}">
                     <input type="hidden" th:field="*{deptNo}">
@@ -39,10 +39,10 @@
                 </form>
                 <form th:action="@{/changeEmployee}" th:object="${employeeForm}" method="post">
                     <input type="hidden" th:field="*{empNo}">
-                    <input type="hidden" th:field="*{lName}">
-                    <input type="hidden" th:field="*{fName}">
-                    <input type="hidden" th:field="*{lKana}">
-                    <input type="hidden" th:field="*{fKana}">
+                    <input type="hidden" th:field="*{lastName}">
+                    <input type="hidden" th:field="*{firstName}">
+                    <input type="hidden" th:field="*{lastKana}">
+                    <input type="hidden" th:field="*{firstKana}">
                     <input type="hidden" th:field="*{password}">
                     <input type="hidden" th:field="*{gender}">
                     <input type="hidden" th:field="*{deptNo}">

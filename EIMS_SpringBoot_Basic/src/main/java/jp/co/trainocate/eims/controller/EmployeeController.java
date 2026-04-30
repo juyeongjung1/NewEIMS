@@ -138,13 +138,13 @@ public class EmployeeController {
     @GetMapping("/changeInput/{empNo}")
     public String changeInput(@PathVariable("empNo") Integer empNo, EmployeeForm employeeForm, Model model) {
         // 初回アクセス（GET）の場合のみ、DBからデータを取得してフォームにセット
-        if (employeeForm.getLName() == null) {
+        if (employeeForm.getLastName() == null) {
             Employee employee = employeeService.findById(empNo);
             employeeForm.setEmpNo(employee.getEmpNo());
-            employeeForm.setLName(employee.getLName());
-            employeeForm.setFName(employee.getFName());
-            employeeForm.setLKana(employee.getLKana());
-            employeeForm.setFKana(employee.getFKana());
+            employeeForm.setLastName(employee.getLastName());
+            employeeForm.setFirstName(employee.getFirstName());
+            employeeForm.setLastKana(employee.getLastKana());
+            employeeForm.setFirstKana(employee.getFirstKana());
             employeeForm.setPassword(employee.getPassword());
             employeeForm.setGender(employee.getGender());
             employeeForm.setDeptNo(employee.getDeptNo());

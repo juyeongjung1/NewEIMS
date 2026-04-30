@@ -18,7 +18,7 @@
             <table class="table table-bordered mb-4">
                 <tbody>
                     <tr><th>社員番号</th><td th:text="${employee.empNo}"></td></tr>
-                    <tr><th>氏名</th><td th:text="${employee.lName} + ' ' + ${employee.fName}"></td></tr>
+                    <tr><th>氏名</th><td th:text="${employee.lastName} + ' ' + ${employee.firstName}"></td></tr>
                     <tr><th>所属部署</th><td th:text="${employee.department.deptName}"></td></tr>
                 </tbody>
             </table>
