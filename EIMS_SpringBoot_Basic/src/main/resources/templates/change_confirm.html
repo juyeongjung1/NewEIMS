@@ -39,7 +39,7 @@
                     <input type="hidden" th:field="*{deptNo}">
                     <button type="submit" class="btn btn-secondary">修正する</button>
                 </form>
-                <form th:action="@{/updateEmployee}" th:object="${employeeForm}" method="post">
+                <form th:action="@{/changeEmployee}" th:object="${employeeForm}" method="post">
                     <input type="hidden" th:field="*{empNo}">
                     <input type="hidden" th:field="*{lastName}">
                     <input type="hidden" th:field="*{firstName}">
