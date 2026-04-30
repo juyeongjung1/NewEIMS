@@ -51,13 +51,17 @@
 - 3\. ユースケース
   - 3.1 ユースケース図
   - 3.2 ユースケース仕様書
-- 4\. UIフロー図
+- 4\. 画面一覧およびUIフロー図
+  - 4.1 画面（HTML）一覧表
+  - 4.2 全体UIフロー図
+  - 4.3 機能別UIフロー図
 - 5\. 画面レイアウト図
 - 6\. データベース仕様
 - 7\. クラス図（分析レベル）
 - 8\. シーケンス図（分析レベル）
 - 9\. クラス図（設計レベル）
 - 10\. シーケンス図（設計レベル）
+  - 10.1 URLマッピング（インターフェース仕様）一覧
 
 <div style="page-break-before: always;"></div>
 
@@ -569,9 +573,29 @@ flowchart LR
 
 ---
 
-## 4. UIフロー図
+## 4. 画面一覧およびUIフロー図
 
-### 4.1 全体UIフロー図
+### 4.1 画面（HTML）一覧表
+
+本システムで作成・使用する画面と、対応するHTMLファイル（Thymeleafテンプレート）の一覧を以下に定義する。
+
+| 画面ID | 画面名 | HTMLファイル名 | 概要 |
+|---|---|---|---|
+| UI1 | トップページ | `index.html` | 各機能への導線となるメニュー画面。 |
+| UI2 | 検索条件入力画面 | `search.html` | 社員情報を検索するための条件（社員番号、氏名、部署）を入力する画面。 |
+| UI3 | 検索結果一覧画面 | `search_result.html` | 氏名・部署による検索にヒットした社員の一覧を表示する画面。 |
+| UI4 | 社員情報登録画面 | `input.html` | 新規に社員情報を登録するための入力画面。 |
+| UI5 | 登録確認画面 | `input_confirm.html` | 登録前に入力内容を確認する画面。 |
+| UI6 | 登録完了画面 | `input_complete.html` | 登録処理が正常に完了したことを通知する画面。 |
+| UI7 | 削除確認画面 | `delete_confirm.html` | 削除前に本当に対象社員を削除してよいか確認する画面。 |
+| UI8 | 削除完了画面 | `delete_complete.html` | 削除処理が正常に完了したことを通知する画面。 |
+| UI9 | 変更画面 | `change.html` | 既存の社員情報を変更するための入力画面。 |
+| UI10 | 変更確認画面 | `change_confirm.html` | 変更前に入力内容を確認する画面。 |
+| UI11 | 変更完了画面 | `change_complete.html` | 変更処理が正常に完了したことを通知する画面。 |
+| UI_L | 社員一覧画面 | `employee_list.html` | 全社員のリストを表示する画面。 |
+| UI_D | 社員詳細画面 | `employee_detail.html` | 特定の社員の詳細情報を表示する画面。 |
+
+### 4.2 全体UIフロー図
 ```mermaid
 flowchart TD
     UI1[UI1: トップページ] --> UI_L[UI_L: 社員一覧画面]
@@ -600,7 +624,7 @@ flowchart TD
 
 <div style="page-break-before: always;"></div>
 
-### 4.2 機能別UIフロー図
+### 4.3 機能別UIフロー図
 
 #### UC001: 社員一覧を表示する
 ```mermaid
@@ -1405,9 +1429,31 @@ classDiagram
 
 ## 10. シーケンス図（設計レベル）
 
+### 10.1 URLマッピング（インターフェース仕様）一覧
+
+フロントエンド（画面）からバックエンド（EmployeeController）へのリクエストとなる、エンドポイント（URL）と処理の対応関係を以下に定義する。
+
+| ユースケース | 機能・アクション | HTTP | URLパス | コントローラーメソッド | 遷移先ビュー名 |
+|---|---|---|---|---|---|
+| 共通 | トップページ表示 | GET | `/` | `index` | `index` |
+| UC001 | 社員一覧表示 | GET | `/employeeList` | `showEmployeeList` | `employee_list` |
+| UC001・002 | 社員詳細画面表示 | GET | `/detail/{empNo}` | `showDetail` | `employee_detail` |
+| UC002 | 検索画面表示 | GET | `/search` | `index` | `search` |
+| UC002 | 氏名で検索 | GET | `/selectByEmpName` | `search` | `search_result` |
+| UC002 | 部署で検索 | GET | `/selectByDeptNo` | `search` | `search_result` |
+| UC002 | 社員番号で検索 | GET | `/selectByEmpNo` | `search` | `employee_detail` (エラー時は元の画面) |
+| UC003 | 登録画面表示 | GET | `/input` | `showInputPage` | `input` |
+| UC003 | 登録確認処理 | POST | `/inputConfirm` | `confirmRegistration` | `input_confirm` (エラー時は `input`) |
+| UC003 | 登録確定処理 | POST | `/saveEmployee` | `saveEmployee` | `input_complete` |
+| UC004 | 変更画面表示 | GET | `/changeInput/{empNo}` | `changeInput` | `change` |
+| UC004 | 変更確認処理 | POST | `/changeConfirm` | `changeConfirm` | `change_confirm` (エラー時は `change`) |
+| UC004 | 変更確定処理 | POST | `/changeEmployee` | `changeEmployee` | `change_complete` |
+| UC005 | 削除確認画面表示 | GET | `/deleteConfirm/{empNo}`| `deleteConfirm` | `delete_confirm` |
+| UC005 | 削除確定処理 | POST | `/deleteEmployee` | `deleteEmployee` | `delete_complete` |
+
 各ユースケースの具体的なメソッド呼び出し、およびMVCモデル間（View, Controller, Service, Repository）のデータの流れを以下に定義する。
 
-### 10.1 UC001: 社員一覧を表示する
+### 10.2 UC001: 社員一覧を表示する
 ```mermaid
 sequenceDiagram
     actor Admin as 人事部管理者
@@ -1452,7 +1498,7 @@ sequenceDiagram
     end
 ```
 
-### 10.2 UC002: 社員情報を検索する
+### 10.3 UC002: 社員情報を検索する
 ```mermaid
 sequenceDiagram
     actor Admin as 人事部管理者
@@ -1545,7 +1591,7 @@ sequenceDiagram
     end
 ```
 
-### 10.3 UC003: 社員情報を登録する
+### 10.4 UC003: 社員情報を登録する
 ```mermaid
 sequenceDiagram
     actor Admin as 人事部管理者
@@ -1601,7 +1647,7 @@ sequenceDiagram
     View -->> Admin: 登録完了画面を表示
 ```
 
-### 10.4 UC004: 社員情報を変更する
+### 10.5 UC004: 社員情報を変更する
 ```mermaid
 sequenceDiagram
     actor Admin as 人事部管理者
@@ -1658,7 +1704,7 @@ sequenceDiagram
     View -->> Admin: 変更完了画面を表示
 ```
 
-### 10.5 UC005: 社員情報を削除する
+### 10.6 UC005: 社員情報を削除する
 ```mermaid
 sequenceDiagram
     actor Admin as 人事部管理者
