@@ -787,8 +787,6 @@ erDiagram
         VARCHAR password
         INTEGER gender
         INTEGER dept_no FK
-        INTEGER role
-        INTEGER delete_flg
     }
 ```
 
@@ -811,8 +809,6 @@ erDiagram
 | password | VARCHAR(20) | NOT NULL | | なし | パスワード |
 | gender | INTEGER | NOT NULL | | なし | 性別（1:男性 2:女性） |
 | dept_no | INTEGER | NOT NULL | FOREIGN KEY | なし | 部署コード |
-| role | INTEGER | | | 0 | 権限（0:一般 1:管理者） |
-| delete_flg | INTEGER | | | 0 | 削除フラグ（0:在籍 1:退職） |
 
 **外部キー制約:**
 - 制約名: `fk_employee_department`
