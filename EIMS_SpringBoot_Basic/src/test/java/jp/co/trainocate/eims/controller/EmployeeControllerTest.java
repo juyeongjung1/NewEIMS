@@ -208,14 +208,11 @@ class EmployeeControllerTest {
 	@Test
 	@DisplayName("登録実行APIのテスト_正常系")
 	void testSaveEmployee_normal() throws Exception {
-		// saveメソッドが呼ばれたら、採番されたモックEmployeeを返すよう設定します
-		when(employeeService.save(any(EmployeeForm.class))).thenAnswer(inv -> {
-			EmployeeForm f = inv.getArgument(0);
-			Employee e = new Employee();
-			e.setEmpNo(20001);
-			e.setDeptNo(f.getDeptNo());
-			return e;
-		});
+		// ① saveメソッドが呼ばれたら返すモックデータを準備します
+		Employee mockSavedEmployee = new Employee();
+		mockSavedEmployee.setEmpNo(20001);
+		// ② スタブ設定
+		Mockito.when(employeeService.save(any(EmployeeForm.class))).thenReturn(mockSavedEmployee);
 
 		mockMvc.perform(post("/saveEmployee")
 				.param("lastName", "山田")
