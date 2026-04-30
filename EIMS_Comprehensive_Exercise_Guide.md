@@ -678,52 +678,55 @@ flowchart TD
 ### 5.1 共通・検索機能
 
 #### UI1: トップページ
-![トップページ](../images/UI1_top.png)
+![トップページ](./images/UI1_top.png)
+
+#### UI_L: 社員一覧画面
+![社員一覧画面](./images/UI_L_employee_list.png)
 
 #### UI2: 検索条件入力画面
-![検索条件入力画面](../images/UI2_search.png)
+![検索条件入力画面](./images/UI2_search.png)
 
 #### UI3: 検索結果一覧画面
-![検索結果一覧画面](../images/UI3_search_result.png)
+![検索結果一覧画面](./images/UI3_search_result.png)
 
 #### UI_D: 社員詳細画面
-![社員詳細画面](../images/UI_D_employee_detail.png)
+![社員詳細画面](./images/UI_D_employee_detail.png)
 
 <div style="page-break-before: always;"></div>
 
 ### 5.2 登録機能
 
 #### UI4: 社員情報登録画面
-![社員情報登録画面](../images/UI4_input.png)
+![社員情報登録画面](./images/UI4_input.png)
 
 #### UI5: 登録確認画面
-![登録確認画面](../images/UI5_input_confirm.png)
+![登録確認画面](./images/UI5_input_confirm.png)
 
 #### UI6: 登録完了画面
-![登録完了画面](../images/UI6_input_complete.png)
+![登録完了画面](./images/UI6_input_complete.png)
 
 <div style="page-break-before: always;"></div>
 
 ### 5.3 変更機能
 
 #### UI9: 変更画面
-![変更画面](../images/UI9_change.png)
+![変更画面](./images/UI9_change.png)
 
 #### UI10: 変更確認画面
-![変更確認画面](../images/UI10_change_confirm.png)
+![変更確認画面](./images/UI10_change_confirm.png)
 
 #### UI11: 変更完了画面
-![変更完了画面](../images/UI11_change_complete.png)
+![変更完了画面](./images/UI11_change_complete.png)
 
 <div style="page-break-before: always;"></div>
 
 ### 5.4 削除機能
 
 #### UI7: 削除確認画面
-![削除確認画面](../images/UI7_delete_confirm.png)
+![削除確認画面](./images/UI7_delete_confirm.png)
 
 #### UI8: 削除完了画面
-![削除完了画面](../images/UI8_delete_complete.png)
+![削除完了画面](./images/UI8_delete_complete.png)
 
 <div style="page-break-before: always;"></div>
 
