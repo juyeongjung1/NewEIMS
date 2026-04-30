@@ -18,7 +18,8 @@
             <table class="table table-bordered mb-4">
                 <tbody>
                     <tr><th class="w-25 bg-light">社員番号</th><td th:text="${employee.empNo}"></td></tr>
-                    <tr><th class="bg-light">姓名</th><td th:text="${employee.lastName} + ' ' + ${employee.firstName}"></td></tr>
+                    <tr><th class="bg-light">氏（漢字）</th><td th:text="${employee.lastName}"></td></tr>
+                    <tr><th class="bg-light">名（漢字）</th><td th:text="${employee.firstName}"></td></tr>
                     <tr><th class="bg-light">所属部署</th><td th:text="${employee.department.deptName}"></td></tr>
                 </tbody>
             </table>
