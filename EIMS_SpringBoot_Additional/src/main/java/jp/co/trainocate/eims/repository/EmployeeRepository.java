@@ -17,8 +17,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
      * @param deleteFlg 削除フラグ
      * @return 該当する社員リスト
      */
-    List<Employee> findByEmpNo(Integer empNo);
-
     /**
      * 氏名（氏または名）の部分一致検索かつ削除フラグ指定で取得します。
      * @param lastName 検索キーワード（氏）

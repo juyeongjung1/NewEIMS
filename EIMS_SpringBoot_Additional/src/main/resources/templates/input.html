@@ -14,36 +14,36 @@
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label class="form-label fw-bold">氏</label>
-                        <input type="text" th:field="*{lastName}" class="form-control" th:errorclass="is-invalid">
-                        <div class="invalid-feedback" th:errors="*{lastName}"></div>
+                        <input type="text" th:field="*{lastName}" class="form-control">
+                        <div th:errors="*{lastName}" class="text-danger mt-1"></div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold">名</label>
-                        <input type="text" th:field="*{firstName}" class="form-control" th:errorclass="is-invalid">
-                        <div class="invalid-feedback" th:errors="*{firstName}"></div>
+                        <input type="text" th:field="*{firstName}" class="form-control">
+                        <div th:errors="*{firstName}" class="text-danger mt-1"></div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold">氏（カナ）</label>
-                        <input type="text" th:field="*{lastKana}" class="form-control" th:errorclass="is-invalid">
-                        <div class="invalid-feedback" th:errors="*{lastKana}"></div>
+                        <input type="text" th:field="*{lastKana}" class="form-control">
+                        <div th:errors="*{lastKana}" class="text-danger mt-1"></div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold">名（カナ）</label>
-                        <input type="text" th:field="*{firstKana}" class="form-control" th:errorclass="is-invalid">
-                        <div class="invalid-feedback" th:errors="*{firstKana}"></div>
+                        <input type="text" th:field="*{firstKana}" class="form-control">
+                        <div th:errors="*{firstKana}" class="text-danger mt-1"></div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold">パスワード</label>
-                        <input type="password" th:field="*{password}" class="form-control" th:errorclass="is-invalid">
-                        <div class="invalid-feedback" th:errors="*{password}"></div>
+                        <input type="password" th:field="*{password}" class="form-control">
+                        <div th:errors="*{password}" class="text-danger mt-1"></div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold">部署</label>
-                        <select th:field="*{deptNo}" class="form-select" th:errorclass="is-invalid">
+                        <select th:field="*{deptNo}" class="form-select">
                             <option value="">部署を選択してください</option>
                             <option th:each="dept : ${departments}" th:value="${dept.deptNo}" th:text="${dept.deptName}"></option>
                         </select>
-                        <div class="invalid-feedback" th:errors="*{deptNo}"></div>
+                        <div th:errors="*{deptNo}" class="text-danger mt-1"></div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold d-block">性別</label>
@@ -55,7 +55,7 @@
                             <input class="form-check-input" type="radio" th:field="*{gender}" value="2" id="gender2">
                             <label class="form-check-label" for="gender2">女性</label>
                         </div>
-                        <div class="text-danger small" th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}"></div>
+                        <div th:errors="*{gender}" class="text-danger mt-1"></div>
                     </div>
                     <div class="col-md-6">
                         <label class="form-label fw-bold d-block">権限（オプション機能）</label>

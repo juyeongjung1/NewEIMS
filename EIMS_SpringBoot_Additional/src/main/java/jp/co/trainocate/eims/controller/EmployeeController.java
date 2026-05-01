@@ -49,14 +49,14 @@ public class EmployeeController {
 
     /** 復元処理を行う */
     @PostMapping("/restore/{empNo}")
-    public String restore(@PathVariable("empNo") Integer empNo) {
+    public String restore(@PathVariable Integer empNo) {
         employeeService.restoreById(empNo);
         return "redirect:/retireeList";
     }
 
     /** 物理削除処理を行う */
     @PostMapping("/physicalDelete/{empNo}")
-    public String physicalDelete(@PathVariable("empNo") Integer empNo) {
+    public String physicalDelete(@PathVariable Integer empNo) {
         employeeService.physicalDeleteById(empNo);
         return "redirect:/retireeList";
     }
@@ -74,10 +74,10 @@ public class EmployeeController {
         if (empNo == null) {
             return "search";
         }
-        List<Employee> employees = employeeService.findByEmpNo(empNo);
-        if (employees.size() == 1) {
+        Employee employee = employeeService.findById(empNo);
+        if (employee != null) {
             // ヒットした場合は詳細画面を直接表示
-            model.addAttribute("employee", employees.get(0));
+            model.addAttribute("employee", employee);
             return "employee_detail";
         }
         // ヒットしない場合は結果画面へ（0件表示用）
@@ -109,7 +109,7 @@ public class EmployeeController {
 
     /** 社員詳細を表示する */
     @GetMapping("/detail/{empNo}")
-    public String showDetail(@PathVariable("empNo") Integer empNo, Model model) {
+    public String showDetail(@PathVariable Integer empNo, Model model) {
         Employee employee = employeeService.findById(empNo);
         model.addAttribute("employee", employee);
         return "employee_detail";
@@ -144,7 +144,7 @@ public class EmployeeController {
 
     /** 削除確認画面を表示する */
     @GetMapping("/deleteConfirm/{empNo}")
-    public String deleteConfirm(@PathVariable("empNo") Integer empNo, Model model) {
+    public String deleteConfirm(@PathVariable Integer empNo, Model model) {
         Employee employee = employeeService.findById(empNo);
         model.addAttribute("employee", employee);
         return "delete_confirm";
@@ -159,7 +159,7 @@ public class EmployeeController {
 
     /** 変更入力画面を表示する */
     @RequestMapping(value = "/changeInput/{empNo}", method = {RequestMethod.GET, RequestMethod.POST})
-    public String changeInput(@PathVariable("empNo") Integer empNo, EmployeeForm employeeForm, Model model) {
+    public String changeInput(@PathVariable Integer empNo, EmployeeForm employeeForm, Model model) {
         // 初回アクセス（GET）の場合のみ、DBからデータを取得してフォームにセット
         if (employeeForm.getLastName() == null) {
             Employee employee = employeeService.findById(empNo);

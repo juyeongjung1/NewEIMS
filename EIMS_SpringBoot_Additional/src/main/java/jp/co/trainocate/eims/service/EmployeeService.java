@@ -16,12 +16,6 @@ public interface EmployeeService {
      */
     List<Employee> findAll();
 
-    /**
-     * 社員番号を指定して 1 件取得します。
-     * @param empNo 社員番号
-     * @return 該当する社員リスト
-     */
-    List<Employee> findByEmpNo(Integer empNo);
 
     /**
      * 氏名（氏または名）による部分一致検索を行います。

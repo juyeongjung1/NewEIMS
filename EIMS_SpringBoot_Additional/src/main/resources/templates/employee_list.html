@@ -29,7 +29,7 @@
                         <tr th:each="employee : ${employees}" th:if="${employee.deleteFlg == 0}">
                             <td class="ps-4 fw-bold" th:text="${employee.empNo}">10001</td>
                             <td>
-                                <a th:href="@{/detail/{id}(id=${employee.empNo})}" 
+                                <a th:href="@{'/detail/' + ${employee.empNo}}" 
                                    th:text="${employee.lastName + ' ' + employee.firstName + ' (' + employee.lastKana + ' ' + employee.firstKana + ')'}"
                                    class="text-decoration-none fw-bold">氏名 (カナ)</a>
                             </td>

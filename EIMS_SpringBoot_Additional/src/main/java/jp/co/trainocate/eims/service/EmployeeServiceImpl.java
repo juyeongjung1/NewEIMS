@@ -23,11 +23,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> findByEmpNo(Integer empNo) {
-        return employeeRepository.findByEmpNo(empNo);
-    }
-
-    @Override
     public List<Employee> findByEmpName(String keyword) {
         return employeeRepository.findByLastNameContainingOrFirstNameContaining(keyword, keyword);
     }

@@ -53,11 +53,11 @@
                 <a th:href="@{/search}" class="btn btn-outline-secondary">戻る</a>
                 
                 <div th:if="${session.loginEmployee != null and (session.loginEmployee.role == 1 or session.loginEmployee.empNo == employee.empNo)}">
-                    <a th:href="@{/change/{empno}(empno=${employee.empNo})}" class="btn btn-primary">変更</a>
+                    <a th:href="@{'/changeInput/' + ${employee.empNo}}" class="btn btn-primary">変更</a>
                 </div>
                 
                 <div th:if="${session.loginEmployee != null and session.loginEmployee.role == 1 and session.loginEmployee.empNo != employee.empNo and employee.deleteFlg == 0}">
-                    <a th:href="@{/deleteConfirm/{empno}(empno=${employee.empNo})}" class="btn btn-danger">退職処理</a>
+                    <a th:href="@{'/deleteConfirm/' + ${employee.empNo}}" class="btn btn-danger">退職処理</a>
                 </div>
             </div>
         </div>

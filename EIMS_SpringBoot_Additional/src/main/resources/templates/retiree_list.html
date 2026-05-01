@@ -36,12 +36,12 @@
                             <td class="text-center">
                                 <div class="d-flex gap-2 justify-content-center">
                                     <!-- 復元フォーム (JSなし) -->
-                                    <form th:action="@{/restore/{empNo}(empNo=${emp.empNo})}" method="post">
+                                    <form th:action="@{'/restore/' + ${emp.empNo}}" method="post">
                                         <button type="submit" class="btn btn-sm btn-success">復元</button>
                                     </form>
                                     
                                     <!-- 完全削除フォーム (JSなし) -->
-                                    <form th:action="@{/physicalDelete/{empNo}(empNo=${emp.empNo})}" method="post">
+                                    <form th:action="@{'/physicalDelete/' + ${emp.empNo}}" method="post">
                                         <button type="submit" class="btn btn-sm btn-danger">完全削除</button>
                                     </form>
                                 </div>
