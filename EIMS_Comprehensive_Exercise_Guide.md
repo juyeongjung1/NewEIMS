@@ -7,8 +7,8 @@
     margin-top: 30px !important;
   }
   .scaled-mermaid svg {
-    max-height: 650px !important;
-    width: auto !important;
+    width: 90% !important;
+    height: auto !important;
   }
   @media print {
     @page {
