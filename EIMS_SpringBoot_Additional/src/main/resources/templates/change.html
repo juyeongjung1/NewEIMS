@@ -10,31 +10,32 @@
         <div class="card p-4 shadow-sm border-0 bg-white">
             <h2 class="fw-bold text-primary mb-4"><i class="bi bi-pencil-square me-2"></i>社員情報変更</h2>
 
-            <form th:action="@{/update}" th:object="${employeeForm}" method="post">
+            <form th:action="@{/changeConfirm}" th:object="${employeeForm}" method="post">
                 <input type="hidden" th:field="*{empNo}">
+                <input type="hidden" th:field="*{deleteFlg}">
                 
                 <div class="alert alert-info py-2 small mb-4">
-                    社員番号: <strong th:text="*{empNo}">10001</strong> の情報を変更しています。
+                    社員番号: <strong th:text="*{empNo}"></strong> の情報を編集しています。
                 </div>
 
-                <div class="row g-3 mb-4">
+                <div class="row g-3">
                     <div class="col-md-6">
-                        <label class="form-label fw-bold">氏 (漢字)</label>
+                        <label class="form-label fw-bold">氏</label>
                         <input type="text" th:field="*{lastName}" class="form-control" th:errorclass="is-invalid">
                         <div class="invalid-feedback" th:errors="*{lastName}"></div>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label fw-bold">名 (漢字)</label>
+                        <label class="form-label fw-bold">名</label>
                         <input type="text" th:field="*{firstName}" class="form-control" th:errorclass="is-invalid">
                         <div class="invalid-feedback" th:errors="*{firstName}"></div>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label fw-bold">氏 (カナ)</label>
+                        <label class="form-label fw-bold">氏（カナ）</label>
                         <input type="text" th:field="*{lastKana}" class="form-control" th:errorclass="is-invalid">
                         <div class="invalid-feedback" th:errors="*{lastKana}"></div>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label fw-bold">名 (カナ)</label>
+                        <label class="form-label fw-bold">名（カナ）</label>
                         <input type="text" th:field="*{firstKana}" class="form-control" th:errorclass="is-invalid">
                         <div class="invalid-feedback" th:errors="*{firstKana}"></div>
                     </div>
@@ -44,37 +45,39 @@
                         <div class="invalid-feedback" th:errors="*{password}"></div>
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label fw-bold">性別</label>
-                        <div class="pt-2">
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" th:field="*{gender}" value="1" id="male">
-                                <label class="form-check-label" for="male">男性</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" th:field="*{gender}" value="2" id="female">
-                                <label class="form-check-label" for="female">女性</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
                         <label class="form-label fw-bold">部署</label>
                         <select th:field="*{deptNo}" class="form-select" th:errorclass="is-invalid">
-                            <option th:each="dept : ${departments}" th:value="${dept.deptNo}" th:text="${dept.deptName}">部署</option>
+                            <option th:each="dept : ${departments}" th:value="${dept.deptNo}" th:text="${dept.deptName}"></option>
                         </select>
                         <div class="invalid-feedback" th:errors="*{deptNo}"></div>
                     </div>
-                    <div class="col-md-6" th:if="${session.loginEmployee != null and session.loginEmployee.role == 1}">
-                        <label class="form-label fw-bold text-warning">権限設定</label>
-                        <select th:field="*{role}" class="form-select">
-                            <option value="0">一般ユーザー</option>
-                            <option value="1">管理者</option>
-                        </select>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold d-block">性別</label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" th:field="*{gender}" value="1" id="gender1">
+                            <label class="form-check-label" for="gender1">男性</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" th:field="*{gender}" value="2" id="gender2">
+                            <label class="form-check-label" for="gender2">女性</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold d-block">権限（オプション機能）</label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" th:field="*{role}" value="0" id="role0">
+                            <label class="form-check-label" for="role0">一般</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" th:field="*{role}" value="1" id="role1">
+                            <label class="form-check-label" for="role1">管理者</label>
+                        </div>
                     </div>
                 </div>
 
-                <div class="mt-4 pt-3 border-top d-flex justify-content-center gap-2">
-                    <a th:href="@{/detail/{empno}(empno=*{empNo})}" class="btn btn-outline-secondary">戻る</a>
-                    <button type="submit" class="btn btn-success">更新する</button>
+                <div class="mt-4 pt-3 border-top d-flex gap-2 justify-content-center">
+                    <button type="submit" class="btn btn-primary px-5">変更確認</button>
+                    <a th:href="@{/detail/{id}(id=*{empNo})}" class="btn btn-outline-secondary">戻る</a>
                 </div>
             </form>
         </div>

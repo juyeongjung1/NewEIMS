@@ -43,7 +43,7 @@ public class EmployeeController {
     /** 退職者一覧を表示する */
     @GetMapping("/retireeList")
     public String showRetireeList(Model model) {
-        model.addAttribute("employees", employeeService.findRetirees());
+        model.addAttribute("retirees", employeeService.findAll());
         return "retiree_list";
     }
 

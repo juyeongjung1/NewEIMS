@@ -7,52 +7,49 @@
 </head>
 <body>
     <div layout:fragment="content">
-        <div class="card p-4 shadow-sm border-0 bg-white">
-            <h2 class="fw-bold text-primary mb-4"><i class="bi bi-people me-2"></i>全社員一覧</h2>
+        <h2 class="fw-bold text-primary mb-4"><i class="bi bi-people me-2"></i>全社員一覧</h2>
+        
+        <div th:if="${employees.?[deleteFlg == 0].empty}" class="alert alert-info shadow-sm">
+            現在、在籍している社員はいません。
+        </div>
 
-            <div class="table-responsive">
-                <table class="table table-hover align-middle">
+        <div th:if="${!employees.?[deleteFlg == 0].empty}" class="card shadow-sm border-0 bg-white">
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0 align-middle">
                     <thead class="table-light">
                         <tr>
-                            <th>社員番号</th>
+                            <th class="ps-4">社員番号</th>
                             <th>氏名</th>
                             <th>部署</th>
                             <th>権限</th>
                             <th>状態</th>
-                            <th>操作</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr th:each="emp : ${employees}">
-                            <td th:text="${emp.empNo}">10001</td>
+                        <tr th:each="employee : ${employees}" th:if="${employee.deleteFlg == 0}">
+                            <td class="ps-4 fw-bold" th:text="${employee.empNo}">10001</td>
                             <td>
-                                <a th:href="@{/detail/{empno}(empno=${emp.empNo})}" 
-                                   th:text="${emp.lastName + ' ' + emp.firstName}" class="text-decoration-none fw-bold">氏名</a>
+                                <a th:href="@{/detail/{id}(id=${employee.empNo})}" 
+                                   th:text="${employee.lastName + ' ' + employee.firstName + ' (' + employee.lastKana + ' ' + employee.firstKana + ')'}"
+                                   class="text-decoration-none fw-bold">氏名 (カナ)</a>
                             </td>
-                            <td th:text="${emp.department.deptName}">部署名</td>
+                            <td th:text="${employee.department.deptName}">部署名</td>
                             <td>
-                                <span th:class="${emp.role == 1 ? 'badge bg-warning text-dark' : 'badge bg-light text-dark'}"
-                                      th:text="${emp.role == 1 ? '管理者' : '一般'}">一般</span>
-                            </td>
-                            <td>
-                                <span th:class="${emp.deleteFlg == 1 ? 'text-danger' : 'text-success'}"
-                                      th:text="${emp.deleteFlg == 1 ? '退職' : '在籍'}">在籍</span>
+                                <span th:if="${employee.role == 1}" class="badge bg-primary">管理者</span>
+                                <span th:if="${employee.role == 0}" class="badge bg-secondary">一般</span>
                             </td>
                             <td>
-                                <div class="btn-group btn-group-sm">
-                                    <a th:href="@{/change/{empno}(empno=${emp.empNo})}" class="btn btn-outline-primary">変更</a>
-                                    <a th:if="${emp.deleteFlg == 0 and session.loginEmployee.empNo != emp.empNo}" 
-                                       th:href="@{/deleteConfirm/{empno}(empno=${emp.empNo})}" class="btn btn-outline-danger">退職</a>
-                                </div>
+                                <span th:if="${employee.deleteFlg == 0}" class="badge bg-success">在籍</span>
+                                <span th:if="${employee.deleteFlg == 1}" class="badge bg-danger">退職</span>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
+        </div>
 
-            <div class="mt-4 pt-3 border-top">
-                <a th:href="@{/index}" class="btn btn-outline-secondary">戻る</a>
-            </div>
+        <div class="mt-4">
+            <a th:href="@{/index}" class="btn btn-outline-secondary">戻る</a>
         </div>
     </div>
 </body>

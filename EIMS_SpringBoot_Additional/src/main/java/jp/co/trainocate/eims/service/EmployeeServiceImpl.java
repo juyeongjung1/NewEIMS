@@ -3,6 +3,7 @@ package jp.co.trainocate.eims.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import jp.co.trainocate.eims.entity.Employee;
 import jp.co.trainocate.eims.form.EmployeeForm;
@@ -10,6 +11,7 @@ import jp.co.trainocate.eims.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
@@ -17,23 +19,22 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<Employee> findAll() {
-        // 通常の全件取得も在籍者のみとする
-        return employeeRepository.findByDeleteFlg(0);
+        return employeeRepository.findAll();
     }
 
     @Override
     public List<Employee> findByEmpNo(Integer empNo) {
-        return employeeRepository.findByEmpNoAndDeleteFlg(empNo, 0);
+        return employeeRepository.findByEmpNo(empNo);
     }
 
     @Override
     public List<Employee> findByEmpName(String keyword) {
-        return employeeRepository.findByLastNameContainingOrFirstNameContainingAndDeleteFlg(keyword, keyword, 0);
+        return employeeRepository.findByLastNameContainingOrFirstNameContaining(keyword, keyword);
     }
 
     @Override
     public List<Employee> findByDeptNo(Integer deptNo) {
-        return employeeRepository.findByDeptNoAndDeleteFlg(deptNo, 0);
+        return employeeRepository.findByDeptNo(deptNo);
     }
 
     @Override

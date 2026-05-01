@@ -17,7 +17,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
      * @param deleteFlg 削除フラグ
      * @return 該当する社員リスト
      */
-    List<Employee> findByEmpNoAndDeleteFlg(Integer empNo, Integer deleteFlg);
+    List<Employee> findByEmpNo(Integer empNo);
 
     /**
      * 氏名（氏または名）の部分一致検索かつ削除フラグ指定で取得します。
@@ -26,7 +26,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
      * @param deleteFlg 削除フラグ
      * @return 該当する社員リスト
      */
-    List<Employee> findByLastNameContainingOrFirstNameContainingAndDeleteFlg(String lastName, String firstName, Integer deleteFlg);
+    List<Employee> findByLastNameContainingOrFirstNameContaining(String lastName, String firstName);
 
     /**
      * 部署番号と削除フラグを指定して検索します。
@@ -34,7 +34,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
      * @param deleteFlg 削除フラグ
      * @return 従業員リスト
      */
-    List<Employee> findByDeptNoAndDeleteFlg(Integer deptNo, Integer deleteFlg);
+    List<Employee> findByDeptNo(Integer deptNo);
 
     /**
      * 削除フラグを指定して全件取得します（退職者一覧用など）。
