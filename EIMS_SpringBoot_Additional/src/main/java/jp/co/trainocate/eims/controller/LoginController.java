@@ -12,13 +12,13 @@ import jakarta.servlet.http.HttpSession;
 import jp.co.trainocate.eims.entity.Employee;
 import jp.co.trainocate.eims.form.LoginForm;
 import jp.co.trainocate.eims.service.EmployeeService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Controller
-@RequiredArgsConstructor
 public class LoginController {
 
-    private final EmployeeService employeeService;
+    @Autowired
+    private EmployeeService employeeService;
 
     /**
      * ログイン画面を表示します。
