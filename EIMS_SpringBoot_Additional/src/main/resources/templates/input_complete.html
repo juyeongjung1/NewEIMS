@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout">
+<head>
+    <title>逋ｻ骭ｲ螳御ｺ・/title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="card p-5 text-center mx-auto" style="max-width: 600px;">
+            <div class="mb-4">
+                <i class="bi bi-check-circle-fill text-success fs-1"></i>
+            </div>
+            <h2 class="text-primary fw-bold mb-3">逋ｻ骭ｲ縺悟ｮ御ｺ・＠縺ｾ縺励◆</h2>
+            <p class="text-secondary mb-5">遉ｾ蜩｡逡ｪ蜿ｷ <strong th:text="${employee.empNo}"></strong> 縺ｮ諠・ｱ繧呈ｭ｣蟶ｸ縺ｫ逋ｻ骭ｲ縺励∪縺励◆縲・/p>
+            
+            <div class="d-flex justify-content-center gap-2">
+                <a th:href="@{/detail/{id}(id=${employee.empNo})}" class="btn btn-primary">隧ｳ邏ｰ逕ｻ髱｢繧定ｦ九ｋ</a>
+                <a th:href="@{/index}" class="btn btn-outline-secondary">繝医ャ繝励↓謌ｻ繧・/a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

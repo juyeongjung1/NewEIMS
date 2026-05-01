@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout">
+<head>
+    <title>蜑企勁遒ｺ隱・/title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="card p-4 mx-auto border-danger" style="max-width: 800px;">
+            <h2 class="text-danger mb-4 fw-bold"><i class="bi bi-exclamation-triangle me-2"></i>遉ｾ蜩｡蜑企勁縺ｮ遒ｺ隱・/h2>
+            <div class="alert alert-warning">
+                縺薙・遉ｾ蜩｡繧偵碁閨ｷ縲肴桶縺・↓螟画峩縺励∪縺吶ゅｈ繧阪＠縺・〒縺吶°・・br>
+                <small>窶ｻ繝・・繧ｿ閾ｪ菴薙・縲碁閨ｷ閠・ｸ隕ｧ縲阪°繧牙盾辣ｧ繝ｻ蠕ｩ蜈・′蜿ｯ閭ｽ縺ｧ縺吶・/small>
+            </div>
+
+            <table class="table table-bordered mb-4">
+                <tbody>
+                    <tr><th class="bg-light w-25">遉ｾ蜩｡逡ｪ蜿ｷ</th><td th:text="${employee.empNo}"></td></tr>
+                    <tr><th class="bg-light">豌丞錐</th><td th:text="${employee.lastName + ' ' + employee.firstName}"></td></tr>
+                    <tr><th class="bg-light">謇螻樣Κ鄂ｲ</th><td th:text="${employee.department.deptName}"></td></tr>
+                </tbody>
+            </table>
+
+            <form th:action="@{/deleteEmployee}" method="post">
+                <input type="hidden" name="empNo" th:value="${employee.empNo}">
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-danger px-5">蜑企勁螳溯｡鯉ｼ磯閨ｷ縺ｫ縺吶ｋ・・/button>
+                    <a th:href="@{/detail/{id}(id=${employee.empNo})}" class="btn btn-outline-secondary">繧ｭ繝｣繝ｳ繧ｻ繝ｫ</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

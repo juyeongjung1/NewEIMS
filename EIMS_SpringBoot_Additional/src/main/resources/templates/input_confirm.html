@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout">
+<head>
+    <title>逋ｻ骭ｲ蜀・ｮｹ遒ｺ隱・/title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="card p-4 mx-auto" style="max-width: 800px;">
+            <h2 class="text-primary mb-4 fw-bold">逋ｻ骭ｲ蜀・ｮｹ縺ｮ遒ｺ隱・/h2>
+            <p class="mb-4">莉･荳九・蜀・ｮｹ縺ｧ逋ｻ骭ｲ縺励∪縺吶ゅｈ繧阪＠縺・〒縺吶°・・/p>
+
+            <table class="table table-bordered mb-4">
+                <tbody>
+                    <tr><th class="bg-light w-25">豌丞錐</th><td th:text="${employeeForm.lastName + ' ' + employeeForm.firstName}"></td></tr>
+                    <tr><th class="bg-light">豌丞錐・医き繝奇ｼ・/th><td th:text="${employeeForm.lastKana + ' ' + employeeForm.firstKana}"></td></tr>
+                    <tr><th class="bg-light">繝代せ繝ｯ繝ｼ繝・/th><td>********・郁｡ｨ遉ｺ縺輔ｌ縺ｾ縺帙ｓ・・/td></tr>
+                    <tr><th class="bg-light">諤ｧ蛻･</th><td th:text="${employeeForm.gender == 1 ? '逕ｷ諤ｧ' : '螂ｳ諤ｧ'}"></td></tr>
+                    <tr><th class="bg-light">謇螻樣Κ鄂ｲ</th><td th:text="${department.deptName}"></td></tr>
+                </tbody>
+            </table>
+
+            <form th:action="@{/saveEmployee}" th:object="${employeeForm}" method="post">
+                <input type="hidden" th:field="*{lastName}">
+                <input type="hidden" th:field="*{firstName}">
+                <input type="hidden" th:field="*{lastKana}">
+                <input type="hidden" th:field="*{firstKana}">
+                <input type="hidden" th:field="*{password}">
+                <input type="hidden" th:field="*{gender}">
+                <input type="hidden" th:field="*{deptNo}">
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary px-5">逋ｻ骭ｲ螳溯｡・/button>
+                    <button type="submit" name="back" th:formaction="@{/input}" class="btn btn-outline-secondary">菫ｮ豁｣縺吶ｋ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

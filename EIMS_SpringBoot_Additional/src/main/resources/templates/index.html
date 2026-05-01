@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout">
+<head>
+    <title>トップページ</title>
+</head>
+<body>
+    <div layout:fragment="content">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card p-4 mb-4 shadow-sm border-0 bg-white">
+                    <h1 class="text-primary mb-4 fw-bold">EIMS 社員情報管理システム</h1>
+                    <p class="lead">このシステムでは、社員情報の検索、登録、更新、および削除を行うことができます。</p>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card h-100 p-3 shadow-sm border-0">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold"><i class="bi bi-search text-primary me-2"></i>社員検索</h5>
+                                <p class="card-text text-secondary">番号、氏名、部署から社員を検索します。</p>
+                                <a th:href="@{/search}" class="btn btn-primary">検索画面へ</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 p-3 shadow-sm border-0">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold"><i class="bi bi-person-plus text-primary me-2"></i>新規登録</h5>
+                                <p class="card-text text-secondary">新しい社員の情報をシステムに登録します。</p>
+                                <a th:href="@{/input}" class="btn btn-primary">登録画面へ</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card p-4 bg-primary text-white shadow">
+                    <h5 class="fw-bold mb-3">お知らせ</h5>
+                    <p class="small">システムのデザインが新しくなりました。サイドバーから各機能へ素早くアクセスできます。</p>
+                    <hr>
+                    <p class="small">管理者権限をお持ちの方は、全社員の一覧や退職者の管理も可能です。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
