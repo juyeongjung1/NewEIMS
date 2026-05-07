@@ -85,7 +85,7 @@ public class EmployeeController {
         return "search_result";
     }
 
-    /** 名字または名前で検索 */
+    /** 氏名で検索 */
     @GetMapping("/selectByEmpName")
     public String selectByEmpName(String keyword, Model model) {
         if (keyword == null || keyword.isBlank()) {
