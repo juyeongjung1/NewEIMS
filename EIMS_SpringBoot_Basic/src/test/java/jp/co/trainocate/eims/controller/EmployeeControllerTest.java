@@ -71,6 +71,23 @@ class EmployeeControllerTest {
 				.andExpect(model().attribute("departments", hasSize(3)));
 	}
 
+	@Test
+	@DisplayName("社員一覧画面の表示テスト_正常系")
+	void testShowEmployeeList_normal() throws Exception {
+		Department mockDept = new Department(100, "人事部");
+		List<Employee> mockEmployees = List.of(
+				new Employee(10001, "山田", "陽翔", "ヤマダ", "ヒナタ", "password", 1, mockDept),
+				new Employee(10002, "中田", "結衣", "ナカタ", "ユイ", "password", 2, mockDept)
+		);
+		Mockito.when(employeeService.findAll()).thenReturn(mockEmployees);
+
+		mockMvc.perform(get("/employeeList"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("employee_list"))
+				.andExpect(model().attributeExists("employees"))
+				.andExpect(model().attribute("employees", hasSize(2)));
+	}
+
 	// ==========================================
 	// 1. 検索機能のテスト
 	// ==========================================
@@ -160,6 +177,22 @@ class EmployeeControllerTest {
 				.andExpect(model().attribute("departments", hasSize(2)));
 	}
 
+	@Test
+	@DisplayName("部署検索APIのテスト_正常系")
+	void testSelectByDeptNo_normal() throws Exception {
+		Department mockDept = new Department(100, "人事部");
+		List<Employee> mockEmployees = List.of(
+				new Employee(10001, "山田", "陽翔", "ヤマダ", "ヒナタ", "password", 1, mockDept)
+		);
+		Mockito.when(employeeService.findByDeptNo(100)).thenReturn(mockEmployees);
+
+		mockMvc.perform(get("/selectByDeptNo").param("deptNo", "100"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("search_result"))
+				.andExpect(model().attributeExists("employees"))
+				.andExpect(model().attribute("employees", hasSize(1)));
+	}
+
 	// ==========================================
 	// 2. 登録機能のテスト
 	// ==========================================
@@ -218,7 +251,7 @@ class EmployeeControllerTest {
 				.andExpect(model().attributeExists("departments"))
 				// EmployeeFormの各フィールドにエラーが格納されていることを検証します
 				.andExpect(model().attributeHasFieldErrors(
-						"employeeForm", "lastName", "firstName", "lastKana", "firstKana", "password", "gender"));
+						"employeeForm", "lastName", "firstName", "lastKana", "firstKana", "password", "gender", "deptNo"));
 	}
 
 	@Test
@@ -231,7 +264,8 @@ class EmployeeControllerTest {
 				.param("lastKana", "アイウエオカキクケコサシスセソタチツテトナニヌネノ") // 20文字超
 				.param("firstKana", "アイウエオカキクケコサシスセソタチツテトナニヌネノ") // 20文字超
 				.param("password", "abc") // 4文字未満
-				.param("gender", "1"))
+				.param("gender", "1")
+				.param("deptNo", "100"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("input"))
 				.andExpect(model().attributeHasFieldErrors(
@@ -292,6 +326,20 @@ class EmployeeControllerTest {
 	}
 
 	@Test
+	@DisplayName("削除実行APIのテスト_正常系")
+	void testDeleteEmployee_normal() throws Exception {
+		Department mockDept = new Department(100, "人事部");
+		Employee mockEmployee = new Employee(10001, "山田", "陽翔", "ヤマダ", "ヒナタ", "password", 1, mockDept);
+		Mockito.when(employeeService.findById(10001)).thenReturn(mockEmployee);
+
+		mockMvc.perform(post("/deleteEmployee").param("empNo", "10001"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("delete_complete"));
+
+		Mockito.verify(employeeService).deleteById(10001);
+	}
+
+	@Test
 	@DisplayName("変更入力画面の表示テスト_正常系")
 	void testChangeInput_normal() throws Exception {
 		// 初期表示のために、DBから既存データを取得するシミュレーション
@@ -310,5 +358,66 @@ class EmployeeControllerTest {
 				.andExpect(view().name("change"))
 				.andExpect(model().attributeExists("employeeForm", "departments"))
 				.andExpect(model().attribute("departments", hasSize(3)));
+	}
+
+	@Test
+	@DisplayName("変更確認APIのテスト_正常系")
+	void testChangeConfirm_normal() throws Exception {
+		Department mockDept = new Department(100, "人事部");
+		Mockito.when(departmentService.findById(100)).thenReturn(mockDept);
+
+		mockMvc.perform(post("/changeConfirm")
+				.param("empNo", "10001")
+				.param("lastName", "山田")
+				.param("firstName", "太郎")
+				.param("lastKana", "ヤマダ")
+				.param("firstKana", "タロウ")
+				.param("password", "passwords")
+				.param("gender", "1")
+				.param("deptNo", "100"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("change_confirm"))
+				.andExpect(model().attributeExists("department"))
+				.andExpect(model().attribute("department", hasProperty("deptName", is("人事部"))));
+	}
+
+	@Test
+	@DisplayName("変更確認APIのテスト_異常系(必須項目未入力)")
+	void testChangeConfirm_error_required() throws Exception {
+		mockMvc.perform(post("/changeConfirm")
+				.param("empNo", "10001")
+				.param("lastName", "")
+				.param("firstName", "")
+				.param("lastKana", "")
+				.param("firstKana", "")
+				.param("password", "")
+				.param("gender", ""))
+				.andExpect(status().isOk())
+				.andExpect(view().name("change"))
+				.andExpect(model().attributeExists("departments"))
+				.andExpect(model().attributeHasFieldErrors(
+						"employeeForm", "lastName", "firstName", "lastKana", "firstKana", "password", "gender", "deptNo"));
+	}
+
+	@Test
+	@DisplayName("変更実行APIのテスト_正常系")
+	void testChangeEmployee_normal() throws Exception {
+		Employee mockUpdatedEmployee = new Employee();
+		mockUpdatedEmployee.setEmpNo(10001);
+		Mockito.when(employeeService.update(any(EmployeeForm.class))).thenReturn(mockUpdatedEmployee);
+
+		mockMvc.perform(post("/changeEmployee")
+				.param("empNo", "10001")
+				.param("lastName", "山田")
+				.param("firstName", "太郎")
+				.param("lastKana", "ヤマダ")
+				.param("firstKana", "タロウ")
+				.param("password", "passwords")
+				.param("gender", "1")
+				.param("deptNo", "100"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("change_complete"))
+				.andExpect(model().attributeExists("employee"))
+				.andExpect(model().attribute("employee", hasProperty("empNo", is(10001))));
 	}
 }

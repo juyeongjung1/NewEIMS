@@ -139,10 +139,10 @@ EIMSデータベースに登録されているすべての社員を一覧で表�
         3. **性別**： DB値が 1 なら「男性」、2 なら「女性」と置換して表示する。
         4. **部署名**
     - **氏名 (カナ) をクリック**することで、対象社員の「社員詳細画面」へ遷移できる導線を設けること。
-    - 検索結果が 0 件の場合は、テーブルを表示せず「該当する社員は存在しませんでした」というメッセージを提示すること。
+    - 検索結果が 0 件の場合は、テーブルを表示せず「検索条件に一致する社員は見つかりませんでした。」というメッセージを提示すること。
     - **「メニューに戻る」** または **「検索画面に戻る」** ためのボタンを適切に配置すること。
 - **社員詳細画面**:
-    - 一覧画面と同じ 4 項目（社員番号、氏名(カナ)、性別、部署名）を表示する。
+    - 社員番号、氏、名、氏（カナ）、名（カナ）、性別、部署名を表示する。
     - この画面を起点とし、後のステップで実装する「変更」「削除」の機能へ繋げる。
 - **共通の表示ルール**:
     - 氏名、カナを表示する際は、姓と名の間を**半角スペース**で連結すること。
@@ -286,7 +286,7 @@ EIMSデータベースに登録されているすべての社員を一覧で表�
 削除プロセスにおける各画面の仕様を以下に定義する。
 
 - **削除確認画面**:
-    - 削除対象の社員情報（社員番号、氏名+カナ、性別、部署名）を読み取り専用で表示する。
+    - 削除対象の社員情報（社員番号、氏、名、氏（カナ）、名（カナ）、性別、部署名）を読み取り専用で表示する。
     - 「この社員を削除しますか？」のような確認メッセージを表示すること。
     - **「削除確定」ボタン** および **「詳細画面に戻る」ボタン** を配置すること。
 - **削除完了画面**:
@@ -437,7 +437,7 @@ flowchart LR
 **基本フロー:**
 1. [人事部管理者]は、システムに「社員一覧」を指示する。
 2. システムは、EIMSデータベースから全社員情報を取得し、社員一覧画面を表示する。
-3. [人事部管理者]は、表示された一覧を確認し、ユースケースを終了する。（代替フロー alt3-1, alt3-2 参照）
+3. [人事部管理者]は、表示された一覧を確認し、ユースケースを終了する。（代替フロー alt3-1, alt3-2, alt3-3 参照）
 
 **代替フロー:**
 - **alt3-1.** 基本フロー3で[人事部管理者]が一覧の氏名+カナをクリックした場合、システムは対象社員の「社員詳細画面」を表示する。
@@ -471,10 +471,10 @@ flowchart LR
 2. システムは、EIMSデータベースからプルダウン用の部署一覧を取得し、検索画面を表示する。
 3. [人事部管理者]は、社員番号・社員名・部署名のいずれかの入力条件で検索を指示する。
 4. システムは、検索条件を用いて[EIMSデータベース]の検索を行い、検索結果一覧を表示する。（代替フロー alt4-1, alt4-2 参照）
-5. [人事部管理者]は、表示された検索結果を確認し、ユースケースを終了する。（代替フロー alt5-1, alt5-2 参照）
+5. [人事部管理者]は、表示された検索結果を確認し、ユースケースを終了する。（代替フロー alt5-1, alt5-2, alt5-3 参照）
 
 **代替フロー:**
-- **alt4-1.** 基本フロー4で該当する社員がいない（検索結果0件）場合、システムは、該当する社員が存在しないことを検索結果画面に表示する。
+- **alt4-1.** 基本フロー4で該当する社員がいない（検索結果0件）場合、システムは、「検索条件に一致する社員は見つかりませんでした。」を検索結果画面に表示する。
 - **alt4-2.** 基本フロー3で社員番号による検索の場合、システムは、検索結果一覧を経由せず直接「社員詳細画面」を表示する。
 - **alt5-1.** 基本フロー5で[人事部管理者]が再検索を指示した場合は、基本フロー2に戻り、システムは部署一覧を取得し、検索画面を表示する。
 - **alt5-2.** 基本フロー5で[人事部管理者]はトップページに遷移することができる。
@@ -922,7 +922,7 @@ erDiagram
 | first_kana | VARCHAR(20) | NOT NULL | | なし | 名（カナ） |
 | password | VARCHAR(20) | NOT NULL | | なし | パスワード |
 | gender | INTEGER | NOT NULL | | なし | 性別（1:男性 2:女性） |
-| dept_no | INTEGER | NOT NULL | FOREIGN KEY | なし | 部署コード |
+| dept_no | INTEGER | NULL | FOREIGN KEY | なし | 部署コード |
 
 **外部キー制約:**
 - 制約名: `fk_employee_department`
@@ -933,7 +933,7 @@ erDiagram
 | テーブル | 件数 | 備考 |
 |---|---|---|
 | department | 6件 | 人事部(100)、経理部(200)、営業部(300)、総務部(400)、開発部(500)、企画部(600) |
-| employee | 60件 | テスト用サンプルデータ（社員番号 10001〜10060） |
+| employee | 20件 | テスト用サンプルデータ（社員番号 10001〜10020） |
 
 <div style="page-break-before: always;"></div>
 
@@ -1229,8 +1229,9 @@ classDiagram
 classDiagram
     class EmployeeController {
         <<Controller>>
+        +index() String
         +index(Model) String
-        +search(EmployeeForm, Model) String
+        +search(Integer, String, Integer, Model) String
         +showDetail(Integer, Model) String
     }
     class EmployeeForm {
@@ -1331,7 +1332,6 @@ classDiagram
     EmployeeServiceImpl ..|> EmployeeService : 実現
     DepartmentServiceImpl ..|> DepartmentService : 実現
     EmployeeServiceImpl ..> EmployeeRepository : 依存(DI)
-    EmployeeServiceImpl ..> DepartmentRepository : 依存(DI)
     DepartmentServiceImpl ..> DepartmentRepository : 依存(DI)
     EmployeeRepository ..> Employee : 操作
 ```
@@ -1372,7 +1372,7 @@ classDiagram
     class EmployeeController {
         <<Controller>>
         +deleteConfirm(Integer, Model) String
-        +deleteEmployee(Integer) String
+        +deleteEmployee(Integer, Model) String
     }
     class EmployeeService {
         <<Interface>>
@@ -1404,8 +1404,9 @@ classDiagram
         <<Controller>>
         -EmployeeService employeeService
         -DepartmentService departmentService
+        +index() String
         +index(Model) String
-        +search(EmployeeForm, Model) String
+        +search(Integer, String, Integer, Model) String
         +showDetail(Integer, Model) String
         +showInputPage(EmployeeForm, Model) String
         +confirmRegistration(EmployeeForm, BindingResult, Model) String
@@ -1414,7 +1415,7 @@ classDiagram
         +changeConfirm(EmployeeForm, BindingResult, Model) String
         +changeEmployee(EmployeeForm, Model) String
         +deleteConfirm(Integer, Model) String
-        +deleteEmployee(Integer) String
+        +deleteEmployee(Integer, Model) String
     }
 
     %% =======================
@@ -1448,7 +1449,6 @@ classDiagram
     class EmployeeServiceImpl {
         <<Service>>
         -EmployeeRepository employeeRepository
-        -DepartmentRepository departmentRepository
     }
     
     class DepartmentService {
@@ -1506,7 +1506,6 @@ classDiagram
     DepartmentServiceImpl ..|> DepartmentService : 実現
 
     EmployeeServiceImpl ..> EmployeeRepository : 依存(DI)
-    EmployeeServiceImpl ..> DepartmentRepository : 依存(DI)
     DepartmentServiceImpl ..> DepartmentRepository : 依存(DI)
 
     EmployeeRepository ..> Employee : 操作
@@ -1788,7 +1787,7 @@ sequenceDiagram
     Admin ->> View: 変更を確定
     View ->> Ctrl: POST /changeEmployee (EmployeeForm)
     activate Ctrl
-    Ctrl ->> Svc: save(EmployeeForm)
+    Ctrl ->> Svc: update(EmployeeForm)
     activate Svc
     Svc ->> Rep: save(Employee)
     activate Rep
@@ -1862,16 +1861,23 @@ sequenceDiagram
 | CT-C-001 | トップ | GET /index | index ビューが返されること。 |
 | CT-C-002 | 検索画面 | GET /search | 部署リストが Model に設定され、search ビューが返されること。 |
 | CT-C-003 | 氏名検索 | GET /selectByEmpName (正常系) | 検索キーワードに合致する社員リストが取得され、search_result ビューが返されること。 |
-| CT-C-004 | 氏名検索 | GET /selectByEmpName (0件) | 空のリストが返され、画面に「一致する社員は見つかりませんでした」と表示されること。 |
+| CT-C-004 | 氏名検索 | GET /selectByEmpName (0件) | 空のリストが返され、画面に「検索条件に一致する社員は見つかりませんでした。」と表示されること。 |
 | CT-C-005 | 番号検索 | GET /selectByEmpNo (正常系) | 指定した社員の詳細情報が Model に設定され、employee_detail ビューが返されること。 |
-| CT-C-006 | 番号検索 | GET /selectByEmpNo (該当なし) | search_result ビューが返され、画面に「一致する社員は見つかりませんでした」と表示されること。 |
+| CT-C-006 | 番号検索 | GET /selectByEmpNo (該当なし) | search_result ビューが返され、画面に「検索条件に一致する社員は見つかりませんでした。」と表示されること。 |
+| CT-C-006-2 | 番号検索 | GET /selectByEmpNo (検索条件なし) | 部署リストが Model に設定され、search ビューが返されること。 |
 | CT-C-007 | 登録画面 | GET /input | 部署リストが Model に設定され、input ビューが返されること。 |
 | CT-C-008 | 登録確認 | POST /inputConfirm (正常) | 入力内容が保持され、input_confirm ビューが返されること。 |
 | CT-C-009 | 登録確認 | POST /inputConfirm (必須エラー) | 必須項目未入力時に、input ビューに戻りエラーが表示されること。 |
 | CT-C-010 | 登録確認 | POST /inputConfirm (サイズエラー) | 文字数制限違反時に、input ビューに戻りエラーが表示されること。 |
 | CT-C-011 | 登録実行 | POST /saveEmployee | 社員情報が保存され、採番された社員番号とともに input_complete ビューが返されること。 |
 | CT-C-012 | 削除確認 | GET /deleteConfirm/{id} | 指定した社員情報が Model に設定され、delete_confirm ビューが返されること。 |
-| CT-C-013 | 変更画面 | GET /changeInput/{id} | 既存の社員情報と部署リストが Model に設定され、change ビューが返されること。 |
+| CT-C-012-2 | 削除確認 | GET /deleteConfirm/{id} (該当なし) | search_result ビューが返され、削除できない旨のメッセージが表示されること。 |
+| CT-C-013 | 削除実行 | POST /deleteEmployee | 社員情報が削除され、delete_complete ビューが返されること。 |
+| CT-C-014 | 変更画面 | GET /changeInput/{id} | 既存の社員情報と部署リストが Model に設定され、change ビューが返されること。 |
+| CT-C-015 | 変更確認 | POST /changeConfirm (正常) | 入力内容が保持され、change_confirm ビューが返されること。 |
+| CT-C-016 | 変更確認 | POST /changeConfirm (必須エラー) | 必須項目未入力時に、change ビューに戻りエラーが表示されること。 |
+| CT-C-017 | 変更実行 | POST /changeEmployee | 社員情報が更新され、change_complete ビューが返されること。 |
+| CT-C-018 | 部署検索 | GET /selectByDeptNo (正常系) | 指定した部署に所属する社員リストが取得され、search_result ビューが返されること。 |
 
 <div style="page-break-before: always;"></div>
 

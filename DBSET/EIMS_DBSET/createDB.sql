@@ -6,7 +6,7 @@ USE eimsdb;
 -- 部署テーブル
 CREATE TABLE department (
   dept_no   INTEGER      NOT NULL,
-  dept_name VARCHAR(20)  NOT NULL,
+  dept_name VARCHAR(10)  NOT NULL,
   PRIMARY KEY (dept_no)
 ) ENGINE=InnoDB;
 
@@ -33,9 +33,9 @@ INSERT INTO department (dept_no, dept_name) VALUES
 (100, '人事部'),
 (200, '経理部'),
 (300, '営業部'),
-(400, '企画部'),
+(400, '総務部'),
 (500, '開発部'),
-(600, '総務部');
+(600, '企画部');
 
 -- 社員（氏名を例示。role / delete_flg は既定値0が入る）
 INSERT INTO employee (emp_no, last_name, first_name, last_kana, first_kana, password, gender, dept_no) VALUES

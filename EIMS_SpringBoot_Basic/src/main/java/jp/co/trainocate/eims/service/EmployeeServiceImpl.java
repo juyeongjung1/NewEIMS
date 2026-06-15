@@ -42,13 +42,25 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee save(EmployeeForm employeeForm) {
-        Employee employee = new Employee();
-        // 更新の場合は既存のエンティティを取得
-        if (employeeForm.getEmpNo() != null) {
-            employee = employeeRepository.findById(employeeForm.getEmpNo()).orElse(new Employee());
-        }
+        Employee employee = copyToEmployee(new Employee(), employeeForm);
 
-        // フォームからエンティティへ手動で詰め替え
+        return employeeRepository.save(employee);
+    }
+
+    @Override
+    public Employee update(EmployeeForm employeeForm) {
+        Employee employee = employeeRepository.findById(employeeForm.getEmpNo()).orElse(new Employee());
+        copyToEmployee(employee, employeeForm);
+
+        return employeeRepository.save(employee);
+    }
+
+    @Override
+    public void deleteById(Integer empNo) {
+        employeeRepository.deleteById(empNo);
+    }
+
+    private Employee copyToEmployee(Employee employee, EmployeeForm employeeForm) {
         employee.setEmpNo(employeeForm.getEmpNo());
         employee.setLastName(employeeForm.getLastName());
         employee.setFirstName(employeeForm.getFirstName());
@@ -57,12 +69,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setPassword(employeeForm.getPassword());
         employee.setGender(employeeForm.getGender());
         employee.setDeptNo(employeeForm.getDeptNo());
-
-        return employeeRepository.save(employee);
-    }
-
-    @Override
-    public void deleteById(Integer empNo) {
-        employeeRepository.deleteById(empNo);
+        return employee;
     }
 }

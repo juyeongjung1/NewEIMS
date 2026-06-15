@@ -52,6 +52,13 @@ public interface EmployeeService {
     Employee save(EmployeeForm employeeForm);
 
     /**
+     * 社員情報を更新します。
+     * @param employeeForm 入力フォーム
+     * @return 更新後のエンティティ
+     */
+    Employee update(EmployeeForm employeeForm);
+
+    /**
      * 社員番号を指定して 1 件削除します。
      * @param empNo 社員番号
      */
