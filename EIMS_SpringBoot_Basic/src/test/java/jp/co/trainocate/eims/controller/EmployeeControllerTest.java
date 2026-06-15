@@ -144,6 +144,22 @@ class EmployeeControllerTest {
 				.andExpect(content().string(containsString("検索条件に一致する社員は見つかりませんでした。")));
 	}
 
+	@Test
+	@DisplayName("社員番号検索APIのテスト_異常系(検索条件なし)")
+	void testSelectByEmpNo_noCondition() throws Exception {
+		List<Department> mockDepartments = List.of(
+				new Department(100, "人事部"),
+				new Department(200, "経理部")
+		);
+		Mockito.when(departmentService.findAll()).thenReturn(mockDepartments);
+
+		mockMvc.perform(get("/selectByEmpNo"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("search"))
+				.andExpect(model().attributeExists("departments"))
+				.andExpect(model().attribute("departments", hasSize(2)));
+	}
+
 	// ==========================================
 	// 2. 登録機能のテスト
 	// ==========================================
@@ -261,6 +277,18 @@ class EmployeeControllerTest {
 				.andExpect(view().name("delete_confirm"))
 				.andExpect(model().attributeExists("employee"))
 				.andExpect(model().attribute("employee", hasProperty("empNo", is(10001))));
+	}
+
+	@Test
+	@DisplayName("削除確認画面の表示テスト_異常系(該当データなし)")
+	void testDeleteConfirm_noData() throws Exception {
+		Mockito.when(employeeService.findById(99999)).thenReturn(null);
+
+		mockMvc.perform(get("/deleteConfirm/99999"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("search_result"))
+				.andExpect(model().attribute("employees", hasSize(0)))
+				.andExpect(content().string(containsString("指定された社員情報は存在しないため、削除できません。")));
 	}
 
 	@Test

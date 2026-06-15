@@ -15,7 +15,8 @@
         <h2 class="text-primary mb-3">検索結果一覧</h2>
         
         <div th:if="${employees.empty}" class="alert alert-warning">
-            検索条件に一致する社員は見つかりませんでした。
+            <span th:if="${message != null}" th:text="${message}"></span>
+            <span th:if="${message == null}">検索条件に一致する社員は見つかりませんでした。</span>
         </div>
 
         <div th:if="${!employees.empty}" class="bg-white p-4 rounded border mb-4">

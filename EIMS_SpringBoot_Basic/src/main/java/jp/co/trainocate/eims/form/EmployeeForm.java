@@ -45,5 +45,6 @@ public class EmployeeForm {
     private Integer gender;
 
     /** 部署番号 */
+    @NotNull(message = "部署は必須項目です")
     private Integer deptNo;
 }

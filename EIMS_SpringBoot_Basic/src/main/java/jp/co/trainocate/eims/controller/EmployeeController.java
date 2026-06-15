@@ -51,6 +51,7 @@ public class EmployeeController {
     @GetMapping("/selectByEmpNo")
     public String selectByEmpNo(Integer empNo, Model model) {
         if (empNo == null) {
+            model.addAttribute("departments", departmentService.findAll());
             return "search";
         }
         Employee employee = employeeService.findById(empNo);
@@ -68,6 +69,7 @@ public class EmployeeController {
     @GetMapping("/selectByEmpName")
     public String selectByEmpName(String keyword, Model model) {
         if (keyword == null || keyword.isBlank()) {
+            model.addAttribute("departments", departmentService.findAll());
             return "search";
         }
         List<Employee> employees = employeeService.findByEmpName(keyword);
@@ -79,6 +81,7 @@ public class EmployeeController {
     @GetMapping("/selectByDeptNo")
     public String selectByDeptNo(Integer deptNo, Model model) {
         if (deptNo == null) {
+            model.addAttribute("departments", departmentService.findAll());
             return "search";
         }
         List<Employee> employees = employeeService.findByDeptNo(deptNo);
@@ -125,13 +128,23 @@ public class EmployeeController {
     @GetMapping("/deleteConfirm/{empNo}")
     public String deleteConfirm(@PathVariable("empNo") Integer empNo, Model model) {
         Employee employee = employeeService.findById(empNo);
+        if (employee == null) {
+            model.addAttribute("employees", new ArrayList<Employee>());
+            model.addAttribute("message", "指定された社員情報は存在しないため、削除できません。");
+            return "search_result";
+        }
         model.addAttribute("employee", employee);
         return "delete_confirm";
     }
 
     /** 社員を削除する */
     @PostMapping("/deleteEmployee")
-    public String deleteEmployee(Integer empNo) {
+    public String deleteEmployee(Integer empNo, Model model) {
+        if (empNo == null || employeeService.findById(empNo) == null) {
+            model.addAttribute("employees", new ArrayList<Employee>());
+            model.addAttribute("message", "指定された社員情報は存在しないため、削除できません。");
+            return "search_result";
+        }
         employeeService.deleteById(empNo);
         return "delete_complete";
     }
