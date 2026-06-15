@@ -3,22 +3,6 @@
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
   }
-  .toc-container {
-    background-color: #f8f9fa;
-    border: 1px solid #e9ecef;
-    border-left: 5px solid #007bff;
-    border-radius: 8px;
-    padding: 20px 30px;
-    margin-top: 20px;
-    margin-bottom: 30px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-  }
-  .toc-container h2 {
-    margin-top: 0 !important;
-    border-bottom: 2px solid #007bff;
-    padding-bottom: 10px;
-    color: #1a365d;
-  }
   h2, h3, h4, h5 {
     margin-top: 30px !important;
   }
@@ -50,9 +34,9 @@
 
 <div style="page-break-before: always;"></div>
 
-<div class="toc-container">
+<div style="background-color: #f8f9fa; border: 1px solid #e9ecef; border-left: 5px solid #007bff; border-radius: 8px; padding: 20px 30px; margin-top: 20px; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
 
-## 目次
+<h2 style="margin-top: 0 !important; border-bottom: 2px solid #007bff; padding-bottom: 10px; color: #1a365d;">目次</h2>
 
 - 1\. 演習概要 ...... p.4
   - 1.1 社員一覧・検索・表示機能の仕様定義 ...... p.4
