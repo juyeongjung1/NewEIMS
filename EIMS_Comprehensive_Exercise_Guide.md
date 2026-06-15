@@ -85,9 +85,9 @@
   - 10.4 UC003: 社員情報を登録する ...... p.58
   - 10.5 UC004: 社員情報を変更する ...... p.59
   - 10.6 UC005: 社員情報を削除する ...... p.60
-- 11\. コンポーネントテスト仕様 ...... p.61
-  - 11.1 Repository テストケース ...... p.61
-  - 11.2 Controller テストケース ...... p.61
+- 11\. コンポーネントテスト仕様（任意） ...... p.61
+  - 11.1 Repository テストケース（任意） ...... p.61
+  - 11.2 Controller テストケース（任意） ...... p.61
 - 12\. 共通メッセージ一覧 ...... p.62
 
 <div style="page-break-before: always;"></div>
@@ -330,7 +330,7 @@ EIMSデータベースに登録されているすべての社員を一覧で表�
 | 1 | 要件定義の内容確認 | 以下の各種ドキュメントを元に、要件を理解する。<br>・ユースケース図<br>・ユースケース仕様書<br>・UI フロー図<br>・画面レイアウト図 | ※成果物の作成は不要。提供された資料を用いる。 |
 | 2 | 設計の内容確認 | 設計レベルのクラス図の記述内容を理解する。 | ※成果物の作成は不要。提供された資料を用いる。 |
 | 3 | プログラミング | 設計モデルどおりにコーディングする。 | ソースコード |
-| 4 | テスト | 設計書（11章）で提供される単体テストケースに基づきコンポーネントテスト（JUnit）を実装する。また、要件定義資料を基にシステムテストケースを自ら作成し、システムテストを実施する。 | システムテストケース仕様書<br>テスト不具合報告書<br>動作するプログラム |
+| 4 | テスト | 要件定義資料を基にシステムテストケースを自ら作成し、システムテストを実施する。余裕がある場合は、11章で提供される単体テストケースを参考に、コンポーネントテスト（JUnit）を実装してもよい。 | システムテストケース仕様書<br>テスト不具合報告書<br>動作するプログラム |
 
 <br>
 
@@ -369,7 +369,7 @@ EIMSデータベースに登録されているすべての社員を一覧で表�
 <tr><td>分析</td><td>シーケンス図（分析レベル）</td><td align="center">※</td><td align="center">※</td><td align="center">※</td><td align="center">※</td></tr>
 <tr><td>設計</td><td>クラス図（設計レベル）</td><td align="center">※</td><td align="center">※</td><td align="center">※</td><td align="center">※</td></tr>
 <tr><td>設計</td><td>シーケンス図（設計レベル）</td><td align="center">※</td><td align="center">※</td><td align="center">※</td><td align="center">※</td></tr>
-<tr><td>設計</td><td>コンポーネントテスト仕様</td><td colspan="4" align="center">※</td></tr>
+<tr><td>設計</td><td>コンポーネントテスト仕様（任意）</td><td colspan="4" align="center">※</td></tr>
 <tr><td>実装</td><td>ソースコード</td><td align="center">○</td><td align="center">○</td><td align="center">○</td><td align="center">○</td></tr>
 <tr><td>テスト</td><td>システムテストケース仕様書.xls</td><td align="center">○</td><td align="center">○</td><td align="center">○</td><td align="center">○</td></tr>
 <tr><td>テスト</td><td>テスト不具合報告書.xls</td><td align="center">○</td><td align="center">○</td><td align="center">○</td><td align="center">○</td></tr>
@@ -1842,11 +1842,11 @@ sequenceDiagram
 
 <div style="page-break-before: always;"></div>
 
-## 11. コンポーネントテスト仕様
+## 11. コンポーネントテスト仕様（任意）
 
-本章では、システムの各コンポーネント（Repository, Controller）に対して実施すべき単体テストのケースを定義する。受講者はこれらのケースを網羅するように JUnit によるテストコードを実装すること。
+本章では、余裕がある場合に実装するコンポーネントテスト（JUnit）の参考ケースを定義する。単体テストは必須課題ではないため、基本機能の実装とシステムテストを優先し、時間に余裕がある場合に取り組むこと。
 
-### 11.1 Repository テストケース (EmployeeRepository)
+### 11.1 Repository テストケース（任意） (EmployeeRepository)
 
 | テストID | テスト対象メソッド | テスト内容 | 期待結果 |
 |---|---|---|---|
@@ -1854,7 +1854,7 @@ sequenceDiagram
 | CT-R-002 | findByLastNameContaining... | 氏名の一部（漢字）を指定して検索する。 | 氏または名にキーワードを含むすべての社員が取得できること。 |
 | CT-R-003 | findByDeptNo | 存在する部署番号を指定して検索する。 | その部署に所属するすべての社員が取得できること。 |
 
-### 11.2 Controller テストケース (EmployeeController)
+### 11.2 Controller テストケース（任意） (EmployeeController)
 
 | テストID | 機能 | テストケース | 期待結果 |
 |---|---|---|---|
