@@ -21,27 +21,28 @@ public class Employee {
 	// 主キーに自動採番を使用
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "emp_no")
 	/** 社員番号 */
-	private Integer empno;
+	private Integer empNo;
 
 	/** 氏 */
-	@Column(length = 20, nullable = false)
-	private String lname;
+	@Column(name = "last_name", length = 10, nullable = false)
+	private String lastName;
 
 	/** 名 */
-	@Column(length = 20, nullable = false)
-	private String fname;
+	@Column(name = "first_name", length = 10, nullable = false)
+	private String firstName;
 
 	/** 氏(カナ) */
-	@Column(length = 50, nullable = false)
-	private String lkana;
+	@Column(name = "last_kana", length = 20, nullable = false)
+	private String lastKana;
 
 	/** 名(カナ) */
-	@Column(length = 50, nullable = false)
-	private String fkana;
+	@Column(name = "first_kana", length = 20, nullable = false)
+	private String firstKana;
 
 	/** パスワード */
-	@Column(length = 30, nullable = false)
+	@Column(length = 20, nullable = false)
 	private String password;
 
 	/** 性別 1:男性 2:女性 */
@@ -50,39 +51,39 @@ public class Employee {
 
 	/** 所属部署 */
 	@ManyToOne
-	@JoinColumn(name = "deptno", insertable = false, updatable = false)
+	@JoinColumn(name = "dept_no", referencedColumnName = "dept_no", insertable = false, updatable = false)
 	private Department department;
 
 	/** 部署番号 (外部キー) */
-	@Column(name = "deptno")
-	private Integer deptno;
+	@Column(name = "dept_no")
+	private Integer deptNo;
 
 	// ★追加：全主要フィールドを同時設定するコンストラクタ。departmentを初期化するパターン
-	public Employee(Integer empno, String lname, String fname, String lkana, String fkana,
+	public Employee(Integer empNo, String lastName, String firstName, String lastKana, String firstKana,
 			String password, Integer gender, Department department) {
 		super();
-		this.empno = empno;
-		this.lname = lname;
-		this.fname = fname;
-		this.lkana = lkana;
-		this.fkana = fkana;
+		this.empNo = empNo;
+		this.lastName = lastName;
+		this.firstName = firstName;
+		this.lastKana = lastKana;
+		this.firstKana = firstKana;
 		this.password = password;
 		this.gender = gender;
 		this.department = department;
 	}
 
-	// ★追加：全主要同時設定するコンストラクタ。deptnoを初期化するパターン
-	public Employee(Integer empno, String lname, String fname, String lkana, String fkana,
-			String password, Integer gender, Integer deptno) {
+	// ★追加：全主要同時設定するコンストラクタ。deptNoを初期化するパターン
+	public Employee(Integer empNo, String lastName, String firstName, String lastKana, String firstKana,
+			String password, Integer gender, Integer deptNo) {
 		super();
-		this.empno = empno;
-		this.lname = lname;
-		this.fname = fname;
-		this.lkana = lkana;
-		this.fkana = fkana;
+		this.empNo = empNo;
+		this.lastName = lastName;
+		this.firstName = firstName;
+		this.lastKana = lastKana;
+		this.firstKana = firstKana;
 		this.password = password;
 		this.gender = gender;
-		this.deptno = deptno;
+		this.deptNo = deptNo;
 	}
 
 	

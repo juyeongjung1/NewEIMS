@@ -54,30 +54,30 @@ class EmployeeRepositoryTest {
 	    Department keiri  = deptRepo.save(new Department(120, "経理部"));
 
 	    // 4) 社員エンティティを作成・保存
-	    // 本エンティティは、@ManyToOne Department と 整数FK deptno の二重マッピングを持つ想定。
-	    // → department をセットしたら、整合のため deptno も同期させておく。
+	    // 本エンティティは、@ManyToOne Department と 整数FK deptNo の二重マッピングを持つ想定。
+	    // → department をセットしたら、整合のため deptNo も同期させておく。
 	    emp1 = new Employee();
-	    emp1.setLname("山田"); emp1.setFname("陽翔");
-	    emp1.setLkana("ヤマダ"); emp1.setFkana("ヒナタ");
+	    emp1.setLastName("山田"); emp1.setFirstName("陽翔");
+	    emp1.setLastKana("ヤマダ"); emp1.setFirstKana("ヒナタ");
 	    emp1.setPassword("password"); emp1.setGender(1);
 	    emp1.setDepartment(jinji);
-	    emp1.setDeptno(jinji.getDeptno());
+	    emp1.setDeptNo(jinji.getDeptNo());
 	    emp1 = empRepo.save(emp1); // save の戻り値はIDが確定した最新状態
 
 	    emp2 = new Employee();
-	    emp2.setLname("中田"); emp2.setFname("結衣");
-	    emp2.setLkana("ナカタ"); emp2.setFkana("ユイ");
+	    emp2.setLastName("中田"); emp2.setFirstName("結衣");
+	    emp2.setLastKana("ナカタ"); emp2.setFirstKana("ユイ");
 	    emp2.setPassword("password"); emp2.setGender(2);
 	    emp2.setDepartment(keiri);
-	    emp2.setDeptno(keiri.getDeptno());
+	    emp2.setDeptNo(keiri.getDeptNo());
 	    emp2 = empRepo.save(emp2);
 
 	    emp3 = new Employee();
-	    emp3.setLname("鈴木"); emp3.setFname("大翔");
-	    emp3.setLkana("スズキ"); emp3.setFkana("ヒロト");
+	    emp3.setLastName("鈴木"); emp3.setFirstName("大翔");
+	    emp3.setLastKana("スズキ"); emp3.setFirstKana("ヒロト");
 	    emp3.setPassword("password"); emp3.setGender(1);
 	    emp3.setDepartment(jinji);
-	    emp3.setDeptno(jinji.getDeptno());
+	    emp3.setDeptNo(jinji.getDeptNo());
 	    emp3 = empRepo.save(emp3);
 	}
 
@@ -85,13 +85,13 @@ class EmployeeRepositoryTest {
 	 * 社員番号（主キー）での検索が 1 件ヒットすることを検証。
 	 */
 	@Test
-	void testFindByEmpno() {
+	void testFindByEmpNo() {
 		// 1) 実行
-		List<Employee> result = empRepo.findByempno(emp1.getEmpno());
+		List<Employee> result = empRepo.findByEmpNo(emp1.getEmpNo());
 		// 2) 件数検証
 		assertThat(result).hasSize(1);
 		// 3) 内容検証
-		assertThat(result.get(0).getLname()).isEqualTo("山田");
+		assertThat(result.get(0).getLastName()).isEqualTo("山田");
 	}
 	
 	/**
@@ -103,7 +103,7 @@ class EmployeeRepositoryTest {
 		List<Employee> result = empRepo.findByEmpNameLike("田");
 		assertThat(result).hasSize(2);
 		// 取得順は未保証のため、順序非依存で比較
-		assertThat(result).extracting(Employee::getLname).containsExactlyInAnyOrder("山田","中田");
+		assertThat(result).extracting(Employee::getLastName).containsExactlyInAnyOrder("山田","中田");
 	}
 	
 	/**
@@ -111,11 +111,11 @@ class EmployeeRepositoryTest {
 	 * ※ 取得順はDB/実装に依存して未保証。実務では順序前提の検証は避けるのが無難。
 	 */
 	@Test
-	void testFindByDepartmentDeptno() {
-		List<Employee> result = empRepo.findByDepartmentDeptno(110);
+	void testFindByDepartmentDeptNo() {
+		List<Employee> result = empRepo.findByDepartmentDeptNo(110);
 		assertThat(result).hasSize(2);
 		// ここでは例として先頭要素を簡易チェック（厳密さが必要なら順序を指定して検索する/順序非依存の検証にする）
-		assertThat(result.get(0).getLname()).isEqualTo("山田");
-		assertThat(result.get(0).getDeptno()).isEqualTo(110);
+		assertThat(result.get(0).getLastName()).isEqualTo("山田");
+		assertThat(result.get(0).getDeptNo()).isEqualTo(110);
 	}
 }

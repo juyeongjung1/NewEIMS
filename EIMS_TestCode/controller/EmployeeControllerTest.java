@@ -81,14 +81,14 @@ class EmployeeControllerTest {
 
 	}
 
-	// ---------- GET /selectByEmpNo?empno=10001 ----------
+	// ---------- GET /selectByEmpNo?empNo=10001 ----------
 	@Test
 	@DisplayName("社員番号検索（パラメータあり）：結果を search_result に表示")
 	void testSelectByEmpNo_WithParam_ReturnsResult() throws Exception {
 		List<Employee> mockEmployee = List.of(
 				new Employee(10001, "山田", "陽翔", "ヤマダ", "ヒナタ", "password", 1, deptList.get(0)));
 		Mockito.when(employeeService.findByEmpNo(10001)).thenReturn(mockEmployee);
-		mockMvc.perform(get("/selectByEmpNo").param("empno", "10001"))
+		mockMvc.perform(get("/selectByEmpNo").param("empNo", "10001"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("search_result"))
 				.andExpect(model().attributeExists("employees"))
@@ -122,7 +122,7 @@ class EmployeeControllerTest {
 
 	}
 
-	// ---------- GET /selectByDeptNo?deptno=100 ----------
+	// ---------- GET /selectByDeptNo?deptNo=100 ----------
 	@Test
 	@DisplayName("部門番号検索：結果を search_result に表示（件数も検証）")
 	void testSelectByDeptNo_ReturnsResult() throws Exception {
@@ -131,7 +131,7 @@ class EmployeeControllerTest {
 				new Employee(10002, "中田", "結衣", "タナカ", "ユイ", "password", 2, deptList.get(0)));
 		Mockito.when(employeeService.findByDeptNo(100)).thenReturn(mockEmployee);
 
-		mockMvc.perform(get("/selectByDeptNo").param("deptno", "100"))
+		mockMvc.perform(get("/selectByDeptNo").param("deptNo", "100"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("search_result"))
 				.andExpect(model().attributeExists("employees"))
@@ -158,17 +158,17 @@ class EmployeeControllerTest {
 		Mockito.when(departmentService.findById(100)).thenReturn(deptList.get(0));
 
 		mockMvc.perform(post("/inputConfirm")
-				.param("lname", "山田")
-				.param("fname", "太郎")
-				.param("lkana", "ヤマダ")
-				.param("fkana", "タロウ")
+				.param("lastName", "山田")
+				.param("firstName", "太郎")
+				.param("lastKana", "ヤマダ")
+				.param("firstKana", "タロウ")
 				.param("password", "passwords")
 				.param("gender", "1")
-				.param("deptno", "100"))
+				.param("deptNo", "100"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("input_confirm"))
 				.andExpect(model().attributeExists("department"))
-				.andExpect(model().attribute("department", hasProperty("deptname",
+				.andExpect(model().attribute("department", hasProperty("deptName",
 						is("人事部"))));
 
 	}
@@ -179,18 +179,18 @@ class EmployeeControllerTest {
 	void testConfirmRegistration_WhenValidationFails1_ReturnsInput() throws Exception {
 
 		mockMvc.perform(post("/inputConfirm")
-				.param("lname", "")
-				.param("fname", "")
-				.param("lkana", "")
-				.param("fkana", "")
+				.param("lastName", "")
+				.param("firstName", "")
+				.param("lastKana", "")
+				.param("firstKana", "")
 				.param("password", "")
 				.param("gender", "")
-				.param("deptno", ""))
+				.param("deptNo", ""))
 				.andExpect(status().isOk())
 				.andExpect(view().name("input"))
 				.andExpect(model().attributeExists("departments"))
 				.andExpect(model().attributeHasFieldErrors(
-						"employeeForm", "lname", "fname", "lkana", "password", "gender", "deptno"));
+						"employeeForm", "lastName", "firstName", "lastKana", "password", "gender", "deptNo"));
 
 	}
 
@@ -200,18 +200,18 @@ class EmployeeControllerTest {
 	void testConfirmRegistration_WhenValidationFails2_ReturnsInput() throws Exception {
 
 		mockMvc.perform(post("/inputConfirm")
-				.param("lname", "氏".repeat(11))// 11文字で違反
-				.param("fname", "名".repeat(11))// 11文字で違反
-				.param("lkana", "し".repeat(11))// 11文字で違反
-				.param("fkana", "め".repeat(11))// 11文字で違反
+				.param("lastName", "氏".repeat(11))// 11文字で違反
+				.param("firstName", "名".repeat(11))// 11文字で違反
+				.param("lastKana", "し".repeat(11))// 11文字で違反
+				.param("firstKana", "め".repeat(11))// 11文字で違反
 				.param("password", "p".repeat(7)) // 7文字で違反
 				.param("gender", "1") //正常
-				.param("deptno", "100")) //正常
+				.param("deptNo", "100")) //正常
 				.andExpect(status().isOk())
 				.andExpect(view().name("input"))
 				.andExpect(model().attributeExists("departments"))
 				.andExpect(model().attributeHasFieldErrors(
-						"employeeForm", "lname", "fname", "lkana", "password"));
+						"employeeForm", "lastName", "firstName", "lastKana", "password"));
 
 	}
 
@@ -226,27 +226,27 @@ class EmployeeControllerTest {
 			EmployeeForm f = inv.getArgument(0);
 			// 必要ならここで f の中身をアサートしてもOK
 			Employee e = new Employee();
-			e.setEmpno(20001); // 採番想定
-			e.setDeptno(f.getDeptno()); // 部門も返しておくと後続が自然
+			e.setEmpNo(20001); // 採番想定
+			e.setDeptNo(f.getDeptNo()); // 部門も返しておくと後続が自然
 			return e;
 		});
 
 		mockMvc.perform(post("/saveEmployee")
-				.param("lname", "山田")
-				.param("fname", "太郎")
-				.param("lkana", "ヤマダ")
-				.param("fkana", "タロウ")
+				.param("lastName", "山田")
+				.param("firstName", "太郎")
+				.param("lastKana", "ヤマダ")
+				.param("firstKana", "タロウ")
 				.param("password", "passwords")
 				.param("gender", "1")
-				.param("deptno", "100"))
+				.param("deptNo", "100"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("input_complete"))
 				.andExpect(model().attributeExists("department"))
-				.andExpect(model().attribute("department", hasProperty("deptname", is("人事部"))));
+				.andExpect(model().attribute("department", hasProperty("deptName", is("人事部"))));
 
 	}
 
-	// ---------- GET /deleteConfirm/{empno} ----------
+	// ---------- GET /deleteConfirm/{empNo} ----------
 	@Test
 	@DisplayName("削除確認：社員情報と部門情報を表示")
 	void testDeleteConfirm_ReturnsEmployeeInfo() throws Exception {
@@ -256,7 +256,7 @@ class EmployeeControllerTest {
 				.andExpect(status().isOk())
 				.andExpect(view().name("delete_confirm"))
 				.andExpect(model().attributeExists("employee"))
-				.andExpect(model().attribute("employee", hasProperty("empno", is(10001))));
+				.andExpect(model().attribute("employee", hasProperty("empNo", is(10001))));
 	}
 
 	// ---------- POST /deleteEmployee ----------
@@ -265,20 +265,20 @@ class EmployeeControllerTest {
 	void testDeleteEmployee_PerformsDeleteAndReturnsComplete() throws Exception {
 
 		mockMvc.perform(post("/deleteEmployee")
-				.param("empno", "10001")
-				.param("lname", "山田")
-				.param("fname", "太郎")
-				.param("lkana", "ヤマダ")
-				.param("fkana", "タロウ")
+				.param("empNo", "10001")
+				.param("lastName", "山田")
+				.param("firstName", "太郎")
+				.param("lastKana", "ヤマダ")
+				.param("firstKana", "タロウ")
 				.param("password", "passwords")
 				.param("gender", "1")
-				.param("deptno", "100"))
+				.param("deptNo", "100"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("delete_complete"));
 
 	}
 
-	// ---------- GET /changeInput/{empno} ----------
+	// ---------- GET /changeInput/{empNo} ----------
 	@Test
 	@DisplayName("変更画面表示：フォーム値と部門リストをモデルに詰める")
 	void testChangeInput_ReturnsFormAndDepartments() throws Exception {
@@ -300,18 +300,18 @@ class EmployeeControllerTest {
 		when(departmentService.findById(100)).thenReturn(deptList.get(0));
 
 		mockMvc.perform(post("/changeConfirm")
-				.param("empno", "10001")
-				.param("lname", "山田")
-				.param("fname", "太郎")
-				.param("lkana", "ヤマダ")
-				.param("fkana", "タロウ")
+				.param("empNo", "10001")
+				.param("lastName", "山田")
+				.param("firstName", "太郎")
+				.param("lastKana", "ヤマダ")
+				.param("firstKana", "タロウ")
 				.param("password", "passwords")
 				.param("gender", "1")
-				.param("deptno", "100"))
+				.param("deptNo", "100"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("change_confirm"))
 				.andExpect(model().attributeExists("department"))
-				.andExpect(model().attribute("department", hasProperty("deptname",
+				.andExpect(model().attribute("department", hasProperty("deptName",
 						is("人事部"))));
 	}
 
@@ -321,18 +321,18 @@ class EmployeeControllerTest {
 	void testChangeConfirm_WhenValidationFails1_ReturnsChange() throws Exception {
 
 		mockMvc.perform(post("/changeConfirm")
-				.param("lname", "")
-				.param("fname", "")
-				.param("lkana", "")
-				.param("fkana", "")
+				.param("lastName", "")
+				.param("firstName", "")
+				.param("lastKana", "")
+				.param("firstKana", "")
 				.param("password", "")
 				.param("gender", "")
-				.param("deptno", ""))
+				.param("deptNo", ""))
 				.andExpect(status().isOk())
 				.andExpect(view().name("change"))
 				.andExpect(model().attributeExists("departments"))
 				.andExpect(model().attributeHasFieldErrors(
-						"employeeForm", "lname", "fname", "lkana", "password", "gender", "deptno"));
+						"employeeForm", "lastName", "firstName", "lastKana", "password", "gender", "deptNo"));
 	}
 
 	// ---------- POST /changeConfirm（バリデーションNG） ----------
@@ -341,18 +341,18 @@ class EmployeeControllerTest {
 	void testChangeConfirm_WhenValidationFails2_ReturnsChange() throws Exception {
 
 		mockMvc.perform(post("/changeConfirm")
-				.param("lname", "氏".repeat(11))// 11文字で違反
-				.param("fname", "名".repeat(11))// 11文字で違反
-				.param("lkana", "し".repeat(11))// 11文字で違反
-				.param("fkana", "め".repeat(11))// 11文字で違反
+				.param("lastName", "氏".repeat(11))// 11文字で違反
+				.param("firstName", "名".repeat(11))// 11文字で違反
+				.param("lastKana", "し".repeat(11))// 11文字で違反
+				.param("firstKana", "め".repeat(11))// 11文字で違反
 				.param("password", "p".repeat(7)) // 7文字で違反
 				.param("gender", "1") //正常
-				.param("deptno", "100")) //正常
+				.param("deptNo", "100")) //正常
 				.andExpect(status().isOk())
 				.andExpect(view().name("change"))
 				.andExpect(model().attributeExists("departments"))
 				.andExpect(model().attributeHasFieldErrors(
-						"employeeForm", "lname", "fname", "lkana", "password"));
+						"employeeForm", "lastName", "firstName", "lastKana", "password"));
 	}
 
 	// ---------- POST /changeEmployee ----------
@@ -362,18 +362,18 @@ class EmployeeControllerTest {
 		Mockito.when(departmentService.findById(100)).thenReturn(deptList.get(0));
 
 		mockMvc.perform(post("/changeEmployee")
-				.param("empno", "10001")
-				.param("lname", "山田")
-				.param("fname", "太郎")
-				.param("lkana", "ヤマダ")
-				.param("fkana", "タロウ")
+				.param("empNo", "10001")
+				.param("lastName", "山田")
+				.param("firstName", "太郎")
+				.param("lastKana", "ヤマダ")
+				.param("firstKana", "タロウ")
 				.param("password", "passwords")
 				.param("gender", "1")
-				.param("deptno", "100"))
+				.param("deptNo", "100"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("change_complete"))
 				.andExpect(model().attributeExists("department"))
-				.andExpect(model().attribute("department", hasProperty("deptno", is(100))));
+				.andExpect(model().attribute("department", hasProperty("deptNo", is(100))));
 
 	}
 }

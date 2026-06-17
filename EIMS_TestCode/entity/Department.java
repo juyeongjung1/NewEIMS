@@ -19,12 +19,13 @@ import lombok.Data;
 public class Department {
     // 主キーの部署番号。
     @Id
+    @Column(name = "dept_no")
     /** 部署番号 */
-    private Integer deptno;
+    private Integer deptNo;
 	
     /** 部署名 */
-    @Column(length = 10, nullable = false)
-    private String deptname;
+    @Column(name = "dept_name", length = 10, nullable = false)
+    private String deptName;
 	
     /** 部署に所属する社員一覧 */
     @OneToMany(mappedBy = "department")
@@ -32,10 +33,10 @@ public class Department {
     
 
     // ★追加：部門番号・部門名を同時設定するコンストラクタ
-    public Department(Integer deptno, String deptname) {
+    public Department(Integer deptNo, String deptName) {
         super();
-    	this.deptno = deptno;
-        this.deptname = deptname;
+        this.deptNo = deptNo;
+        this.deptName = deptName;
     }
     
  
