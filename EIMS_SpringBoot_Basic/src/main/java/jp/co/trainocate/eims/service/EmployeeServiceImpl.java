@@ -14,22 +14,6 @@ import lombok.RequiredArgsConstructor;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-
-    @Override
-    public List<Employee> findAll() {
-        return employeeRepository.findAll();
-    }
-
-    @Override
-    public List<Employee> findByEmpNo(Integer empNo) {
-        return employeeRepository.findByEmpNo(empNo);
-    }
-
-    @Override
-    public List<Employee> findByEmpName(String keyword) {
-        return employeeRepository.findByLastNameContainingOrFirstNameContaining(keyword, keyword);
-    }
-
     @Override
     public List<Employee> findByDeptNo(Integer deptNo) {
         return employeeRepository.findByDeptNo(deptNo);

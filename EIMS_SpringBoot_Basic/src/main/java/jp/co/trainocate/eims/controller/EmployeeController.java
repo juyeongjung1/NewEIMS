@@ -59,7 +59,6 @@ public class EmployeeController {
             }
             // ヒットしない場合は結果画面へ（0件表示用）
             model.addAttribute("employees", new ArrayList<Employee>());
-            model.addAttribute("employees", new ArrayList<Employee>());
             return "search_result";
         }
 

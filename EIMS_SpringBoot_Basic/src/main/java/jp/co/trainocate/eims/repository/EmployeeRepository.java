@@ -11,12 +11,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import jp.co.trainocate.eims.entity.Employee;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
-    /**
-     * 社員番号を指定して 1 件取得します。
-     * @param empNo 検索する社員番号
-     * @return 該当する社員リスト
-     */
-    List<Employee> findByEmpNo(Integer empNo);
 
     /**
      * 氏(lastName) または 名(firstName) による部分一致検索を行います。
