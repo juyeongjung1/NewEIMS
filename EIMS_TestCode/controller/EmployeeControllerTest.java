@@ -83,26 +83,42 @@ class EmployeeControllerTest {
 
 	// ---------- GET /selectByEmpNo?empNo=10001 ----------
 	@Test
-	@DisplayName("社員番号検索（パラメータあり）：結果を search_result に表示")
+	@DisplayName("社員番号検索（パラメータあり）：詳細を employee_detail に表示")
 	void testSelectByEmpNo_WithParam_ReturnsResult() throws Exception {
-		List<Employee> mockEmployee = List.of(
-				new Employee(10001, "山田", "陽翔", "ヤマダ", "ヒナタ", "password", 1, deptList.get(0)));
-		Mockito.when(employeeService.findByEmpNo(10001)).thenReturn(mockEmployee);
+		Mockito.when(employeeService.findById(10001)).thenReturn(empList.get(0));
+
 		mockMvc.perform(get("/selectByEmpNo").param("empNo", "10001"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("employee_detail"))
+				.andExpect(model().attributeExists("employee"))
+				.andExpect(model().attribute("employee", hasProperty("empNo", is(10001))));
+
+	}
+
+	// ---------- GET /selectByEmpNo?empNo=99999 ----------
+	@Test
+	@DisplayName("社員番号検索（該当なし）：0件の search_result を表示")
+	void testSelectByEmpNo_NotFound_ReturnsSearchResult() throws Exception {
+		Mockito.when(employeeService.findById(99999)).thenReturn(null);
+
+		mockMvc.perform(get("/selectByEmpNo").param("empNo", "99999"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("search_result"))
 				.andExpect(model().attributeExists("employees"))
-				.andExpect(model().attribute("employees", hasSize(1)));
-
+				.andExpect(model().attribute("employees", hasSize(0)));
 	}
 
 	// ---------- GET /selectByEmpNo（パラメータ無し） ----------
 	@Test
 	@DisplayName("社員番号検索（パラメータ無し）：検索画面に戻る")
 	void testSelectByEmpNo_NoParam_ReturnsSearch() throws Exception {
+		Mockito.when(departmentService.findAll()).thenReturn(deptList);
+
 		mockMvc.perform(get("/selectByEmpNo"))
 				.andExpect(status().isOk())
-				.andExpect(view().name("search"));
+				.andExpect(view().name("search"))
+				.andExpect(model().attributeExists("departments"))
+				.andExpect(model().attribute("departments", hasSize(3)));
 	}
 
 	// ---------- GET /selectByEmpName?keyword=結衣 ----------
@@ -120,6 +136,19 @@ class EmployeeControllerTest {
 				.andExpect(model().attributeExists("employees"))
 				.andExpect(model().attribute("employees", hasSize(2)));
 
+	}
+
+	// ---------- GET /selectByEmpName?keyword=該当なし ----------
+	@Test
+	@DisplayName("氏名検索（0件）：0件の search_result を表示")
+	void testSelectByEmpName_NoResult_ReturnsSearchResult() throws Exception {
+		Mockito.when(employeeService.findByEmpName("該当なし")).thenReturn(List.of());
+
+		mockMvc.perform(get("/selectByEmpName").param("keyword", "該当なし"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("search_result"))
+				.andExpect(model().attributeExists("employees"))
+				.andExpect(model().attribute("employees", hasSize(0)));
 	}
 
 	// ---------- GET /selectByDeptNo?deptNo=100 ----------
@@ -219,10 +248,8 @@ class EmployeeControllerTest {
 	@Test
 	@DisplayName("登録実行：保存して input_complete を返す（ModelMapper不使用）")
 	void testSaveEmployee_SavesAndReturnsComplete() throws Exception {
-		when(departmentService.findById(100)).thenReturn(new Department(100, "人事部"));
-
 		// 引数はBinderが作る別インスタンスなので any(EmployeeForm.class) でマッチさせる
-		when(employeeService.saveEmployee(any(EmployeeForm.class))).thenAnswer(inv -> {
+		when(employeeService.save(any(EmployeeForm.class))).thenAnswer(inv -> {
 			EmployeeForm f = inv.getArgument(0);
 			// 必要ならここで f の中身をアサートしてもOK
 			Employee e = new Employee();
@@ -241,8 +268,8 @@ class EmployeeControllerTest {
 				.param("deptNo", "100"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("input_complete"))
-				.andExpect(model().attributeExists("department"))
-				.andExpect(model().attribute("department", hasProperty("deptName", is("人事部"))));
+				.andExpect(model().attributeExists("employee"))
+				.andExpect(model().attribute("employee", hasProperty("empNo", is(20001))));
 
 	}
 
@@ -250,7 +277,7 @@ class EmployeeControllerTest {
 	@Test
 	@DisplayName("削除確認：社員情報と部門情報を表示")
 	void testDeleteConfirm_ReturnsEmployeeInfo() throws Exception {
-		Mockito.when(employeeService.findByEmployee(10001)).thenReturn(empList.get(0));
+		Mockito.when(employeeService.findById(10001)).thenReturn(empList.get(0));
 
 		mockMvc.perform(get("/deleteConfirm/10001"))
 				.andExpect(status().isOk())
@@ -259,10 +286,24 @@ class EmployeeControllerTest {
 				.andExpect(model().attribute("employee", hasProperty("empNo", is(10001))));
 	}
 
+	// ---------- GET /deleteConfirm/{empNo}（該当なし） ----------
+	@Test
+	@DisplayName("削除確認（該当なし）：削除できない旨を表示")
+	void testDeleteConfirm_NotFound_ReturnsSearchResult() throws Exception {
+		Mockito.when(employeeService.findById(99999)).thenReturn(null);
+
+		mockMvc.perform(get("/deleteConfirm/99999"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("search_result"))
+				.andExpect(model().attributeExists("employees", "message"))
+				.andExpect(model().attribute("employees", hasSize(0)));
+	}
+
 	// ---------- POST /deleteEmployee ----------
 	@Test
 	@DisplayName("削除実行：削除して delete_complete を返す")
 	void testDeleteEmployee_PerformsDeleteAndReturnsComplete() throws Exception {
+		Mockito.when(employeeService.findById(10001)).thenReturn(empList.get(0));
 
 		mockMvc.perform(post("/deleteEmployee")
 				.param("empNo", "10001")
@@ -275,6 +316,7 @@ class EmployeeControllerTest {
 				.param("deptNo", "100"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("delete_complete"));
+		verify(employeeService).deleteById(10001);
 
 	}
 
@@ -283,12 +325,14 @@ class EmployeeControllerTest {
 	@DisplayName("変更画面表示：フォーム値と部門リストをモデルに詰める")
 	void testChangeInput_ReturnsFormAndDepartments() throws Exception {
 
+		Mockito.when(employeeService.findById(10001)).thenReturn(empList.get(0));
 		Mockito.when(departmentService.findAll()).thenReturn(deptList);
 
 		mockMvc.perform(get("/changeInput/10001"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("change"))
 				.andExpect(model().attributeExists("employeeForm", "departments"))
+				.andExpect(model().attribute("employeeForm", hasProperty("empNo", is(10001))))
 				.andExpect(model().attribute("departments", hasSize(3)));
 
 	}
@@ -359,7 +403,7 @@ class EmployeeControllerTest {
 	@Test
 	@DisplayName("変更実行：保存して change_complete を返す（ModelMapper不使用）")
 	void testChangeEmployee_UpdatesAndReturnsComplete() throws Exception {
-		Mockito.when(departmentService.findById(100)).thenReturn(deptList.get(0));
+		Mockito.when(employeeService.update(any(EmployeeForm.class))).thenReturn(empList.get(0));
 
 		mockMvc.perform(post("/changeEmployee")
 				.param("empNo", "10001")
@@ -372,8 +416,8 @@ class EmployeeControllerTest {
 				.param("deptNo", "100"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("change_complete"))
-				.andExpect(model().attributeExists("department"))
-				.andExpect(model().attribute("department", hasProperty("deptNo", is(100))));
+				.andExpect(model().attributeExists("employee"))
+				.andExpect(model().attribute("employee", hasProperty("empNo", is(10001))));
 
 	}
 }

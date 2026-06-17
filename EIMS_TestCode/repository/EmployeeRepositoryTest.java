@@ -99,8 +99,8 @@ class EmployeeRepositoryTest {
 	 * Repository 側は JPQL + LIKEで実装している前提。
 	 */
 	@Test
-	void testFindByEmpNameLike() {
-		List<Employee> result = empRepo.findByEmpNameLike("田");
+	void testFindByLastNameContainingOrFirstNameContaining() {
+		List<Employee> result = empRepo.findByLastNameContainingOrFirstNameContaining("田", "田");
 		assertThat(result).hasSize(2);
 		// 取得順は未保証のため、順序非依存で比較
 		assertThat(result).extracting(Employee::getLastName).containsExactlyInAnyOrder("山田","中田");
@@ -111,8 +111,8 @@ class EmployeeRepositoryTest {
 	 * ※ 取得順はDB/実装に依存して未保証。実務では順序前提の検証は避けるのが無難。
 	 */
 	@Test
-	void testFindByDepartmentDeptNo() {
-		List<Employee> result = empRepo.findByDepartmentDeptNo(110);
+	void testFindByDeptNo() {
+		List<Employee> result = empRepo.findByDeptNo(110);
 		assertThat(result).hasSize(2);
 		// ここでは例として先頭要素を簡易チェック（厳密さが必要なら順序を指定して検索する/順序非依存の検証にする）
 		assertThat(result.get(0).getLastName()).isEqualTo("山田");
