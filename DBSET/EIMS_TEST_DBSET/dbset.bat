@@ -5,10 +5,10 @@ rem 　１）データベースを作成する先はローカルコンピュー�
 rem 　２）rootユーザのパスワードはPa$$w0rdである
 rem 
 
-mysql -uroot -pPa$$w0rd --default-character-set=utf8mb4 < dropUser.sql
-mysql -uroot -pPa$$w0rd --default-character-set=utf8mb4 < dropDB.sql
-mysql -uroot -pPa$$w0rd --default-character-set=utf8mb4 < createUser.sql
-mysql -uroot -pPa$$w0rd --default-character-set=utf8mb4 < createDB.sql
+mysql --default-character-set=utf8mb4 -uroot -pPa$$w0rd < dropUser.sql
+mysql --default-character-set=utf8mb4 -uroot -pPa$$w0rd < dropDB.sql
+mysql --default-character-set=utf8mb4 -uroot -pPa$$w0rd < createUser.sql
+mysql --default-character-set=utf8mb4 -uroot -pPa$$w0rd < createDB.sql
 echo =========================================================
 echo データベースの作成が終了しました。
 echo もし、エラーが発生している場合は再度、やり直してください。
