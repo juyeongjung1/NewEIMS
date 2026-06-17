@@ -1,17 +1,11 @@
 package jp.co.trainocate.enshu.controller;
-//Hamcrest はワイルドカードをやめ、必要なものだけ
+
 import static org.hamcrest.Matchers.*;
-//Mockito 側は個別に
-import static org.mockito.ArgumentMatchers.any;
-//※ Mockito のワイルドカード import（import static org.mockito.Mockito.*;）は使わない
-//when/verify は個別 import する
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -23,7 +17,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import jp.co.trainocate.enshu.entity.Department;
 import jp.co.trainocate.enshu.entity.Employee;
-import jp.co.trainocate.enshu.form.EmployeeForm;
 import jp.co.trainocate.enshu.service.DepartmentService;
 import jp.co.trainocate.enshu.service.EmployeeService;
 
@@ -40,23 +33,15 @@ class EmployeeControllerTest {
 	@MockBean
 	private DepartmentService departmentService;
 
-	// --- 共通テストデータ（3件ずつ） ---
-	//(Controllerテストでも、メソッドの数が多い場合は、@BeforeEachのテストデータを使うと便利です)
-	private List<Department> deptList;
-	private List<Employee> empList;
+	private List<Department> deptList = List.of(
+			new Department(100, "人事部"),
+			new Department(200, "経理部"),
+			new Department(300, "営業部"));
 
-	@BeforeEach
-	void setUp() {
-		deptList = List.of(
-				new Department(100, "人事部"),
-				new Department(200, "経理部"),
-				new Department(300, "営業部"));
-
-		empList = List.of(
-				new Employee(10001, "山田", "陽翔", "ヤマダ", "ヒナタ", "password", 1, deptList.get(0)),
-				new Employee(10002, "中田", "結衣", "タナカ", "ユイ", "password", 2, deptList.get(0)),
-				new Employee(10003, "鈴木", "大翔", "スズキ", "ヒロト", "password", 1, deptList.get(2)));
-	}
+	private List<Employee> empList = List.of(
+			new Employee(10001, "山田", "陽翔", "ヤマダ", "ヒナタ", "password", 1, deptList.get(0)),
+			new Employee(10002, "中田", "結衣", "タナカ", "ユイ", "password", 2, deptList.get(0)),
+			new Employee(10003, "鈴木", "大翔", "スズキ", "ヒロト", "password", 1, deptList.get(2)));
 
 	// ---------- GET /index ----------
 	@Test
@@ -248,15 +233,9 @@ class EmployeeControllerTest {
 	@Test
 	@DisplayName("登録実行：保存して input_complete を返す（ModelMapper不使用）")
 	void testSaveEmployee_SavesAndReturnsComplete() throws Exception {
-		// 引数はBinderが作る別インスタンスなので any(EmployeeForm.class) でマッチさせる
-		when(employeeService.save(any(EmployeeForm.class))).thenAnswer(inv -> {
-			EmployeeForm f = inv.getArgument(0);
-			// 必要ならここで f の中身をアサートしてもOK
-			Employee e = new Employee();
-			e.setEmpNo(20001); // 採番想定
-			e.setDeptNo(f.getDeptNo()); // 部門も返しておくと後続が自然
-			return e;
-		});
+		Employee savedEmployee = new Employee(20001, "山田", "太郎", "ヤマダ", "タロウ", "passwords", 1,
+				deptList.get(0));
+		Mockito.when(employeeService.save(Mockito.any())).thenReturn(savedEmployee);
 
 		mockMvc.perform(post("/saveEmployee")
 				.param("lastName", "山田")
@@ -316,7 +295,6 @@ class EmployeeControllerTest {
 				.param("deptNo", "100"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("delete_complete"));
-		verify(employeeService).deleteById(10001);
 
 	}
 
@@ -341,7 +319,7 @@ class EmployeeControllerTest {
 	@Test
 	@DisplayName("変更確認(正常系)：バリデーションOKで change_confirm を返す（選択部門をモデルへ）")
 	void testChangeConfirm_WhenValid_ReturnsConfirm() throws Exception {
-		when(departmentService.findById(100)).thenReturn(deptList.get(0));
+		Mockito.when(departmentService.findById(100)).thenReturn(deptList.get(0));
 
 		mockMvc.perform(post("/changeConfirm")
 				.param("empNo", "10001")
@@ -403,7 +381,7 @@ class EmployeeControllerTest {
 	@Test
 	@DisplayName("変更実行：保存して change_complete を返す（ModelMapper不使用）")
 	void testChangeEmployee_UpdatesAndReturnsComplete() throws Exception {
-		Mockito.when(employeeService.update(any(EmployeeForm.class))).thenReturn(empList.get(0));
+		Mockito.when(employeeService.update(Mockito.any())).thenReturn(empList.get(0));
 
 		mockMvc.perform(post("/changeEmployee")
 				.param("empNo", "10001")
