@@ -22,44 +22,45 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold">氏（漢字）</label>
-                    <input type="text" th:field="*{lastName}" class="form-control w-50" placeholder="氏" required>
+                    <input type="text" th:field="*{lastName}" class="form-control w-50" placeholder="氏">
                     <div th:errors="*{lastName}" class="text-danger mt-1"></div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold">名（漢字）</label>
-                    <input type="text" th:field="*{firstName}" class="form-control w-50" placeholder="名" required>
+                    <input type="text" th:field="*{firstName}" class="form-control w-50" placeholder="名">
                     <div th:errors="*{firstName}" class="text-danger mt-1"></div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold">氏（カナ）</label>
-                    <input type="text" th:field="*{lastKana}" class="form-control w-50" placeholder="セイ" required>
+                    <input type="text" th:field="*{lastKana}" class="form-control w-50" placeholder="セイ">
                     <div th:errors="*{lastKana}" class="text-danger mt-1"></div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold">名（カナ）</label>
-                    <input type="text" th:field="*{firstKana}" class="form-control w-50" placeholder="メイ" required>
+                    <input type="text" th:field="*{firstKana}" class="form-control w-50" placeholder="メイ">
                     <div th:errors="*{firstKana}" class="text-danger mt-1"></div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold">パスワード</label>
-                    <input type="password" th:field="*{password}" class="form-control w-50" required>
+                    <input type="password" th:field="*{password}" class="form-control w-50">
                     <div th:errors="*{password}" class="text-danger mt-1"></div>
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold d-block">性別</label>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" th:field="*{gender}" value="1" id="genderM" required>
+                        <input class="form-check-input" type="radio" th:field="*{gender}" value="1" id="genderM">
                         <label class="form-check-label" for="genderM">男性</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" th:field="*{gender}" value="2" id="genderF" required>
+                        <input class="form-check-input" type="radio" th:field="*{gender}" value="2" id="genderF">
                         <label class="form-check-label" for="genderF">女性</label>
                     </div>
                     <div th:errors="*{gender}" class="text-danger mt-1"></div>
                 </div>
                 <div class="mb-4">
                     <label class="form-label fw-bold">所属部署</label>
-                    <select th:field="*{deptNo}" class="form-select w-50" required>
+                    <select th:field="*{deptNo}" class="form-select w-50">
+                        <option value="">部署を選択してください</option>
                         <option th:each="dept : ${departments}" th:value="${dept.deptNo}" th:text="${dept.deptName}"></option>
                     </select>
                     <div th:errors="*{deptNo}" class="text-danger mt-1"></div>

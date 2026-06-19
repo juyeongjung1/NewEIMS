@@ -82,7 +82,9 @@ class EmployeeControllerMaintenanceTest {
 				.andExpect(view().name("change"))
 				.andExpect(model().attributeExists("employeeForm", "departments"))
 				.andExpect(model().attribute("employeeForm", hasProperty("empNo", is(10001))))
-				.andExpect(model().attribute("departments", hasSize(3)));
+				.andExpect(model().attribute("departments", hasSize(3)))
+				.andExpect(content().string(not(containsString(" required"))))
+				.andExpect(content().string(containsString("value=\"\"")));
 	}
 
 	@Test
@@ -122,7 +124,11 @@ class EmployeeControllerMaintenanceTest {
 				.andExpect(view().name("change"))
 				.andExpect(model().attributeExists("departments"))
 				.andExpect(model().attributeHasFieldErrors(
-						"employeeForm", "lastName", "firstName", "lastKana", "firstKana", "password", "gender", "deptNo"));
+						"employeeForm", "lastName", "firstName", "lastKana", "firstKana", "password", "gender", "deptNo"))
+				.andExpect(content().string(containsString("氏は必須項目です")))
+				.andExpect(content().string(containsString("名は必須項目です")))
+				.andExpect(content().string(containsString("性別は必須項目です")))
+				.andExpect(content().string(containsString("部署は必須項目です")));
 	}
 
 	@Test

@@ -43,7 +43,9 @@ class EmployeeControllerRegistrationTest {
 				.andExpect(status().isOk())
 				.andExpect(view().name("input"))
 				.andExpect(model().attributeExists("departments"))
-				.andExpect(model().attribute("departments", hasSize(3)));
+				.andExpect(model().attribute("departments", hasSize(3)))
+				.andExpect(content().string(not(containsString(" required"))))
+				.andExpect(content().string(containsString("value=\"\"")));
 	}
 
 	@Test
@@ -81,7 +83,11 @@ class EmployeeControllerRegistrationTest {
 				.andExpect(view().name("input"))
 				.andExpect(model().attributeExists("departments"))
 				.andExpect(model().attributeHasFieldErrors(
-						"employeeForm", "lastName", "firstName", "lastKana", "firstKana", "password", "gender", "deptNo"));
+						"employeeForm", "lastName", "firstName", "lastKana", "firstKana", "password", "gender", "deptNo"))
+				.andExpect(content().string(containsString("氏は必須項目です")))
+				.andExpect(content().string(containsString("名は必須項目です")))
+				.andExpect(content().string(containsString("性別は必須項目です")))
+				.andExpect(content().string(containsString("部署は必須項目です")));
 	}
 
 	@Test
@@ -100,7 +106,10 @@ class EmployeeControllerRegistrationTest {
 				.andExpect(status().isOk())
 				.andExpect(view().name("input"))
 				.andExpect(model().attributeHasFieldErrors(
-						"employeeForm", "lastName", "firstName", "lastKana", "firstKana", "password"));
+						"employeeForm", "lastName", "firstName", "lastKana", "firstKana", "password"))
+				.andExpect(content().string(containsString("氏は10文字以内で入力してください")))
+				.andExpect(content().string(containsString("名は10文字以内で入力してください")))
+				.andExpect(content().string(containsString("パスワードは4文字以上16文字以内で入力してください")));
 	}
 
 	@Test
