@@ -3,6 +3,7 @@ package jp.co.trainocate.eims.repository;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,13 +50,12 @@ class EmployeeRepositoryTest {
 	}
 
 	@Test
-	void testFindByEmpNo() {
-		List<Employee> result = empRepo.findByEmpNo(emp1.getEmpNo());
+	void testFindById() {
+		Optional<Employee> result = empRepo.findById(emp1.getEmpNo());
 
-		assertThat(result).hasSize(1);
-		// メインテキストで推奨されている tuple による検証
-		assertThat(result).extracting(Employee::getLastName, Employee::getFirstName)
-				.containsExactly(tuple("山田", "陽翔"));
+		assertThat(result).isPresent();
+		assertThat(result.get().getLastName()).isEqualTo("山田");
+		assertThat(result.get().getFirstName()).isEqualTo("陽翔");
 	}
 
 	@Test

@@ -37,25 +37,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Employee save(EmployeeForm employeeForm) {
-        Employee employee = copyToEmployee(new Employee(), employeeForm);
-
-        return employeeRepository.save(employee);
-    }
-
-    @Override
-    public Employee update(EmployeeForm employeeForm) {
-        Employee employee = employeeRepository.findById(employeeForm.getEmpNo()).orElse(new Employee());
-        copyToEmployee(employee, employeeForm);
-
-        return employeeRepository.save(employee);
-    }
-
-    @Override
-    public void deleteById(Integer empNo) {
-        employeeRepository.deleteById(empNo);
-    }
-
-    private Employee copyToEmployee(Employee employee, EmployeeForm employeeForm) {
+        Employee employee = new Employee();
         employee.setEmpNo(employeeForm.getEmpNo());
         employee.setLastName(employeeForm.getLastName());
         employee.setFirstName(employeeForm.getFirstName());
@@ -64,6 +46,27 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setPassword(employeeForm.getPassword());
         employee.setGender(employeeForm.getGender());
         employee.setDeptNo(employeeForm.getDeptNo());
-        return employee;
+
+        return employeeRepository.save(employee);
+    }
+
+    @Override
+    public Employee update(EmployeeForm employeeForm) {
+        Employee employee = new Employee();
+        employee.setEmpNo(employeeForm.getEmpNo());
+        employee.setLastName(employeeForm.getLastName());
+        employee.setFirstName(employeeForm.getFirstName());
+        employee.setLastKana(employeeForm.getLastKana());
+        employee.setFirstKana(employeeForm.getFirstKana());
+        employee.setPassword(employeeForm.getPassword());
+        employee.setGender(employeeForm.getGender());
+        employee.setDeptNo(employeeForm.getDeptNo());
+
+        return employeeRepository.save(employee);
+    }
+
+    @Override
+    public void deleteById(Integer empNo) {
+        employeeRepository.deleteById(empNo);
     }
 }
