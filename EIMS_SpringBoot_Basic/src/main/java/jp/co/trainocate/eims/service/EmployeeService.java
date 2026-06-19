@@ -10,8 +10,17 @@ import jp.co.trainocate.eims.entity.Employee;
 import jp.co.trainocate.eims.form.EmployeeForm;
 
 public interface EmployeeService {
+    /**
+     * 社員テーブルを全件取得します。
+     * @return 社員エンティティのリスト
+     */
     List<Employee> findAll();
 
+    /**
+     * 氏または名にキーワードを含む社員を検索します。
+     * @param keyword 検索キーワード
+     * @return 該当する社員エンティティのリスト
+     */
     List<Employee> findByEmpName(String keyword);
 
     /**

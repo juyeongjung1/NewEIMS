@@ -15,26 +15,31 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
 
+    /** {@inheritDoc} */
     @Override
     public List<Employee> findAll() {
         return employeeRepository.findAll();
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<Employee> findByEmpName(String keyword) {
         return employeeRepository.findByLastNameContainingOrFirstNameContaining(keyword, keyword);
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<Employee> findByDeptNo(Integer deptNo) {
         return employeeRepository.findByDeptNo(deptNo);
     }
 
+    /** {@inheritDoc} */
     @Override
     public Employee findById(Integer empNo) {
         return employeeRepository.findById(empNo).orElse(null);
     }
 
+    /** {@inheritDoc} */
     @Override
     public Employee save(EmployeeForm employeeForm) {
         Employee employee = new Employee();
@@ -50,6 +55,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.save(employee);
     }
 
+    /** {@inheritDoc} */
     @Override
     public Employee update(EmployeeForm employeeForm) {
         Employee employee = new Employee();
@@ -65,6 +71,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.save(employee);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void deleteById(Integer empNo) {
         employeeRepository.deleteById(empNo);

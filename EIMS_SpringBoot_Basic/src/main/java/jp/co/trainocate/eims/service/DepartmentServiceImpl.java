@@ -14,11 +14,13 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     private final DepartmentRepository departmentRepository;
 
+    /** {@inheritDoc} */
     @Override
     public List<Department> findAll() {
         return departmentRepository.findAll();
     }
 
+    /** {@inheritDoc} */
     @Override
     public Department findById(Integer deptNo) {
         return departmentRepository.findById(deptNo).orElse(null);
