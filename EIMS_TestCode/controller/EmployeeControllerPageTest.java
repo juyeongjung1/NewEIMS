@@ -10,12 +10,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import jp.co.trainocate.enshu.entity.Department;
+import jp.co.trainocate.enshu.entity.Employee;
 import jp.co.trainocate.enshu.service.DepartmentService;
 import jp.co.trainocate.enshu.service.EmployeeService;
 
@@ -26,10 +27,10 @@ class EmployeeControllerPageTest {
 	@Autowired
 	private MockMvc mockMvc;
 
-	@MockBean
+	@MockitoBean
 	private EmployeeService employeeService;
 
-	@MockBean
+	@MockitoBean
 	private DepartmentService departmentService;
 
 	private List<Department> deptList = List.of(
@@ -55,5 +56,20 @@ class EmployeeControllerPageTest {
 				.andExpect(view().name("search"))
 				.andExpect(model().attributeExists("departments"))
 				.andExpect(model().attribute("departments", hasSize(3)));
+	}
+
+	@Test
+	@DisplayName("社員一覧画面の表示：社員リストをモデルに詰めて employee_list を返す")
+	void testShowEmployeeList_ReturnsEmployeeList() throws Exception {
+		List<Employee> empList = List.of(
+				new Employee(10001, "山田", "陽翔", "ヤマダ", "ヒナタ", "password", 1, deptList.get(0)),
+				new Employee(10002, "中田", "結衣", "タナカ", "ユイ", "password", 2, deptList.get(0)));
+		Mockito.when(employeeService.findAll()).thenReturn(empList);
+
+		mockMvc.perform(get("/employeeList"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("employee_list"))
+				.andExpect(model().attributeExists("employees"))
+				.andExpect(model().attribute("employees", hasSize(2)));
 	}
 }
