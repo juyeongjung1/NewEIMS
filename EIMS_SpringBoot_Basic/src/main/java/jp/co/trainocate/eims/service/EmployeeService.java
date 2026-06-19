@@ -10,6 +10,8 @@ import jp.co.trainocate.eims.entity.Employee;
 import jp.co.trainocate.eims.form.EmployeeForm;
 
 public interface EmployeeService {
+    List<Employee> findAll();
+
     List<Employee> findByEmpName(String keyword);
 
     /**
