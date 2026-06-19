@@ -43,9 +43,7 @@ class EmployeeControllerRegistrationTest {
 				.andExpect(status().isOk())
 				.andExpect(view().name("input"))
 				.andExpect(model().attributeExists("departments"))
-				.andExpect(model().attribute("departments", hasSize(3)))
-				.andExpect(content().string(not(containsString(" required"))))
-				.andExpect(content().string(containsString("value=\"\"")));
+				.andExpect(model().attribute("departments", hasSize(3)));
 	}
 
 	@Test

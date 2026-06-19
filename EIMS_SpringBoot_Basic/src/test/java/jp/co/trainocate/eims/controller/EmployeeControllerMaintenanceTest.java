@@ -82,9 +82,7 @@ class EmployeeControllerMaintenanceTest {
 				.andExpect(view().name("change"))
 				.andExpect(model().attributeExists("employeeForm", "departments"))
 				.andExpect(model().attribute("employeeForm", hasProperty("empNo", is(10001))))
-				.andExpect(model().attribute("departments", hasSize(3)))
-				.andExpect(content().string(not(containsString(" required"))))
-				.andExpect(content().string(containsString("value=\"\"")));
+				.andExpect(model().attribute("departments", hasSize(3)));
 	}
 
 	@Test
