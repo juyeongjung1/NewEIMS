@@ -54,8 +54,8 @@ class EmployeeRepositoryTest {
 		Optional<Employee> result = empRepo.findById(emp1.getEmpNo());
 
 		assertThat(result).isPresent();
-		assertThat(result.get().getLastName()).isEqualTo("山田");
-		assertThat(result.get().getFirstName()).isEqualTo("陽翔");
+		assertThat(result.stream().toList()).extracting(Employee::getLastName, Employee::getFirstName, Employee::getDeptNo)
+				.containsExactly(tuple("山田", "陽翔", 110));
 	}
 
 	@Test
@@ -64,8 +64,8 @@ class EmployeeRepositoryTest {
 		List<Employee> result = empRepo.findByLastNameContainingOrFirstNameContaining("田", "田");
 
 		assertThat(result).hasSize(2);
-		assertThat(result).extracting(Employee::getLastName, Employee::getFirstName)
-				.containsExactlyInAnyOrder(tuple("山田", "陽翔"), tuple("中田", "結衣"));
+		assertThat(result).extracting(Employee::getLastName, Employee::getFirstName, Employee::getDeptNo)
+				.containsExactlyInAnyOrder(tuple("山田", "陽翔", 110), tuple("中田", "結衣", 120));
 	}
 
 	@Test
@@ -74,7 +74,7 @@ class EmployeeRepositoryTest {
 		List<Employee> result = empRepo.findByDeptNo(110);
 
 		assertThat(result).hasSize(2);
-		assertThat(result).extracting(Employee::getLastName, Employee::getFirstName)
-				.containsExactlyInAnyOrder(tuple("山田", "陽翔"), tuple("鈴木", "大翔"));
+		assertThat(result).extracting(Employee::getLastName, Employee::getFirstName, Employee::getDeptNo)
+				.containsExactlyInAnyOrder(tuple("山田", "陽翔", 110), tuple("鈴木", "大翔", 110));
 	}
 }

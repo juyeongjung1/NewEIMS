@@ -91,7 +91,8 @@ class EmployeeRepositoryTest {
 		// 2) 件数検証
 		assertThat(result).hasSize(1);
 		// 3) 内容検証
-		assertThat(result.get(0).getLastName()).isEqualTo("山田");
+		assertThat(result).extracting(Employee::getLastName, Employee::getFirstName, Employee::getDeptNo)
+				.containsExactly(tuple("山田", "陽翔", 110));
 	}
 	
 	/**
@@ -103,7 +104,8 @@ class EmployeeRepositoryTest {
 		List<Employee> result = empRepo.findByLastNameContainingOrFirstNameContaining("田", "田");
 		assertThat(result).hasSize(2);
 		// 取得順は未保証のため、順序非依存で比較
-		assertThat(result).extracting(Employee::getLastName).containsExactlyInAnyOrder("山田","中田");
+		assertThat(result).extracting(Employee::getLastName, Employee::getFirstName, Employee::getDeptNo)
+				.containsExactlyInAnyOrder(tuple("山田", "陽翔", 110), tuple("中田", "結衣", 120));
 	}
 	
 	/**
@@ -114,8 +116,7 @@ class EmployeeRepositoryTest {
 	void testFindByDeptNo() {
 		List<Employee> result = empRepo.findByDeptNo(110);
 		assertThat(result).hasSize(2);
-		// ここでは例として先頭要素を簡易チェック（厳密さが必要なら順序を指定して検索する/順序非依存の検証にする）
-		assertThat(result.get(0).getLastName()).isEqualTo("山田");
-		assertThat(result.get(0).getDeptNo()).isEqualTo(110);
+		assertThat(result).extracting(Employee::getLastName, Employee::getFirstName, Employee::getDeptNo)
+				.containsExactlyInAnyOrder(tuple("山田", "陽翔", 110), tuple("鈴木", "大翔", 110));
 	}
 }
