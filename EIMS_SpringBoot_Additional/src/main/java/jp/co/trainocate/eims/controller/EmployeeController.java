@@ -30,7 +30,7 @@ public class EmployeeController {
         return "index";
     }
 
-    /** 社員一覧を表示する（在籍者のみ） */
+    /** 社員一覧を表示する */
     @GetMapping("/employeeList")
     public String showEmployeeList(Model model) {
         model.addAttribute("employees", employeeService.findAll());
@@ -46,14 +46,14 @@ public class EmployeeController {
 
     /** 復元処理を行う */
     @PostMapping("/restore/{empNo}")
-    public String restore(@PathVariable Integer empNo) {
+    public String restore(@PathVariable("empNo") Integer empNo) {
         employeeService.restoreById(empNo);
         return "redirect:/retireeList";
     }
 
     /** 物理削除処理を行う */
     @PostMapping("/physicalDelete/{empNo}")
-    public String physicalDelete(@PathVariable Integer empNo) {
+    public String physicalDelete(@PathVariable("empNo") Integer empNo) {
         employeeService.physicalDeleteById(empNo);
         return "redirect:/retireeList";
     }
@@ -151,7 +151,7 @@ public class EmployeeController {
         return "delete_confirm";
     }
 
-    /** 社員を削除（論理削除）する */
+    /** 社員を削除する */
     @PostMapping("/deleteEmployee")
     public String deleteEmployee(Integer empNo, Model model) {
         if (empNo == null || employeeService.findById(empNo) == null) {

@@ -3,11 +3,11 @@ package jp.co.trainocate.eims.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import jakarta.validation.Valid;
 import jakarta.servlet.http.HttpSession;
 import jp.co.trainocate.eims.entity.Employee;
 import jp.co.trainocate.eims.form.LoginForm;
@@ -32,7 +32,7 @@ public class LoginController {
      * ログイン認証処理を行います。
      */
     @PostMapping("/login")
-    public String login(@Validated @ModelAttribute LoginForm loginForm, BindingResult result, 
+    public String login(@Valid @ModelAttribute LoginForm loginForm, BindingResult result, 
                         HttpSession session, Model model) {
         if (result.hasErrors()) {
             return "login";
