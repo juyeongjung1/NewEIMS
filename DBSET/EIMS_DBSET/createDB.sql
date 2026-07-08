@@ -19,7 +19,7 @@ CREATE TABLE employee (
   first_kana    VARCHAR(20)  NOT NULL,
   password      VARCHAR(20)  NOT NULL,
   gender        INTEGER      NOT NULL,
-  dept_no       INTEGER,
+  dept_no       INTEGER      NOT NULL,
   role          INTEGER      NOT NULL DEFAULT 0,
   delete_flg    INTEGER      NOT NULL DEFAULT 0,
   PRIMARY KEY (emp_no),

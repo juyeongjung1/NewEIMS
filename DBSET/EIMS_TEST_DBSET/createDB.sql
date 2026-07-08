@@ -24,9 +24,9 @@ CREATE TABLE employee (
   first_kana     VARCHAR(20)  NOT NULL,
   password   VARCHAR(20)  NOT NULL,
   gender     INTEGER      NOT NULL,
-  dept_no    INTEGER,
-  role       INTEGER      DEFAULT 0,         -- 0:一般 / 1:管理者
-  delete_flg INTEGER      DEFAULT 0,         -- 0:在籍 / 1:退職
+  dept_no    INTEGER      NOT NULL,
+  role       INTEGER      NOT NULL DEFAULT 0, -- 0:一般 / 1:管理者
+  delete_flg INTEGER      NOT NULL DEFAULT 0, -- 0:在籍 / 1:退職
   PRIMARY KEY (emp_no),
   CONSTRAINT fk_employee_department
     FOREIGN KEY (dept_no) REFERENCES department(dept_no)
