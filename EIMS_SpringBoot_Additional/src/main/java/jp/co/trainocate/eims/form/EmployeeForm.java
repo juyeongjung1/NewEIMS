@@ -36,16 +36,16 @@ public class EmployeeForm {
     private String firstKana;
 
     /** パスワード */
-    @NotBlank(message = "パスワードを入力してください")
+    @NotBlank(message = "パスワードは必須項目です")
     @Size(min = 4, max = 16, message = "パスワードは4文字以上16文字以内で入力してください")
     private String password;
 
     /** 性別 1:男性 2:女性 */
-    @NotNull(message = "性別を選択してください")
+    @NotNull(message = "性別は必須項目です")
     private Integer gender;
 
     /** 部署番号 */
-    @NotNull(message = "部署を選択してください")
+    @NotNull(message = "部署は必須項目です")
     private Integer deptNo;
 
     /** 権限 0:一般 1:管理者 */

@@ -11,16 +11,15 @@ import jp.co.trainocate.eims.form.EmployeeForm;
 
 public interface EmployeeService {
     /**
-     * 社員情報を全件取得します。
-     * @return 全社員リスト
+     * 社員テーブルを全件取得します。
+     * @return 社員エンティティのリスト
      */
     List<Employee> findAll();
 
-
     /**
-     * 氏名（氏または名）による部分一致検索を行います。
+     * 氏または名にキーワードを含む社員を検索します。
      * @param keyword 検索キーワード
-     * @return 該当する社員リスト
+     * @return 該当する社員エンティティのリスト
      */
     List<Employee> findByEmpName(String keyword);
 
@@ -44,6 +43,13 @@ public interface EmployeeService {
      * @return 保存後のエンティティ
      */
     Employee save(EmployeeForm employeeForm);
+
+    /**
+     * 社員情報を更新します。
+     * @param employeeForm 入力フォーム
+     * @return 更新後のエンティティ
+     */
+    Employee update(EmployeeForm employeeForm);
 
     /**
      * 社員番号を指定して 1 件削除（論理削除）します。

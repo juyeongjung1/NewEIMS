@@ -3,29 +3,26 @@ package jp.co.trainocate.eims.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import jp.co.trainocate.eims.entity.Employee;
 import jp.co.trainocate.eims.form.EmployeeForm;
 import jp.co.trainocate.eims.service.DepartmentService;
 import jp.co.trainocate.eims.service.EmployeeService;
 
 @Controller
+@RequiredArgsConstructor
 public class EmployeeController {
 
-    @Autowired
-    private EmployeeService employeeService;
-    @Autowired
-    private DepartmentService departmentService;
+    private final EmployeeService employeeService;
+    private final DepartmentService departmentService;
 
     /** トップページを表示する */
     @GetMapping({"/", "/index"})
@@ -43,7 +40,7 @@ public class EmployeeController {
     /** 退職者一覧を表示する */
     @GetMapping("/retireeList")
     public String showRetireeList(Model model) {
-        model.addAttribute("retirees", employeeService.findAll());
+        model.addAttribute("retirees", employeeService.findRetirees());
         return "retiree_list";
     }
 
@@ -63,61 +60,60 @@ public class EmployeeController {
 
     /** 検索画面を表示する */
     @GetMapping("/search")
-    public String showSearchPage(Model model) {
+    public String showSearch(Model model) {
         model.addAttribute("departments", departmentService.findAll());
         return "search";
     }
 
-    /** 社員番号で検索 */
-    @GetMapping("/selectByEmpNo")
-    public String selectByEmpNo(Integer empNo, Model model) {
-        if (empNo == null) {
-            return "search";
+    /** 社員番号・氏名・部署番号で検索 */
+    @GetMapping({"/selectByEmpNo", "/selectByEmpName", "/selectByDeptNo"})
+    public String search(Integer empNo, String keyword, Integer deptNo, Model model) {
+        if (empNo != null) {
+            Employee employee = employeeService.findById(empNo);
+            if (employee != null && employee.getDeleteFlg() == 0) {
+                // ヒットした場合は詳細画面を直接表示
+                model.addAttribute("employee", employee);
+                return "employee_detail";
+            }
+            // ヒットしない場合は結果画面へ（0件表示用）
+            model.addAttribute("employees", new ArrayList<Employee>());
+            return "search_result";
         }
-        Employee employee = employeeService.findById(empNo);
-        if (employee != null) {
-            // ヒットした場合は詳細画面を直接表示
-            model.addAttribute("employee", employee);
-            return "employee_detail";
-        }
-        // ヒットしない場合は結果画面へ（0件表示用）
-        model.addAttribute("employees", new ArrayList<Employee>());
-        return "search_result";
-    }
 
-    /** 氏名で検索 */
-    @GetMapping("/selectByEmpName")
-    public String selectByEmpName(String keyword, Model model) {
-        if (keyword == null || keyword.isBlank()) {
-            return "search";
+        if (keyword != null && !keyword.isBlank()) {
+            List<Employee> employees = employeeService.findByEmpName(keyword);
+            model.addAttribute("employees", employees);
+            return "search_result";
         }
-        List<Employee> employees = employeeService.findByEmpName(keyword);
-        model.addAttribute("employees", employees);
-        return "search_result";
-    }
 
-    /** 部署番号で検索 */
-    @GetMapping("/selectByDeptNo")
-    public String selectByDeptNo(Integer deptNo, Model model) {
-        if (deptNo == null) {
-            return "search";
+        if (deptNo != null) {
+            List<Employee> employees = employeeService.findByDeptNo(deptNo);
+            model.addAttribute("employees", employees);
+            return "search_result";
         }
-        List<Employee> employees = employeeService.findByDeptNo(deptNo);
-        model.addAttribute("employees", employees);
-        return "search_result";
+
+        model.addAttribute("departments", departmentService.findAll());
+        return "search";
     }
 
     /** 社員詳細を表示する */
     @GetMapping("/detail/{empNo}")
-    public String showDetail(@PathVariable Integer empNo, Model model) {
+    public String showDetail(@PathVariable("empNo") Integer empNo, Model model) {
         Employee employee = employeeService.findById(empNo);
         model.addAttribute("employee", employee);
         return "employee_detail";
     }
 
-    /** 登録画面を表示する */
-    @RequestMapping(value = "/input", method = {RequestMethod.GET, RequestMethod.POST})
+    /** 登録画面を表示する（初回表示・GET） */
+    @GetMapping("/input")
     public String showInputPage(EmployeeForm employeeForm, Model model) {
+        model.addAttribute("departments", departmentService.findAll());
+        return "input";
+    }
+
+    /** 確認画面から「修正する」で登録画面へ戻る（POST・入力値を保持） */
+    @PostMapping("/input")
+    public String backToInputPage(EmployeeForm employeeForm, Model model) {
         model.addAttribute("departments", departmentService.findAll());
         return "input";
     }
@@ -144,39 +140,51 @@ public class EmployeeController {
 
     /** 削除確認画面を表示する */
     @GetMapping("/deleteConfirm/{empNo}")
-    public String deleteConfirm(@PathVariable Integer empNo, Model model) {
+    public String deleteConfirm(@PathVariable("empNo") Integer empNo, Model model) {
         Employee employee = employeeService.findById(empNo);
+        if (employee == null) {
+            model.addAttribute("employees", new ArrayList<Employee>());
+            model.addAttribute("message", "指定された社員情報は存在しないため、削除できません。");
+            return "search_result";
+        }
         model.addAttribute("employee", employee);
         return "delete_confirm";
     }
 
     /** 社員を削除（論理削除）する */
     @PostMapping("/deleteEmployee")
-    public String deleteEmployee(Integer empNo) {
+    public String deleteEmployee(Integer empNo, Model model) {
+        if (empNo == null || employeeService.findById(empNo) == null) {
+            model.addAttribute("employees", new ArrayList<Employee>());
+            model.addAttribute("message", "指定された社員情報は存在しないため、削除できません。");
+            return "search_result";
+        }
         employeeService.deleteById(empNo);
         return "delete_complete";
     }
 
-    /** 変更入力画面を表示する */
-    @RequestMapping(value = "/changeInput/{empNo}", method = {RequestMethod.GET, RequestMethod.POST})
-    public String changeInput(@PathVariable Integer empNo, EmployeeForm employeeForm, Model model) {
-        // 初回アクセス（GET）の場合のみ、DBからデータを取得してフォームにセット
-        if (employeeForm.getLastName() == null) {
-            Employee employee = employeeService.findById(empNo);
-            employeeForm.setEmpNo(employee.getEmpNo());
-            employeeForm.setLastName(employee.getLastName());
-            employeeForm.setFirstName(employee.getFirstName());
-            employeeForm.setLastKana(employee.getLastKana());
-            employeeForm.setFirstKana(employee.getFirstKana());
-            employeeForm.setPassword(employee.getPassword());
-            employeeForm.setGender(employee.getGender());
-            employeeForm.setDeptNo(employee.getDeptNo());
-            
-            // 追加フィールドのセット
-            employeeForm.setRole(employee.getRole());
-            employeeForm.setDeleteFlg(employee.getDeleteFlg());
-        }
+    /** 変更画面を表示する（初回表示・GET：DBから現在の登録内容をフォームにセット） */
+    @GetMapping("/changeInput/{empNo}")
+    public String changeInput(@PathVariable("empNo") Integer empNo, EmployeeForm employeeForm, Model model) {
+        Employee employee = employeeService.findById(empNo);
+        employeeForm.setEmpNo(employee.getEmpNo());
+        employeeForm.setLastName(employee.getLastName());
+        employeeForm.setFirstName(employee.getFirstName());
+        employeeForm.setLastKana(employee.getLastKana());
+        employeeForm.setFirstKana(employee.getFirstKana());
+        employeeForm.setPassword(employee.getPassword());
+        employeeForm.setGender(employee.getGender());
+        employeeForm.setDeptNo(employee.getDeptNo());
+        employeeForm.setRole(employee.getRole());
+        employeeForm.setDeleteFlg(employee.getDeleteFlg());
 
+        model.addAttribute("departments", departmentService.findAll());
+        return "change";
+    }
+
+    /** 確認画面から「修正する」で変更画面へ戻る（POST：DBから取り直さず入力値を保持） */
+    @PostMapping("/changeInput/{empNo}")
+    public String backToChangeInput(@PathVariable("empNo") Integer empNo, EmployeeForm employeeForm, Model model) {
         model.addAttribute("departments", departmentService.findAll());
         return "change";
     }
@@ -195,7 +203,7 @@ public class EmployeeController {
     /** 社員情報を更新する */
     @PostMapping("/changeEmployee")
     public String changeEmployee(EmployeeForm employeeForm, Model model) {
-        Employee employee = employeeService.save(employeeForm);
+        Employee employee = employeeService.update(employeeForm);
         model.addAttribute("employee", employee);
         return "change_complete";
     }
