@@ -46,14 +46,14 @@ public class EmployeeController {
 
     /** 復元処理を行う */
     @PostMapping("/restore/{empNo}")
-    public String restore(@PathVariable("empNo") Integer empNo) {
+    public String restore(@PathVariable Integer empNo) {
         employeeService.restoreById(empNo);
         return "redirect:/retireeList";
     }
 
     /** 物理削除処理を行う */
     @PostMapping("/physicalDelete/{empNo}")
-    public String physicalDelete(@PathVariable("empNo") Integer empNo) {
+    public String physicalDelete(@PathVariable Integer empNo) {
         employeeService.physicalDeleteById(empNo);
         return "redirect:/retireeList";
     }
@@ -98,7 +98,7 @@ public class EmployeeController {
 
     /** 社員詳細を表示する */
     @GetMapping("/detail/{empNo}")
-    public String showDetail(@PathVariable("empNo") Integer empNo, Model model) {
+    public String showDetail(@PathVariable Integer empNo, Model model) {
         Employee employee = employeeService.findById(empNo);
         model.addAttribute("employee", employee);
         return "employee_detail";
@@ -140,7 +140,7 @@ public class EmployeeController {
 
     /** 削除確認画面を表示する */
     @GetMapping("/deleteConfirm/{empNo}")
-    public String deleteConfirm(@PathVariable("empNo") Integer empNo, Model model) {
+    public String deleteConfirm(@PathVariable Integer empNo, Model model) {
         Employee employee = employeeService.findById(empNo);
         if (employee == null) {
             model.addAttribute("employees", new ArrayList<Employee>());
@@ -165,7 +165,7 @@ public class EmployeeController {
 
     /** 変更画面を表示する（初回表示・GET：DBから現在の登録内容をフォームにセット） */
     @GetMapping("/changeInput/{empNo}")
-    public String changeInput(@PathVariable("empNo") Integer empNo, EmployeeForm employeeForm, Model model) {
+    public String changeInput(@PathVariable Integer empNo, EmployeeForm employeeForm, Model model) {
         Employee employee = employeeService.findById(empNo);
         employeeForm.setEmpNo(employee.getEmpNo());
         employeeForm.setLastName(employee.getLastName());
@@ -184,7 +184,7 @@ public class EmployeeController {
 
     /** 確認画面から「修正する」で変更画面へ戻る（POST：DBから取り直さず入力値を保持） */
     @PostMapping("/changeInput/{empNo}")
-    public String backToChangeInput(@PathVariable("empNo") Integer empNo, EmployeeForm employeeForm, Model model) {
+    public String backToChangeInput(@PathVariable Integer empNo, EmployeeForm employeeForm, Model model) {
         model.addAttribute("departments", departmentService.findAll());
         return "change";
     }
