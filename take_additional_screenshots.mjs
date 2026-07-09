@@ -8,7 +8,7 @@ import { deflateSync, inflateSync } from "node:zlib";
 const chromePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 const baseUrl = "http://localhost:8080";
 const port = 9222;
-const outputDir = "C:\\work\\NewEIMS\\NewEIMS\\追加機能の設計書\\images";
+const outputDir = join(process.cwd(), "追加機能の設計書", "images");
 const userDataDir = "C:\\work\\NewEIMS\\NewEIMS\\.tmp-additional-screenshot-profile";
 let dbPrepared = false;
 
@@ -406,6 +406,7 @@ async function main() {
   await login(10001);
   await navigate("/index");
   await screenshotSelector("AF11_header_logout.png", ".navbar", 0);
+  await screenshot("AF04_top_admin.png");
 
   await navigate("/employeeList");
   await applyPhaseView("designOnly");
@@ -431,6 +432,8 @@ async function main() {
   await login(10003);
   await navigate("/index");
   await screenshot("AF04_top_general.png");
+  await navigate("/employeeList");
+  await screenshot("AF04_list_general.png");
   await navigate("/detail/10001");
   await screenshot("AF04_detail_general_other.png");
 
