@@ -184,6 +184,31 @@ async function main() {
     console.log(fileName);
   }
 
+  async function screenshotSelector(fileName, selector, padding = 16) {
+    const clip = await evaluate(`
+      (() => {
+        const target = document.querySelector('${selector}');
+        const rect = target.getBoundingClientRect();
+        const pad = ${padding};
+        return {
+          x: Math.max(0, Math.floor(rect.left - pad)),
+          y: Math.max(0, Math.floor(rect.top - pad)),
+          width: Math.min(window.innerWidth, Math.ceil(rect.width + pad * 2)),
+          height: Math.min(window.innerHeight, Math.ceil(rect.height + pad * 2)),
+          scale: 1
+        };
+      })()
+    `, true);
+    const result = await cdp.send("Page.captureScreenshot", {
+      format: "png",
+      fromSurface: true,
+      captureBeyondViewport: false,
+      clip,
+    });
+    writeFileSync(join(outputDir, fileName), Buffer.from(result.data, "base64"));
+    console.log(fileName);
+  }
+
   async function submitInvalidLogin() {
     await navigate("/login");
     const loaded = cdp.once("Page.loadEventFired");
@@ -253,6 +278,9 @@ async function main() {
   await screenshot("AF01_login_error.png");
 
   await login(10001);
+  await navigate("/index");
+  await screenshotSelector("AF11_header_logout.png", ".navbar", 0);
+
   await navigate("/employeeList");
   await applyPhaseView("designOnly");
   await screenshot("AF20_design_only_list.png");
