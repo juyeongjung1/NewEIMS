@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const { execFileSync } = require("child_process");
+const { execFileSync, spawn } = require("child_process");
 const { pathToFileURL } = require("url");
 
 const docsDir = __dirname;
@@ -11,6 +11,7 @@ const outDir = path.join(docsDir, "output");
 const cssPath = path.join(tmpDir, "guide.css");
 const htmlPath = path.join(tmpDir, "additional-design-doc.html");
 const pdfPath = path.join(outDir, "EIMS_追加機能設計書.pdf");
+const tmpPdfPath = path.join(tmpDir, "EIMS_追加機能設計書.pdf");
 const previewPath = path.join(tmpDir, "additional-design-doc-preview.png");
 const chromePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 const logoPath = path.join(root, "images", "trainocate_logo.png");
@@ -401,18 +402,179 @@ function runPandoc() {
     console.log(`HTML: ${htmlPath}`);
 }
 
-function renderPdf() {
-    console.log("Rendering PDF...");
-    const fileUrl = pathToFileURL(htmlPath).href;
-    execFileSync(chromePath, [
+function delay(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function removeDirWithRetry(target) {
+    for (let i = 0; i < 12; i += 1) {
+        try {
+            fs.rmSync(target, { recursive: true, force: true });
+            return;
+        } catch (error) {
+            if (error.code !== "EBUSY" && error.code !== "EPERM") {
+                throw error;
+            }
+            await delay(250);
+        }
+    }
+}
+
+function waitForExit(process) {
+    return new Promise((resolve) => {
+        if (process.exitCode !== null) {
+            resolve();
+            return;
+        }
+        process.once("exit", resolve);
+        setTimeout(resolve, 2000);
+    });
+}
+
+async function waitForDevTools(port) {
+    const endpoint = `http://127.0.0.1:${port}/json/version`;
+    for (let i = 0; i < 80; i += 1) {
+        try {
+            const response = await fetch(endpoint);
+            if (response.ok) {
+                return;
+            }
+        } catch (error) {
+            // Chrome is still starting.
+        }
+        await delay(250);
+    }
+    throw new Error("Chrome DevTools endpoint did not start.");
+}
+
+async function createPage(port) {
+    const response = await fetch(`http://127.0.0.1:${port}/json/new?about:blank`, { method: "PUT" });
+    if (!response.ok) {
+        throw new Error(`Failed to create Chrome page: ${response.status} ${response.statusText}`);
+    }
+    return response.json();
+}
+
+function createCdpClient(webSocketUrl) {
+    const socket = new WebSocket(webSocketUrl);
+    let nextId = 1;
+    const callbacks = new Map();
+    const listeners = new Map();
+
+    socket.addEventListener("message", (event) => {
+        const message = JSON.parse(event.data);
+        if (message.id && callbacks.has(message.id)) {
+            const { resolve, reject } = callbacks.get(message.id);
+            callbacks.delete(message.id);
+            if (message.error) {
+                reject(new Error(`${message.error.message}: ${message.error.data || ""}`));
+            } else {
+                resolve(message.result);
+            }
+            return;
+        }
+
+        if (message.method && listeners.has(message.method)) {
+            for (const listener of listeners.get(message.method)) {
+                listener(message.params || {});
+            }
+        }
+    });
+
+    const opened = new Promise((resolve, reject) => {
+        socket.addEventListener("open", resolve, { once: true });
+        socket.addEventListener("error", reject, { once: true });
+    });
+
+    function send(method, params = {}) {
+        const id = nextId;
+        nextId += 1;
+        const payload = JSON.stringify({ id, method, params });
+        return new Promise((resolve, reject) => {
+            callbacks.set(id, { resolve, reject });
+            socket.send(payload);
+        });
+    }
+
+    function once(method) {
+        return new Promise((resolve) => {
+            const listener = (params) => {
+                listeners.get(method).delete(listener);
+                resolve(params);
+            };
+            if (!listeners.has(method)) {
+                listeners.set(method, new Set());
+            }
+            listeners.get(method).add(listener);
+        });
+    }
+
+    return {
+        opened,
+        send,
+        once,
+        close() {
+            socket.close();
+        },
+    };
+}
+
+async function renderPdfWithOutline(fileUrl) {
+    const port = 43000 + Math.floor(Math.random() * 1000);
+    const chromeProfilePath = path.join(tmpDir, `chrome-profile-${process.pid}-${Date.now()}`);
+    fs.mkdirSync(chromeProfilePath, { recursive: true });
+
+    const chrome = spawn(chromePath, [
         "--headless=new",
         "--disable-gpu",
         "--no-first-run",
         "--no-default-browser-check",
-        "--no-pdf-header-footer",
-        `--print-to-pdf=${pdfPath}`,
-        fileUrl,
-    ], { stdio: "inherit" });
+        `--remote-debugging-port=${port}`,
+        `--user-data-dir=${chromeProfilePath}`,
+    ], { stdio: "ignore" });
+
+    try {
+        await waitForDevTools(port);
+        const page = await createPage(port);
+        const client = createCdpClient(page.webSocketDebuggerUrl);
+        await client.opened;
+        await client.send("Page.enable");
+        await client.send("Runtime.enable");
+
+        const loaded = client.once("Page.loadEventFired");
+        await client.send("Page.navigate", { url: fileUrl });
+        await loaded;
+        await client.send("Emulation.setEmulatedMedia", { media: "print" });
+
+        const pdf = await client.send("Page.printToPDF", {
+            displayHeaderFooter: false,
+            printBackground: true,
+            preferCSSPageSize: true,
+            generateTaggedPDF: true,
+            generateDocumentOutline: true,
+        });
+
+        fs.writeFileSync(tmpPdfPath, Buffer.from(pdf.data, "base64"));
+        client.close();
+    } finally {
+        chrome.kill();
+        await waitForExit(chrome);
+        await removeDirWithRetry(chromeProfilePath);
+    }
+}
+
+async function renderPdf() {
+    console.log("Rendering PDF...");
+    const fileUrl = pathToFileURL(htmlPath).href;
+    await renderPdfWithOutline(fileUrl);
+    try {
+        fs.copyFileSync(tmpPdfPath, pdfPath);
+    } catch (error) {
+        if (error.code === "EBUSY" || error.code === "EPERM") {
+            throw new Error(`PDF is locked. Close the file and run this script again: ${pdfPath}`);
+        }
+        throw error;
+    }
 
     console.log("Saving preview image...");
     execFileSync(chromePath, [
@@ -439,6 +601,6 @@ function inspectPdf() {
 
 (async () => {
     runPandoc();
-    renderPdf();
+    await renderPdf();
     inspectPdf();
 })();
