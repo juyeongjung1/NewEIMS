@@ -103,35 +103,36 @@ h1, h2, h3, h4 {
 
 h1 {
     font-size: 21pt;
-    margin: 12mm 0 9mm;
+    margin: 0 0 9mm;
     padding-bottom: 4mm;
     border-bottom: 2px solid var(--brand);
+    break-before: page;
 }
 
 h2 {
     font-size: 15.5pt;
-    margin: 8mm 0 5mm;
+    margin: 7mm 0 4mm;
     padding: 2.5mm 4mm;
     background: var(--brand-soft);
     border-left: 5px solid var(--brand);
-    break-before: page;
+    break-before: auto;
+    break-after: avoid;
 }
 
 h1 + h2 {
-    break-before: avoid;
     margin-top: 0;
 }
 
 h3 {
     font-size: 13.2pt;
-    margin: 9mm 0 4mm;
+    margin: 6mm 0 3mm;
     padding-bottom: 1.5mm;
     border-bottom: 1px solid var(--line);
-    break-before: page;
+    break-before: auto;
+    break-after: avoid;
 }
 
 h2 + h3 {
-    break-before: avoid;
     margin-top: 0;
 }
 
@@ -139,6 +140,7 @@ h4 {
     font-size: 11.2pt;
     margin: 6mm 0 2.5mm;
     color: var(--brand-dark);
+    break-after: avoid;
 }
 
 p {
@@ -165,6 +167,7 @@ blockquote {
     background: var(--brand-soft);
     border-left: 5px solid var(--brand);
     color: #562313;
+    break-inside: avoid;
 }
 
 table {
@@ -235,6 +238,7 @@ img {
 
 .layout-diagram-block {
     break-inside: avoid;
+    page-break-inside: avoid;
     margin-bottom: 8mm;
 }
 
