@@ -16,8 +16,10 @@
 
             <div class="row">
                 <div class="col-md-3 text-center mb-4">
-                    <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=200&h=250&fit=crop" 
-                         class="img-fluid rounded shadow-sm border" alt="顔写真">
+                    <img th:src="@{'/images/' + ${employee.empNo} + '.png'}"
+                         th:alt="${employee.lastName + ' ' + employee.firstName}"
+                         class="rounded shadow-sm border"
+                         style="width: 180px; height: 220px; object-fit: cover;">
                 </div>
                 <div class="col-md-9">
                     <table class="table table-bordered">

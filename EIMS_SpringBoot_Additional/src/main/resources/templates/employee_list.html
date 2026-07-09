@@ -18,6 +18,7 @@
                 <table class="table table-hover mb-0 align-middle">
                     <thead class="table-light">
                         <tr>
+                            <th class="ps-4">顔写真</th>
                             <th class="ps-4">社員番号</th>
                             <th>氏名</th>
                             <th>部署</th>
@@ -27,6 +28,12 @@
                     </thead>
                     <tbody>
                         <tr th:each="employee : ${employees}" th:if="${employee.deleteFlg == 0}">
+                            <td class="ps-4">
+                                <img th:src="@{'/images/' + ${employee.empNo} + '.png'}"
+                                     th:alt="${employee.lastName + ' ' + employee.firstName}"
+                                     class="rounded border"
+                                     style="width: 60px; height: 70px; object-fit: cover;">
+                            </td>
                             <td class="ps-4 fw-bold" th:text="${employee.empNo}">10001</td>
                             <td>
                                 <a th:href="@{'/detail/' + ${employee.empNo}}" 
