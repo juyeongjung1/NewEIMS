@@ -1,8 +1,9 @@
 import { execFileSync, spawn } from "node:child_process";
-import { mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { request } from "node:http";
 import { join } from "node:path";
 import { setTimeout as wait } from "node:timers/promises";
+import { deflateSync, inflateSync } from "node:zlib";
 
 const chromePath = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
 const baseUrl = "http://localhost:8080";
@@ -45,6 +46,129 @@ function setDeleteFlg(empNo, deleteFlg) {
     "-e",
     `UPDATE employee SET delete_flg = ${deleteFlg} WHERE emp_no = ${empNo};`,
   ], { stdio: "ignore" });
+}
+
+const crcTable = new Uint32Array(256);
+for (let i = 0; i < 256; i++) {
+  let c = i;
+  for (let j = 0; j < 8; j++) {
+    c = (c & 1) ? (0xedb88320 ^ (c >>> 1)) : (c >>> 1);
+  }
+  crcTable[i] = c >>> 0;
+}
+
+function crc32(buffer) {
+  let c = 0xffffffff;
+  for (const byte of buffer) {
+    c = crcTable[(c ^ byte) & 0xff] ^ (c >>> 8);
+  }
+  return (c ^ 0xffffffff) >>> 0;
+}
+
+function chunk(type, data = Buffer.alloc(0)) {
+  const typeBuffer = Buffer.from(type, "ascii");
+  const out = Buffer.alloc(12 + data.length);
+  out.writeUInt32BE(data.length, 0);
+  typeBuffer.copy(out, 4);
+  data.copy(out, 8);
+  out.writeUInt32BE(crc32(Buffer.concat([typeBuffer, data])), 8 + data.length);
+  return out;
+}
+
+function addBlackBorder(filePath, border = 4) {
+  const source = readFileSync(filePath);
+  let offset = 8;
+  let width = 0;
+  let height = 0;
+  const idat = [];
+  const chunks = [];
+
+  while (offset < source.length) {
+    const length = source.readUInt32BE(offset);
+    const type = source.subarray(offset + 4, offset + 8).toString("ascii");
+    const data = source.subarray(offset + 8, offset + 8 + length);
+    if (type === "IHDR") {
+      width = data.readUInt32BE(0);
+      height = data.readUInt32BE(4);
+      if (data[8] !== 8 || data[9] !== 2) {
+        throw new Error(`${filePath} は 8bit RGB PNG ではありません。`);
+      }
+    } else if (type === "IDAT") {
+      idat.push(data);
+    } else if (!["IEND", "gAMA", "cHRM", "sRGB", "iCCP"].includes(type)) {
+      chunks.push(chunk(type, Buffer.from(data)));
+    }
+    offset += 12 + length;
+  }
+
+  const bytesPerPixel = 3;
+  const stride = width * bytesPerPixel;
+  const raw = inflateSync(Buffer.concat(idat));
+  const pixels = Buffer.alloc(width * height * bytesPerPixel);
+  let previous = Buffer.alloc(stride);
+  let input = 0;
+
+  for (let y = 0; y < height; y++) {
+    const filter = raw[input++];
+    const row = Buffer.from(raw.subarray(input, input + stride));
+    input += stride;
+    for (let x = 0; x < stride; x++) {
+      const left = x >= bytesPerPixel ? row[x - bytesPerPixel] : 0;
+      const up = previous[x];
+      const upLeft = x >= bytesPerPixel ? previous[x - bytesPerPixel] : 0;
+      if (filter === 1) row[x] = (row[x] + left) & 0xff;
+      if (filter === 2) row[x] = (row[x] + up) & 0xff;
+      if (filter === 3) row[x] = (row[x] + Math.floor((left + up) / 2)) & 0xff;
+      if (filter === 4) {
+        const p = left + up - upLeft;
+        const pa = Math.abs(p - left);
+        const pb = Math.abs(p - up);
+        const pc = Math.abs(p - upLeft);
+        row[x] = (row[x] + (pa <= pb && pa <= pc ? left : pb <= pc ? up : upLeft)) & 0xff;
+      }
+    }
+    row.copy(pixels, y * stride);
+    previous = row;
+  }
+
+  const newWidth = width + border * 2;
+  const newHeight = height + border * 2;
+  const newStride = newWidth * bytesPerPixel;
+  const framed = Buffer.alloc((newStride + 1) * newHeight);
+  let out = 0;
+
+  for (let y = 0; y < newHeight; y++) {
+    framed[out++] = 0;
+    for (let x = 0; x < newWidth; x++) {
+      const inBorder = x < border || y < border || x >= width + border || y >= height + border;
+      if (inBorder) {
+        framed[out++] = 0;
+        framed[out++] = 0;
+        framed[out++] = 0;
+      } else {
+        const src = ((y - border) * width + (x - border)) * bytesPerPixel;
+        framed[out++] = pixels[src];
+        framed[out++] = pixels[src + 1];
+        framed[out++] = pixels[src + 2];
+      }
+    }
+  }
+
+  const ihdr = Buffer.alloc(13);
+  ihdr.writeUInt32BE(newWidth, 0);
+  ihdr.writeUInt32BE(newHeight, 4);
+  ihdr[8] = 8;
+  ihdr[9] = 2;
+  ihdr[10] = 0;
+  ihdr[11] = 0;
+  ihdr[12] = 0;
+  writeFileSync(filePath, Buffer.concat([
+    source.subarray(0, 8),
+    chunk("IHDR", ihdr),
+    ...chunks,
+    chunk("IDAT", deflateSync(framed)),
+    chunk("IEND"),
+  ]));
 }
 
 async function waitForChrome() {
@@ -181,6 +305,7 @@ async function main() {
       clip,
     });
     writeFileSync(join(outputDir, fileName), Buffer.from(result.data, "base64"));
+    addBlackBorder(join(outputDir, fileName));
     console.log(fileName);
   }
 
@@ -206,6 +331,7 @@ async function main() {
       clip,
     });
     writeFileSync(join(outputDir, fileName), Buffer.from(result.data, "base64"));
+    addBlackBorder(join(outputDir, fileName));
     console.log(fileName);
   }
 
