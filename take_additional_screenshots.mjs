@@ -1,4 +1,4 @@
-import { spawn } from "node:child_process";
+import { execFileSync, spawn } from "node:child_process";
 import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { request } from "node:http";
 import { join } from "node:path";
@@ -9,6 +9,7 @@ const baseUrl = "http://localhost:8080";
 const port = 9222;
 const outputDir = "C:\\work\\NewEIMS\\NewEIMS\\追加機能の設計書\\images";
 const userDataDir = "C:\\work\\NewEIMS\\NewEIMS\\.tmp-additional-screenshot-profile";
+let dbPrepared = false;
 
 mkdirSync(outputDir, { recursive: true });
 rmSync(userDataDir, { recursive: true, force: true });
@@ -21,7 +22,7 @@ const chrome = spawn(chromePath, [
   "--hide-scrollbars",
   `--remote-debugging-port=${port}`,
   `--user-data-dir=${userDataDir}`,
-  "--window-size=1366,900",
+  "--window-size=1180,740",
   "about:blank",
 ], { stdio: "ignore" });
 
@@ -34,6 +35,16 @@ function httpGetJson(url) {
       res.on("end", () => resolve(JSON.parse(body)));
     }).on("error", reject).end();
   });
+}
+
+function setDeleteFlg(empNo, deleteFlg) {
+  execFileSync("mysql", [
+    "-ueimsuser",
+    "-pPa$$w0rd",
+    "eimsdb",
+    "-e",
+    `UPDATE employee SET delete_flg = ${deleteFlg} WHERE emp_no = ${empNo};`,
+  ], { stdio: "ignore" });
 }
 
 async function waitForChrome() {
@@ -106,15 +117,18 @@ function connectCdp(wsUrl) {
 }
 
 async function main() {
+  setDeleteFlg(10002, 1);
+  dbPrepared = true;
+
   const wsUrl = await waitForChrome();
   const cdp = await connectCdp(wsUrl);
 
   await cdp.send("Page.enable");
   await cdp.send("Runtime.enable");
   await cdp.send("Emulation.setDeviceMetricsOverride", {
-    width: 1366,
-    height: 900,
-    deviceScaleFactor: 1.25,
+    width: 1180,
+    height: 740,
+    deviceScaleFactor: 1.5,
     mobile: false,
   });
 
@@ -125,18 +139,61 @@ async function main() {
     await wait(900);
   }
 
-  async function evaluate(expression) {
-    await cdp.send("Runtime.evaluate", { expression, awaitPromise: true });
+  async function evaluate(expression, returnByValue = false) {
+    const result = await cdp.send("Runtime.evaluate", { expression, awaitPromise: true, returnByValue });
+    return result.result?.value;
   }
 
   async function screenshot(fileName) {
+    const clip = await evaluate(`
+      (() => {
+        const pad = 24;
+        if (!document.querySelector('main')) {
+          const card = document.querySelector('.card') || document.body;
+          const rect = card.getBoundingClientRect();
+          return {
+            x: Math.max(0, Math.floor(rect.left - pad)),
+            y: Math.max(0, Math.floor(rect.top - pad)),
+            width: Math.min(window.innerWidth, Math.ceil(rect.width + pad * 2)),
+            height: Math.min(window.innerHeight, Math.ceil(rect.height + pad * 2)),
+            scale: 1
+          };
+        }
+
+        const targets = [
+          ...document.querySelectorAll('.navbar, main .card, main h2, main table, main .alert, main .mt-4')
+        ];
+        const bottom = Math.max(...targets.map((el) => el.getBoundingClientRect().bottom), 480);
+        const right = Math.max(...targets.map((el) => el.getBoundingClientRect().right), 920);
+        return {
+          x: 0,
+          y: 0,
+          width: Math.min(window.innerWidth, Math.ceil(right + pad)),
+          height: Math.min(window.innerHeight, Math.ceil(bottom + pad)),
+          scale: 1
+        };
+      })()
+    `, true);
     const result = await cdp.send("Page.captureScreenshot", {
       format: "png",
       fromSurface: true,
       captureBeyondViewport: false,
+      clip,
     });
     writeFileSync(join(outputDir, fileName), Buffer.from(result.data, "base64"));
     console.log(fileName);
+  }
+
+  async function submitInvalidLogin() {
+    await navigate("/login");
+    const loaded = cdp.once("Page.loadEventFired");
+    await evaluate(`
+      document.querySelector('input[name="empNo"]').value = '10001';
+      document.querySelector('input[name="password"]').value = 'password1';
+      document.querySelector('form').requestSubmit();
+    `);
+    await loaded;
+    await wait(900);
   }
 
   async function login(empNo) {
@@ -156,20 +213,63 @@ async function main() {
     await wait(500);
   }
 
+  async function applyPhaseView(phase) {
+    await evaluate(`
+      (() => {
+        const hideColumn = (label) => {
+          const headers = [...document.querySelectorAll('table thead th')];
+          const index = headers.findIndex((th) => th.textContent.trim() === label);
+          if (index < 0) return;
+          document.querySelectorAll('table tr').forEach((tr) => {
+            const cell = tr.children[index];
+            if (cell) cell.style.display = 'none';
+          });
+        };
+        const hideMenu = (label) => {
+          [...document.querySelectorAll('nav a')].forEach((a) => {
+            if (a.textContent.includes(label)) {
+              a.closest('li').style.display = 'none';
+            }
+          });
+        };
+        const phase = '${phase}';
+        if (phase === 'designOnly') {
+          hideColumn('権限');
+          hideColumn('状態');
+          hideMenu('退職者管理');
+          document.querySelector('.navbar .ms-auto').style.visibility = 'hidden';
+        }
+        if (phase === 'afterRetiree') {
+          hideColumn('権限');
+        }
+      })()
+    `);
+    await wait(300);
+  }
+
   await navigate("/login");
   await screenshot("AF01_login.png");
+  await submitInvalidLogin();
+  await screenshot("AF01_login_error.png");
 
   await login(10001);
-  await navigate("/index");
-  await screenshot("AF02_top_admin.png");
   await navigate("/employeeList");
-  await screenshot("AF02_employee_list.png");
-  await navigate("/selectByDeptNo?deptNo=100");
-  await screenshot("AF02_search_result.png");
+  await applyPhaseView("designOnly");
+  await screenshot("AF20_design_only_list.png");
+
+  await navigate("/employeeList");
+  await applyPhaseView("afterRetiree");
+  await screenshot("AF23_after_retiree_list.png");
+
+  await navigate("/employeeList");
+  await screenshot("AF24_after_role_list.png");
+
+  await navigate("/employeeList");
   await navigate("/retireeList");
   await screenshot("AF03_retiree_list.png");
   await navigate("/detail/10003");
   await screenshot("AF05_detail_admin_other.png");
+  await screenshot("AF25_after_detail.png");
   await navigate("/detail/10001");
   await screenshot("AF05_detail_admin_self.png");
 
@@ -184,8 +284,12 @@ async function main() {
 }
 
 main()
-  .finally(() => {
+  .finally(async () => {
+    if (dbPrepared) {
+      setDeleteFlg(10002, 0);
+    }
     chrome.kill();
+    await wait(1000);
     try {
       rmSync(userDataDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 300 });
     } catch {
