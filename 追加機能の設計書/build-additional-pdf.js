@@ -85,9 +85,7 @@ body {
 }
 
 body > h1:first-of-type {
-    margin-top: 0;
-    color: var(--brand);
-    border-bottom: 2px solid var(--brand);
+    display: none;
 }
 
 a {
@@ -107,6 +105,10 @@ h1 {
     padding-bottom: 4mm;
     border-bottom: 2px solid var(--brand);
     break-before: page;
+}
+
+#title-block-header .title {
+    break-before: auto;
 }
 
 h2 {
@@ -396,6 +398,8 @@ function runPandoc() {
             "title=EIMS 追加機能設計書",
             "--metadata",
             "lang=ja-JP",
+            "--metadata",
+            "toc-title=目次",
             "--css",
             cssPath,
             "--output",
