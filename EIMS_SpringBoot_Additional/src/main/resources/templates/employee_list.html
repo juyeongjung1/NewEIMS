@@ -43,7 +43,7 @@
                             <td th:text="${employee.department.deptName}">部署名</td>
                             <td>
                                 <span th:if="${employee.role == 1}" class="badge bg-primary">管理者</span>
-                                <span th:if="${employee.role == 0}" class="badge bg-secondary">一般</span>
+                                <span th:if="${employee.role == 0}" class="badge bg-secondary">一般ユーザー</span>
                             </td>
                             <td>
                                 <span th:if="${employee.deleteFlg == 0}" class="badge bg-success">在籍</span>

@@ -18,7 +18,6 @@
                     <tr><th class="bg-light">パスワード</th><td>●●●●●●●●</td></tr>
                     <tr><th class="bg-light">部署</th><td th:text="${department.deptName}"></td></tr>
                     <tr><th class="bg-light">性別</th><td th:text="${employeeForm.gender == 1 ? '男性' : '女性'}"></td></tr>
-                    <tr><th class="bg-light">権限</th><td th:text="${employeeForm.role == 1 ? '管理者' : '一般'}"></td></tr>
                 </tbody>
             </table>
 
@@ -31,8 +30,6 @@
                 <input type="hidden" th:field="*{password}">
                 <input type="hidden" th:field="*{gender}">
                 <input type="hidden" th:field="*{deptNo}">
-                <input type="hidden" th:field="*{role}">
-                <input type="hidden" th:field="*{deleteFlg}">
 
                 <div class="d-flex gap-2 justify-content-center">
                     <button type="submit" class="btn btn-primary px-5">変更確定</button>

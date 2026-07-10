@@ -23,6 +23,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /** {@inheritDoc} */
     @Override
+    public List<Employee> findActiveEmployees() {
+        return employeeRepository.findByDeleteFlg(0);
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public List<Employee> findByEmpName(String keyword) {
         return employeeRepository.findByDeleteFlgAndLastNameContainingOrDeleteFlgAndFirstNameContaining(
                 0, keyword, 0, keyword);
@@ -52,8 +58,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setPassword(employeeForm.getPassword());
         employee.setGender(employeeForm.getGender());
         employee.setDeptNo(employeeForm.getDeptNo());
-        employee.setRole(employeeForm.getRole());
-        employee.setDeleteFlg(employeeForm.getDeleteFlg());
+        employee.setRole(0);
+        employee.setDeleteFlg(0);
 
         return employeeRepository.save(employee);
     }
@@ -61,8 +67,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     /** {@inheritDoc} */
     @Override
     public Employee update(EmployeeForm employeeForm) {
-        Employee employee = new Employee();
-        employee.setEmpNo(employeeForm.getEmpNo());
+        Employee employee = employeeRepository.findById(employeeForm.getEmpNo()).orElse(null);
+        if (employee == null) {
+            return null;
+        }
         employee.setLastName(employeeForm.getLastName());
         employee.setFirstName(employeeForm.getFirstName());
         employee.setLastKana(employeeForm.getLastKana());
@@ -70,8 +78,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setPassword(employeeForm.getPassword());
         employee.setGender(employeeForm.getGender());
         employee.setDeptNo(employeeForm.getDeptNo());
-        employee.setRole(employeeForm.getRole());
-        employee.setDeleteFlg(employeeForm.getDeleteFlg());
 
         return employeeRepository.save(employee);
     }

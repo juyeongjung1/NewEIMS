@@ -48,9 +48,4 @@ public class EmployeeForm {
     @NotNull(message = "部署は必須項目です")
     private Integer deptNo;
 
-    /** 権限 0:一般 1:管理者 */
-    private Integer role = 0;
-
-    /** 削除フラグ 0:在籍 1:退職 */
-    private Integer deleteFlg = 0;
 }
