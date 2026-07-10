@@ -3,12 +3,12 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout">
 <head>
-    <title>削除確認</title>
+    <title>退職処理確認</title>
 </head>
 <body>
     <div layout:fragment="content">
         <div class="card p-4 mx-auto border-danger shadow" style="max-width: 800px;">
-            <h2 class="text-danger mb-4 fw-bold"><i class="bi bi-exclamation-triangle me-2"></i>社員削除の確認</h2>
+            <h2 class="text-danger mb-4 fw-bold"><i class="bi bi-exclamation-triangle me-2"></i>社員退職処理の確認</h2>
             <div class="alert alert-warning">
                 この社員を「退職」扱いに変更します。よろしいですか？<br>
                 <small>※データ自体は「退職者一覧」から参照・復元が可能です。</small>
@@ -25,7 +25,7 @@
             <form th:action="@{/deleteEmployee}" method="post">
                 <input type="hidden" name="empNo" th:value="${employee.empNo}">
                 <div class="d-flex gap-2 justify-content-center">
-                    <button type="submit" class="btn btn-danger px-5">削除実行（退職にする）</button>
+                    <button type="submit" class="btn btn-danger px-5">退職処理を実行</button>
                     <a th:href="@{'/detail/' + ${employee.empNo}}" class="btn btn-outline-secondary">キャンセル</a>
                 </div>
             </form>
