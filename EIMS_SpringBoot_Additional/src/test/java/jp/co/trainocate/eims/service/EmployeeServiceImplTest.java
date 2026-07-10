@@ -5,7 +5,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -40,15 +39,6 @@ class EmployeeServiceImplTest {
         verify(employeeRepository).save(captor.capture());
         assertEquals(0, captor.getValue().getRole());
         assertEquals(0, captor.getValue().getDeleteFlg());
-    }
-
-    @Test
-    void findActiveEmployeesUsesDeleteFlagZero() {
-        when(employeeRepository.findByDeleteFlg(0)).thenReturn(List.of());
-
-        employeeService.findActiveEmployees();
-
-        verify(employeeRepository).findByDeleteFlg(0);
     }
 
     @Test

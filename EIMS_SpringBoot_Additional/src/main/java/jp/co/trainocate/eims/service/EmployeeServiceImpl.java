@@ -23,12 +23,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     /** {@inheritDoc} */
     @Override
-    public List<Employee> findActiveEmployees() {
-        return employeeRepository.findByDeleteFlg(0);
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public List<Employee> findByEmpName(String keyword) {
         return employeeRepository.findByDeleteFlgAndLastNameContainingOrDeleteFlgAndFirstNameContaining(
                 0, keyword, 0, keyword);

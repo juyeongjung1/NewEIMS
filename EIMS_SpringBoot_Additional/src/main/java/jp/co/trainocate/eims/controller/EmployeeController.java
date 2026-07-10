@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import jp.co.trainocate.eims.entity.Employee;
@@ -33,44 +32,28 @@ public class EmployeeController {
 
     /** 社員一覧を表示する */
     @GetMapping("/employeeList")
-    public String showEmployeeList(Model model, HttpSession session) {
-        if (!isAdmin(session)) {
-            return "redirect:/index";
-        }
+    public String showEmployeeList(Model model) {
         model.addAttribute("employees", employeeService.findAll());
         return "employee_list";
     }
 
     /** 退職者一覧を表示する */
     @GetMapping("/retireeList")
-    public String showRetireeList(Model model, HttpSession session) {
-        if (!isAdmin(session)) {
-            return "redirect:/index";
-        }
+    public String showRetireeList(Model model) {
         model.addAttribute("retirees", employeeService.findRetirees());
         return "retiree_list";
     }
 
     /** 復元処理を行う */
     @PostMapping("/restore/{empNo}")
-    public String restore(@PathVariable Integer empNo, HttpSession session) {
-        if (!isAdmin(session)) {
-            return "redirect:/index";
-        }
+    public String restore(@PathVariable Integer empNo) {
         employeeService.restoreById(empNo);
         return "redirect:/retireeList";
     }
 
     /** 物理削除処理を行う */
     @PostMapping("/physicalDelete/{empNo}")
-    public String physicalDelete(@PathVariable Integer empNo, HttpSession session) {
-        if (!canDelete(session, empNo)) {
-            return "redirect:/index";
-        }
-        Employee employee = employeeService.findById(empNo);
-        if (employee == null || !Integer.valueOf(1).equals(employee.getDeleteFlg())) {
-            return "redirect:/retireeList";
-        }
+    public String physicalDelete(@PathVariable Integer empNo) {
         employeeService.physicalDeleteById(empNo);
         return "redirect:/retireeList";
     }
@@ -157,10 +140,7 @@ public class EmployeeController {
 
     /** 削除確認画面を表示する */
     @GetMapping("/deleteConfirm/{empNo}")
-    public String deleteConfirm(@PathVariable Integer empNo, Model model, HttpSession session) {
-        if (!canDelete(session, empNo)) {
-            return "redirect:/index";
-        }
+    public String deleteConfirm(@PathVariable Integer empNo, Model model) {
         Employee employee = employeeService.findById(empNo);
         if (employee == null) {
             model.addAttribute("employees", new ArrayList<Employee>());
@@ -173,10 +153,7 @@ public class EmployeeController {
 
     /** 社員を削除する */
     @PostMapping("/deleteEmployee")
-    public String deleteEmployee(Integer empNo, Model model, HttpSession session) {
-        if (!canDelete(session, empNo)) {
-            return "redirect:/index";
-        }
+    public String deleteEmployee(Integer empNo, Model model) {
         if (empNo == null || employeeService.findById(empNo) == null) {
             model.addAttribute("employees", new ArrayList<Employee>());
             model.addAttribute("message", "指定された社員情報は存在しないため、削除できません。");
@@ -188,11 +165,7 @@ public class EmployeeController {
 
     /** 変更画面を表示する（初回表示・GET：DBから現在の登録内容をフォームにセット） */
     @GetMapping("/changeInput/{empNo}")
-    public String changeInput(@PathVariable Integer empNo, EmployeeForm employeeForm, Model model,
-            HttpSession session) {
-        if (!canChange(session, empNo)) {
-            return "redirect:/index";
-        }
+    public String changeInput(@PathVariable Integer empNo, EmployeeForm employeeForm, Model model) {
         Employee employee = employeeService.findById(empNo);
         employeeForm.setEmpNo(employee.getEmpNo());
         employeeForm.setLastName(employee.getLastName());
@@ -209,22 +182,14 @@ public class EmployeeController {
 
     /** 確認画面から「修正する」で変更画面へ戻る（POST：DBから取り直さず入力値を保持） */
     @PostMapping("/changeInput/{empNo}")
-    public String backToChangeInput(@PathVariable Integer empNo, EmployeeForm employeeForm, Model model,
-            HttpSession session) {
-        if (!canChange(session, empNo)) {
-            return "redirect:/index";
-        }
+    public String backToChangeInput(@PathVariable Integer empNo, EmployeeForm employeeForm, Model model) {
         model.addAttribute("departments", departmentService.findAll());
         return "change";
     }
 
     /** 変更内容を確認する */
     @PostMapping("/changeConfirm")
-    public String changeConfirm(@Valid EmployeeForm employeeForm, BindingResult bindingResult, Model model,
-            HttpSession session) {
-        if (!canChange(session, employeeForm.getEmpNo())) {
-            return "redirect:/index";
-        }
+    public String changeConfirm(@Valid EmployeeForm employeeForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("departments", departmentService.findAll());
             return "change";
@@ -235,31 +200,10 @@ public class EmployeeController {
 
     /** 社員情報を更新する */
     @PostMapping("/changeEmployee")
-    public String changeEmployee(EmployeeForm employeeForm, Model model, HttpSession session) {
-        if (!canChange(session, employeeForm.getEmpNo())) {
-            return "redirect:/index";
-        }
+    public String changeEmployee(EmployeeForm employeeForm, Model model) {
         Employee employee = employeeService.update(employeeForm);
         model.addAttribute("employee", employee);
         return "change_complete";
     }
 
-    /** ログイン中の社員が管理者か判定する */
-    private boolean isAdmin(HttpSession session) {
-        Employee loginEmployee = (Employee) session.getAttribute("loginEmployee");
-        return loginEmployee != null && Integer.valueOf(1).equals(loginEmployee.getRole());
-    }
-
-    /** ログイン中の社員が対象社員を変更できるか判定する */
-    private boolean canChange(HttpSession session, Integer empNo) {
-        Employee loginEmployee = (Employee) session.getAttribute("loginEmployee");
-        return loginEmployee != null
-                && (isAdmin(session) || loginEmployee.getEmpNo().equals(empNo));
-    }
-
-    /** ログイン中の社員が対象社員を退職処理できるか判定する */
-    private boolean canDelete(HttpSession session, Integer empNo) {
-        Employee loginEmployee = (Employee) session.getAttribute("loginEmployee");
-        return isAdmin(session) && !loginEmployee.getEmpNo().equals(empNo);
-    }
 }

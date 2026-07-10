@@ -17,13 +17,6 @@ public interface EmployeeService {
     List<Employee> findAll();
 
     /**
-     * 在籍社員（delete_flg = 0）を全件取得します。
-     * 一覧取得時にServiceで退職者を除外する場合の参考解答です。
-     * @return 在籍社員リスト
-     */
-    List<Employee> findActiveEmployees();
-
-    /**
      * 氏または名にキーワードを含む社員を検索します。
      * @param keyword 検索キーワード
      * @return 該当する社員エンティティのリスト
