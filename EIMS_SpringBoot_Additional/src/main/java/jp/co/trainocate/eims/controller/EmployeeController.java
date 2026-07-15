@@ -151,7 +151,7 @@ public class EmployeeController {
         return "delete_confirm";
     }
 
-    /** 社員を削除する */
+    /** 社員を退職状態にする（論理削除） */
     @PostMapping("/deleteEmployee")
     public String deleteEmployee(Integer empNo, Model model) {
         if (empNo == null || employeeService.findById(empNo) == null) {

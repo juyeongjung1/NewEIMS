@@ -52,7 +52,7 @@ public interface EmployeeService {
     Employee update(EmployeeForm employeeForm);
 
     /**
-     * 社員番号を指定して 1 件削除します。
+     * 社員番号を指定して退職状態にします（論理削除）。
      * @param empNo 社員番号
      */
     void deleteById(Integer empNo);
