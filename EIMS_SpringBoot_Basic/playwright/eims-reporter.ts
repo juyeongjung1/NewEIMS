@@ -37,7 +37,7 @@ function displayStatus(result: CaseResult): { label: string; className: string; 
 }
 
 function levelLabel(level: SearchTestCase['level']): string {
-  if (level === 'common') return '共通・簡易実装';
+  if (level === 'common') return '簡易実装';
   if (level === 'standard') return '一般仕様';
   return '参考確認';
 }
@@ -91,16 +91,16 @@ class EimsReporter implements Reporter {
     const common = results.filter((item) => item.definition.level === 'common');
     const standard = results.filter((item) => item.definition.level === 'standard');
     const reference = results.filter((item) => item.definition.level === 'reference');
-    const commonPassed = common.filter((item) => item.status === 'passed').length;
+    const simplifiedPassed = common.filter((item) => item.status === 'passed').length;
     const standardPassed = standard.filter((item) => item.status === 'passed').length;
     const referencePassed = reference.filter((item) => item.status === 'passed').length;
-    const commonComplete = commonPassed === common.length;
+    const simplifiedComplete = simplifiedPassed === common.length;
     const standardComplete = standardPassed === standard.length;
-    const overall = commonComplete && standardComplete
+    const overall = simplifiedComplete && standardComplete
       ? { label: '一般仕様達成', className: 'pass', description: '検索機能は一般仕様まで実装できています。' }
-      : commonComplete
-        ? { label: '簡易実装相当', className: 'warning', description: '基本的な検索は動作しています。黄色の項目を実装すると一般仕様へ進めます。' }
-        : { label: '要確認', className: 'fail', description: '基本的な検索機能に問題があります。赤い項目から確認してください。' };
+      : simplifiedComplete
+        ? { label: '簡易実装達成', className: 'warning', description: '難易度を抑えた検索機能として完成しています。黄色の項目へ進むと一般仕様を目指せます。' }
+        : { label: '要確認', className: 'fail', description: '簡易実装として必要な検索機能に問題があります。赤い項目から確認してください。' };
     const elapsed = Math.max(0, Date.now() - this.startedAt.getTime());
     const updatedAt = new Intl.DateTimeFormat('ja-JP', { dateStyle: 'long', timeStyle: 'medium' }).format(new Date());
 
@@ -119,7 +119,7 @@ class EimsReporter implements Reporter {
           <details${detailOpen}>
             <summary>
               <span class="status-icon">${status.icon}</span>
-              <span class="case-title"><small>${escapeHtml(item.definition.id)}・${levelLabel(item.definition.level)}</small>${escapeHtml(item.definition.title)}</span>
+              <span class="case-title"><small>確認${escapeHtml(item.definition.id.slice(3))}・${levelLabel(item.definition.level)}</small>${escapeHtml(item.definition.title)}</span>
               <span class="status-label">${status.label}</span>
             </summary>
             <div class="case-body">
@@ -141,7 +141,7 @@ class EimsReporter implements Reporter {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>EIMS 検索機能 実装診断レポート</title>
+  <title>EIMS 共通機能・検索機能 実装診断レポート</title>
   <style>
     :root { --navy:#17324d; --blue:#2563eb; --green:#17834f; --amber:#b66b00; --red:#c43232; --muted:#607080; --line:#d9e2ea; --bg:#f4f7fa; }
     * { box-sizing:border-box; }
@@ -201,12 +201,12 @@ class EimsReporter implements Reporter {
   </style>
 </head>
 <body>
-  <header><div class="inner"><h1>EIMS 検索機能 実装診断レポート</h1><p>テストケース仕様書兼結果報告書（T0002）の29ケースを反映しています。</p></div></header>
+  <header><div class="inner"><h1>EIMS 共通機能 実装診断レポート</h1><p>共通機能 ＞ 検索機能</p></div></header>
   <main>
     <section class="hero">
       <div class="panel overall ${overall.className}"><span class="badge">${overall.label}</span><p>${overall.description}</p></div>
       <div class="panel scores">
-        ${this.scoreCard('共通・簡易実装', commonPassed, common.length)}
+        ${this.scoreCard('簡易実装', simplifiedPassed, common.length)}
         ${this.scoreCard('一般仕様', standardPassed, standard.length)}
         ${this.scoreCard('参考確認', referencePassed, reference.length)}
       </div>
@@ -214,13 +214,13 @@ class EimsReporter implements Reporter {
     <section class="panel toolbar">
       <button class="active" data-filter="all">すべて</button>
       <button data-filter="problem">確認が必要</button>
-      <button data-filter="common">共通・簡易実装</button>
+      <button data-filter="common">簡易実装</button>
       <button data-filter="standard">一般仕様</button>
       <button data-filter="reference">参考確認</button>
       <span class="updated">${escapeHtml(updatedAt)}・${(elapsed / 1000).toFixed(1)}秒</span>
     </section>
     <section id="cases">${cards}</section>
-    <p class="legend">黄色の項目だけが未達の場合は、検索機能は「簡易実装相当」です。参考確認は総合判定に影響しません。</p>
+    <p class="legend">簡易実装を達成したあと、黄色の項目へ進むと一般仕様を目指せます。参考確認は総合判定に影響しません。</p>
   </main>
   <script>
     const buttons = document.querySelectorAll('[data-filter]');
