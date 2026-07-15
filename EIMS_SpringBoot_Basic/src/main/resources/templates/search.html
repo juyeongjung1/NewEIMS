@@ -38,7 +38,6 @@
                 <div class="mb-2">
                     <select name="deptNo" class="form-select w-50">
                         <option value="">部署を選択してください</option>
-                        <option th:each="dept : ${departments}" th:value="${dept.deptNo}" th:text="${dept.deptName}"></option>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary">検索</button>
@@ -46,7 +45,6 @@
         </div>
         
         <div class="mb-5">
-            <a th:href="@{/}" class="btn btn-secondary">メニューに戻る</a>
         </div>
     </div>
 </body>

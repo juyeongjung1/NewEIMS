@@ -60,15 +60,13 @@ public class EmployeeController {
         }
 
         if (keyword != null && !keyword.isBlank()) {
-            List<Employee> employees = employeeService.findByEmpName(keyword);
-            model.addAttribute("employees", employees);
-            return "search_result";
+            model.addAttribute("departments", departmentService.findAll());
+            return "search";
         }
 
         if (deptNo != null) {
-            List<Employee> employees = employeeService.findByDeptNo(deptNo);
-            model.addAttribute("employees", employees);
-            return "search_result";
+            model.addAttribute("departments", departmentService.findAll());
+            return "search";
         }
 
         model.addAttribute("departments", departmentService.findAll());
