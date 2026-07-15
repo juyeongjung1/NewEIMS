@@ -3,29 +3,26 @@ package jp.co.trainocate.eims.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import jp.co.trainocate.eims.entity.Employee;
 import jp.co.trainocate.eims.form.EmployeeForm;
 import jp.co.trainocate.eims.service.DepartmentService;
 import jp.co.trainocate.eims.service.EmployeeService;
 
 @Controller
+@RequiredArgsConstructor
 public class EmployeeController {
 
-    @Autowired
-    private EmployeeService employeeService;
-    @Autowired
-    private DepartmentService departmentService;
+    private final EmployeeService employeeService;
+    private final DepartmentService departmentService;
 
     /** トップページを表示する */
     @GetMapping({"/", "/index"})
@@ -42,7 +39,7 @@ public class EmployeeController {
 
     /** 検索画面を表示する */
     @GetMapping("/search")
-    public String index(Model model) {
+    public String showSearch(Model model) {
         model.addAttribute("departments", departmentService.findAll());
         return "search";
     }
@@ -86,9 +83,16 @@ public class EmployeeController {
         return "employee_detail";
     }
 
-    /** 登録画面を表示する */
-    @RequestMapping(value = "/input", method = {RequestMethod.GET, RequestMethod.POST})
+    /** 登録画面を表示する（初回表示・GET） */
+    @GetMapping("/input")
     public String showInputPage(EmployeeForm employeeForm, Model model) {
+        model.addAttribute("departments", departmentService.findAll());
+        return "input";
+    }
+
+    /** 確認画面から「修正する」で登録画面へ戻る（POST・入力値を保持） */
+    @PostMapping("/input")
+    public String backToInputPage(EmployeeForm employeeForm, Model model) {
         model.addAttribute("departments", departmentService.findAll());
         return "input";
     }
@@ -138,22 +142,26 @@ public class EmployeeController {
         return "delete_complete";
     }
 
-    /** 変更入力画面を表示する */
-    @RequestMapping(value = "/changeInput/{empNo}", method = {RequestMethod.GET, RequestMethod.POST})
+    /** 変更画面を表示する（初回表示・GET：DBから現在の登録内容をフォームにセット） */
+    @GetMapping("/changeInput/{empNo}")
     public String changeInput(@PathVariable("empNo") Integer empNo, EmployeeForm employeeForm, Model model) {
-        // 初回アクセス（GET）の場合のみ、DBからデータを取得してフォームにセット
-        if (employeeForm.getLastName() == null) {
-            Employee employee = employeeService.findById(empNo);
-            employeeForm.setEmpNo(employee.getEmpNo());
-            employeeForm.setLastName(employee.getLastName());
-            employeeForm.setFirstName(employee.getFirstName());
-            employeeForm.setLastKana(employee.getLastKana());
-            employeeForm.setFirstKana(employee.getFirstKana());
-            employeeForm.setPassword(employee.getPassword());
-            employeeForm.setGender(employee.getGender());
-            employeeForm.setDeptNo(employee.getDeptNo());
-        }
+        Employee employee = employeeService.findById(empNo);
+        employeeForm.setEmpNo(employee.getEmpNo());
+        employeeForm.setLastName(employee.getLastName());
+        employeeForm.setFirstName(employee.getFirstName());
+        employeeForm.setLastKana(employee.getLastKana());
+        employeeForm.setFirstKana(employee.getFirstKana());
+        employeeForm.setPassword(employee.getPassword());
+        employeeForm.setGender(employee.getGender());
+        employeeForm.setDeptNo(employee.getDeptNo());
 
+        model.addAttribute("departments", departmentService.findAll());
+        return "change";
+    }
+
+    /** 確認画面から「修正する」で変更画面へ戻る（POST：DBから取り直さず入力値を保持） */
+    @PostMapping("/changeInput/{empNo}")
+    public String backToChangeInput(@PathVariable("empNo") Integer empNo, EmployeeForm employeeForm, Model model) {
         model.addAttribute("departments", departmentService.findAll());
         return "change";
     }

@@ -51,7 +51,7 @@ public class Employee {
     private Integer gender;
 	
     /** 部署番号 (外部キー) */
-    @Column(name = "dept_no")
+    @Column(name = "dept_no", nullable = false)
     private Integer deptNo;
 	
     /** 所属部署 */

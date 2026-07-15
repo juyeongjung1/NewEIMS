@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>変更確認 - EIMS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CDN にアクセスできない場合は、上の行をコメントアウトし、下のローカル版（static/css に同梱）を有効にする -->
+    <!-- <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet"> -->
 </head>
 <body class="bg-light">
     <nav class="bg-primary p-2 mb-4">
@@ -48,7 +50,7 @@
                     <input type="hidden" th:field="*{password}">
                     <input type="hidden" th:field="*{gender}">
                     <input type="hidden" th:field="*{deptNo}">
-                    <button type="submit" class="btn btn-primary">変更確定する</button>
+                    <button type="submit" class="btn btn-primary">変更確定</button>
                 </form>
             </div>
         </div>
