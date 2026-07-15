@@ -1,5 +1,6 @@
 ﻿param(
-    [int]$Port = 18080
+    [int]$Port = 0,
+    [switch]$NoOpenReport
 )
 
 $ErrorActionPreference = 'Stop'
@@ -11,6 +12,32 @@ $StdoutLog = Join-Path $ResultsDir 'spring-boot.out.log'
 $StderrLog = Join-Path $ResultsDir 'spring-boot.err.log'
 $SpringProcess = $null
 $ExitCode = 1
+
+[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)
+$OutputEncoding = [Console]::OutputEncoding
+
+function Get-AvailableTcpPort {
+    $Listener = [System.Net.Sockets.TcpListener]::new([System.Net.IPAddress]::Loopback, 0)
+    try {
+        $Listener.Start()
+        return ([System.Net.IPEndPoint]$Listener.LocalEndpoint).Port
+    }
+    finally {
+        $Listener.Stop()
+    }
+}
+
+function Write-DashboardProgress {
+    param(
+        [int]$Percent,
+        [string]$Phase,
+        [string]$Message
+    )
+
+    $Payload = @{ percent = $Percent; phase = $Phase; message = $Message } | ConvertTo-Json -Compress
+    Write-Output "@@EIMS@@$Payload"
+    Write-Host ("[{0,3}%] {1}" -f $Percent, $Message) -ForegroundColor Cyan
+}
 
 function Write-FriendlyFailureReport {
     param(
@@ -33,6 +60,7 @@ body{margin:0;background:#f4f7fa;color:#1f2937;font-family:"Yu Gothic UI","Meiry
 }
 
 try {
+    Write-DashboardProgress 2 '準備' '実行環境を確認しています...'
     New-Item -ItemType Directory -Force -Path $ResultsDir | Out-Null
     Remove-Item -LiteralPath $StdoutLog, $StderrLog -Force -ErrorAction SilentlyContinue
 
@@ -46,12 +74,13 @@ try {
     Push-Location $PlaywrightDir
     try {
         if (-not (Test-Path (Join-Path $PlaywrightDir 'node_modules\@playwright\test'))) {
+            Write-DashboardProgress 5 '初回準備' 'Playwrightをインストールしています...'
             Write-Host '初回準備：Playwrightをインストールしています...' -ForegroundColor Cyan
             & npm.cmd ci
             if ($LASTEXITCODE -ne 0) { throw 'Playwrightのインストールに失敗しました。インターネット接続を確認してください。' }
         }
 
-        Write-Host 'テスト用ブラウザーを確認しています...' -ForegroundColor Cyan
+        Write-DashboardProgress 10 'ブラウザー準備' 'テスト用ブラウザーを確認しています...'
         & npx.cmd playwright install chromium
         if ($LASTEXITCODE -ne 0) { throw 'Chromiumの準備に失敗しました。インターネット接続を確認してください。' }
     }
@@ -64,7 +93,11 @@ try {
         throw 'mvnw.cmdが見つかりません。EIMSプロジェクトのフォルダー構成を確認してください。'
     }
 
-    Write-Host 'EIMSを起動しています...' -ForegroundColor Cyan
+    if ($Port -eq 0) {
+        $Port = Get-AvailableTcpPort
+    }
+    Write-DashboardProgress 20 'ポート選択' "空いているポート $Port を使用します。"
+    Write-DashboardProgress 25 'サーバー起動' 'EIMSを起動しています...'
     $PreviousRestartSetting = $env:SPRING_DEVTOOLS_RESTART_ENABLED
     $env:SPRING_DEVTOOLS_RESTART_ENABLED = 'false'
     try {
@@ -97,6 +130,9 @@ try {
             }
         }
         catch {
+            if ($Attempt -gt 0 -and $Attempt % 10 -eq 0) {
+                Write-DashboardProgress 25 'サーバー起動' "EIMSの起動を待っています（$Attempt 秒経過）..."
+            }
             Start-Sleep -Seconds 1
         }
     }
@@ -107,7 +143,7 @@ try {
         throw 'Spring Bootの起動に失敗しました。'
     }
 
-    Write-Host '検索機能を確認しています...' -ForegroundColor Cyan
+    Write-DashboardProgress 30 '検索機能' 'EIMSが起動しました。検索機能の全29件を確認します。'
     Push-Location $PlaywrightDir
     try {
         $env:EIMS_BASE_URL = $BaseUrl
@@ -134,7 +170,7 @@ finally {
     if ($null -ne $SpringProcess -and -not $SpringProcess.HasExited) {
         & taskkill.exe /PID $SpringProcess.Id /T /F 2>$null | Out-Null
     }
-    if (Test-Path -LiteralPath $ReportPath) {
+    if ((Test-Path -LiteralPath $ReportPath) -and -not $NoOpenReport) {
         Write-Host '結果報告書をブラウザーで開きます。' -ForegroundColor Green
         Start-Process -FilePath $ReportPath
     }

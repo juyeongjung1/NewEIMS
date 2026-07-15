@@ -46,10 +46,32 @@ class EimsReporter implements Reporter {
   private startedAt = new Date();
   private results = new Map<string, CaseResult>();
   private outputFile = path.resolve(process.cwd(), 'results', 'search-report.html');
+  private completedCount = 0;
+
+  private sendProgress(payload: Record<string, unknown>): void {
+    console.log(`@@EIMS@@${JSON.stringify(payload)}`);
+  }
 
   onBegin(_config: FullConfig): void {
     this.startedAt = new Date();
+    this.completedCount = 0;
     fs.mkdirSync(path.dirname(this.outputFile), { recursive: true });
+    this.sendProgress({ percent: 30, phase: '検索機能', message: `全${searchTestCases.length}件の確認を開始します。`, completed: 0, total: searchTestCases.length });
+  }
+
+  onTestBegin(test: TestCase): void {
+    const id = test.title.match(/TC\d{3}/)?.[0];
+    const definition = id ? searchTestCaseMap.get(id) : undefined;
+    if (!definition) return;
+
+    this.sendProgress({
+      percent: 30 + Math.round((this.completedCount / searchTestCases.length) * 65),
+      phase: '検索機能',
+      message: definition.title,
+      current: this.completedCount + 1,
+      completed: this.completedCount,
+      total: searchTestCases.length,
+    });
   }
 
   onTestEnd(test: TestCase, result: TestResult): void {
@@ -71,6 +93,16 @@ class EimsReporter implements Reporter {
       error: result.errors.map((error) => error.message ?? error.value ?? '').join('\n').replace(ansiPattern, ''),
       screenshot: imageDataUrl(screenshot?.path),
     });
+
+    this.completedCount += 1;
+    this.sendProgress({
+      percent: 30 + Math.round((this.completedCount / searchTestCases.length) * 65),
+      phase: '検索機能',
+      message: definition.title,
+      completed: this.completedCount,
+      total: searchTestCases.length,
+      result: status,
+    });
   }
 
   async onEnd(_result: FullResult): Promise<{ status: FullResult['status'] }> {
@@ -82,6 +114,7 @@ class EimsReporter implements Reporter {
     }));
 
     fs.writeFileSync(this.outputFile, this.buildHtml(allResults), 'utf8');
+    this.sendProgress({ percent: 98, phase: '結果作成', message: 'HTML結果報告書を作成しました。', completed: searchTestCases.length, total: searchTestCases.length });
 
     const commonFailed = allResults.some((item) => item.definition.level === 'common' && item.status !== 'passed');
     return { status: commonFailed ? 'failed' : 'passed' };
