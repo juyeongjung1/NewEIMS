@@ -18,7 +18,7 @@
   </style>
 </head>
 <body>
-  <header><h1>EIMS 実装診断アプリ</h1><p>共通機能 ＞ 検索・登録・更新・削除</p></header>
+  <header><h1>EIMS 実装診断アプリ</h1><p>共通機能 ＞ <span id="scope">検索・登録・更新・削除</span></p></header>
   <main><div class="grid">
     <section class="card progress-card"><div class="ring" id="ring"><div class="ring-content"><div class="percent"><span id="percent">1</span><small>%</small></div><div class="phase" id="phase">開始</div></div></div><p class="count"><strong id="completed">0</strong> / <span id="total">113</span> 件 完了</p></section>
     <section class="card detail"><div class="eyebrow">現在の確認内容</div><h2 id="message">診断の準備をしています...</h2><div class="status"><span class="dot"></span><span id="statusText">しばらくお待ちください</span></div><div class="bar"><span id="bar"></span></div><div class="log-title"><h3>進行状況</h3><span id="resultCount">合格 0 ／ 要確認 0 ／ 対象外 0</span></div><div class="log" id="log" aria-live="polite"></div><div class="actions"><a class="button" id="report" href="/report" target="_blank">詳しい結果報告書を見る</a></div></section>
@@ -27,7 +27,7 @@
     const $=id=>document.getElementById(id);let passed=0,failed=0,skipped=0,lastKey='';
     const addLog=e=>{const key=[e.percent,e.message,e.result,e.status].join('|');if(key===lastKey)return;lastKey=key;const row=document.createElement('div');row.className='entry '+(e.result==='passed'?'pass':e.result==='failed'?'fail':'');const t=new Date(e.time);row.innerHTML=`<time>${t.toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit',second:'2-digit'})}</time><span>${e.result==='passed'?'○ ':e.result==='failed'?'× ':''}${e.message}</span>`;$('log').append(row);$('log').scrollTop=$('log').scrollHeight};
     new EventSource('/events').onmessage=event=>{const e=JSON.parse(event.data);const percent=Math.max(1,Math.min(100,e.percent||1));$('percent').textContent=percent;$('phase').textContent=e.phase||'確認中';$('message').textContent=e.message||'';$('ring').style.setProperty('--value',percent);$('bar').style.width=percent+'%';if(Number.isInteger(e.completed))$('completed').textContent=e.completed;if(Number.isInteger(e.total))$('total').textContent=e.total;if(e.result==='passed')passed++;if(e.result==='failed')failed++;if(e.result==='skipped')skipped++;$('resultCount').textContent=`合格 ${passed} ／ 要確認 ${failed} ／ 対象外 ${skipped}`;addLog(e);if(e.status==='completed'||e.status==='failed'){document.body.classList.add(e.status==='completed'?'complete':'failed');$('statusText').textContent=e.status==='completed'?'診断が完了しました':'確認が必要な項目があります';if(e.reportReady)$('report').classList.add('visible')}};
-    fetch('/start',{method:'POST'}).catch(()=>{$('message').textContent='診断を開始できませんでした。';});
+    (async()=>{try{const settings=await (await fetch('/settings')).json();$('scope').textContent=settings.label;$('total').textContent=settings.total;await fetch('/start',{method:'POST'});}catch{$('message').textContent='診断を開始できませんでした。';}})();
   </script>
 </body>
 </html>

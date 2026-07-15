@@ -9,6 +9,12 @@ const testCaseMap = new Map(allTestCases.map((testCase) => [`${testCase.feature}
 const featureLabels: Record<FeatureId, string> = {
   search: '検索機能', registration: '登録機能', update: '更新機能', delete: '削除機能',
 };
+const requestedFeature = process.env.EIMS_FEATURE ?? 'all';
+const selectedFeature = requestedFeature === 'all' || requestedFeature in featureLabels ? requestedFeature : 'all';
+const selectedTestCases = selectedFeature === 'all'
+  ? allTestCases
+  : allTestCases.filter((testCase) => testCase.feature === selectedFeature);
+const assessmentLabel = selectedFeature === 'all' ? '検索・登録・更新・削除' : featureLabels[selectedFeature as FeatureId];
 
 type CaseResult = {
   definition: EimsTestCase;
@@ -63,7 +69,7 @@ class EimsReporter implements Reporter {
     this.startedAt = new Date();
     this.completedCount = 0;
     fs.mkdirSync(path.dirname(this.outputFile), { recursive: true });
-    this.sendProgress({ percent: 30, phase: '共通機能', message: `全${allTestCases.length}件の確認を開始します。`, completed: 0, total: allTestCases.length });
+    this.sendProgress({ percent: 30, phase: assessmentLabel, message: `全${selectedTestCases.length}件の確認を開始します。`, completed: 0, total: selectedTestCases.length });
   }
 
   onTestBegin(test: TestCase): void {
@@ -72,12 +78,12 @@ class EimsReporter implements Reporter {
     if (!definition) return;
 
     this.sendProgress({
-      percent: 30 + Math.round((this.completedCount / allTestCases.length) * 65),
+      percent: 30 + Math.round((this.completedCount / selectedTestCases.length) * 65),
       phase: featureLabels[definition.feature],
       message: definition.title,
       current: this.completedCount + 1,
       completed: this.completedCount,
-      total: allTestCases.length,
+      total: selectedTestCases.length,
     });
   }
 
@@ -103,11 +109,11 @@ class EimsReporter implements Reporter {
 
     this.completedCount += 1;
     this.sendProgress({
-      percent: 30 + Math.round((this.completedCount / allTestCases.length) * 65),
+      percent: 30 + Math.round((this.completedCount / selectedTestCases.length) * 65),
       phase: featureLabels[definition.feature],
       message: definition.title,
       completed: this.completedCount,
-      total: allTestCases.length,
+      total: selectedTestCases.length,
       result: status,
     });
   }
@@ -115,7 +121,7 @@ class EimsReporter implements Reporter {
   async onEnd(_result: FullResult): Promise<{ status: FullResult['status'] }> {
     if (this.completedCount === 0) return { status: 'passed' };
 
-    const allResults = allTestCases.map((definition) => this.results.get(`${definition.feature}:${definition.id}`) ?? ({
+    const allResults = selectedTestCases.map((definition) => this.results.get(`${definition.feature}:${definition.id}`) ?? ({
       definition,
       status: 'notRun' as const,
       duration: 0,
@@ -123,13 +129,14 @@ class EimsReporter implements Reporter {
     }));
 
     fs.writeFileSync(this.outputFile, this.buildHtml(allResults), 'utf8');
-    this.sendProgress({ percent: 98, phase: '結果作成', message: 'HTML結果報告書を作成しました。', completed: allTestCases.length, total: allTestCases.length });
+    this.sendProgress({ percent: 98, phase: '結果作成', message: 'HTML結果報告書を作成しました。', completed: selectedTestCases.length, total: selectedTestCases.length });
 
     const commonFailed = allResults.some((item) => item.definition.level === 'common' && item.status !== 'passed');
     return { status: commonFailed ? 'failed' : 'passed' };
   }
 
   private buildHtml(results: CaseResult[]): string {
+    const subject = selectedFeature === 'all' ? '共通機能' : assessmentLabel;
     const common = results.filter((item) => item.definition.level === 'common');
     const standard = results.filter((item) => item.definition.level === 'standard');
     const reference = results.filter((item) => item.definition.level === 'reference');
@@ -139,12 +146,15 @@ class EimsReporter implements Reporter {
     const simplifiedComplete = simplifiedPassed === common.length;
     const standardComplete = standardPassed === standard.length;
     const overall = simplifiedComplete && standardComplete
-      ? { label: '一般仕様達成', className: 'pass', description: '共通機能は一般仕様まで実装できています。' }
+      ? { label: '一般仕様達成', className: 'pass', description: `${subject}は一般仕様まで実装できています。` }
       : simplifiedComplete
-        ? { label: '簡易実装達成', className: 'warning', description: '難易度を抑えた共通機能として完成しています。黄色の項目へ進むと一般仕様を目指せます。' }
-        : { label: '要確認', className: 'fail', description: '簡易実装として必要な共通機能に問題があります。赤い項目から確認してください。' };
+        ? { label: '簡易実装達成', className: 'warning', description: `難易度を抑えた${subject}として完成しています。黄色の項目へ進むと一般仕様を目指せます。` }
+        : { label: '要確認', className: 'fail', description: `簡易実装として必要な${subject}に問題があります。赤い項目から確認してください。` };
     const elapsed = Math.max(0, Date.now() - this.startedAt.getTime());
     const updatedAt = new Intl.DateTimeFormat('ja-JP', { dateStyle: 'long', timeStyle: 'medium' }).format(new Date());
+    const featureButtons = selectedFeature === 'all'
+      ? '<button data-filter="search">検索</button><button data-filter="registration">登録</button><button data-filter="update">更新</button><button data-filter="delete">削除</button>'
+      : '';
 
     const cards = results.map((item) => {
       const status = displayStatus(item);
@@ -243,7 +253,7 @@ class EimsReporter implements Reporter {
   </style>
 </head>
 <body>
-  <header><div class="inner"><h1>EIMS 共通機能 実装診断レポート</h1><p>検索・登録・更新・削除</p></div></header>
+  <header><div class="inner"><h1>EIMS 共通機能 実装診断レポート</h1><p>${assessmentLabel}</p></div></header>
   <main>
     <section class="hero">
       <div class="panel overall ${overall.className}"><span class="badge">${overall.label}</span><p>${overall.description}</p></div>
@@ -259,10 +269,7 @@ class EimsReporter implements Reporter {
       <button data-filter="common">簡易実装</button>
       <button data-filter="standard">一般仕様</button>
       <button data-filter="reference">参考確認</button>
-      <button data-filter="search">検索</button>
-      <button data-filter="registration">登録</button>
-      <button data-filter="update">更新</button>
-      <button data-filter="delete">削除</button>
+      ${featureButtons}
       <span class="updated">${escapeHtml(updatedAt)}・${(elapsed / 1000).toFixed(1)}秒</span>
     </section>
     <section id="cases">${cards}</section>

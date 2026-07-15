@@ -7,6 +7,16 @@ import { spawn } from 'node:child_process';
 const root = dirname(fileURLToPath(import.meta.url));
 const dashboardPath = join(root, 'dashboard.html');
 const reportPath = join(root, 'results', 'eims-report.html');
+const featureSettings = {
+  all: { label: '検索・登録・更新・削除', total: 113 },
+  search: { label: '検索機能', total: 29 },
+  registration: { label: '登録機能', total: 34 },
+  update: { label: '更新機能', total: 35 },
+  delete: { label: '削除機能', total: 15 },
+};
+const requestedFeature = process.argv[2] ?? 'all';
+const feature = Object.hasOwn(featureSettings, requestedFeature) ? requestedFeature : 'all';
+const settings = featureSettings[feature];
 const clients = new Set();
 const history = [];
 let running = false;
@@ -42,11 +52,11 @@ function readProgress(stream) {
 function startDiagnostics() {
   if (running || finished) return;
   running = true;
-  publish({ percent: 1, phase: '開始', message: '診断アプリを開始しました。', status: 'running' });
+  publish({ percent: 1, phase: '開始', message: `${settings.label}の診断を開始しました。`, status: 'running', total: settings.total });
 
   const child = spawn('powershell.exe', [
     '-NoLogo', '-NoProfile', '-ExecutionPolicy', 'Bypass',
-    '-File', join(root, 'run-search-tests.ps1'), '-NoOpenReport',
+    '-File', join(root, 'run-search-tests.ps1'), '-NoOpenReport', '-Feature', feature,
   ], { cwd: root, windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
 
   readProgress(child.stdout);
@@ -75,6 +85,11 @@ const server = createServer((request, response) => {
   if (request.method === 'GET' && url.pathname === '/') {
     response.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' });
     response.end(readFileSync(dashboardPath));
+    return;
+  }
+  if (request.method === 'GET' && url.pathname === '/settings') {
+    response.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' });
+    response.end(JSON.stringify({ feature, ...settings }));
     return;
   }
   if (request.method === 'GET' && url.pathname === '/events') {

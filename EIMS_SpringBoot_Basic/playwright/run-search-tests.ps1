@@ -1,6 +1,8 @@
 ﻿param(
     [int]$Port = 0,
-    [switch]$NoOpenReport
+    [switch]$NoOpenReport,
+    [ValidateSet('all', 'search', 'registration', 'update', 'delete')]
+    [string]$Feature = 'all'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -12,6 +14,14 @@ $StdoutLog = Join-Path $ResultsDir 'spring-boot.out.log'
 $StderrLog = Join-Path $ResultsDir 'spring-boot.err.log'
 $SpringProcess = $null
 $ExitCode = 1
+$FeatureSettings = @{
+    all          = @{ Label = '共通機能'; Total = 113; TestFile = $null }
+    search       = @{ Label = '検索機能'; Total = 29; TestFile = 'tests/search.spec.ts' }
+    registration = @{ Label = '登録機能'; Total = 34; TestFile = 'tests/registration.spec.ts' }
+    update       = @{ Label = '更新機能'; Total = 35; TestFile = 'tests/update.spec.ts' }
+    delete       = @{ Label = '削除機能'; Total = 15; TestFile = 'tests/delete.spec.ts' }
+}
+$SelectedFeature = $FeatureSettings[$Feature]
 
 [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)
 $OutputEncoding = [Console]::OutputEncoding
@@ -143,15 +153,21 @@ try {
         throw 'Spring Bootの起動に失敗しました。'
     }
 
-    Write-DashboardProgress 30 '共通機能' 'EIMSが起動しました。共通機能の全113件を確認します。'
+    Write-DashboardProgress 30 $SelectedFeature.Label "EIMSが起動しました。$($SelectedFeature.Label)の全$($SelectedFeature.Total)件を確認します。"
     Push-Location $PlaywrightDir
     try {
         $env:EIMS_BASE_URL = $BaseUrl
-        & npx.cmd playwright test
+        $env:EIMS_FEATURE = $Feature
+        $PlaywrightArguments = @('playwright', 'test')
+        if ($null -ne $SelectedFeature.TestFile) {
+            $PlaywrightArguments += $SelectedFeature.TestFile
+        }
+        & npx.cmd @PlaywrightArguments
         $ExitCode = $LASTEXITCODE
     }
     finally {
         Remove-Item Env:EIMS_BASE_URL -ErrorAction SilentlyContinue
+        Remove-Item Env:EIMS_FEATURE -ErrorAction SilentlyContinue
         Pop-Location
     }
 }

@@ -1,5 +1,6 @@
 ﻿$ErrorActionPreference = 'Stop'
 $DashboardServer = Join-Path $PSScriptRoot 'dashboard-server.mjs'
+$Feature = if ($env:EIMS_FEATURE -in @('search', 'registration', 'update', 'delete')) { $env:EIMS_FEATURE } else { 'all' }
 $ResultsDir = Join-Path $PSScriptRoot 'results'
 $OutputLog = Join-Path $ResultsDir 'dashboard-launch.out.log'
 $ErrorLog = Join-Path $ResultsDir 'dashboard-launch.err.log'
@@ -13,7 +14,7 @@ if (-not (Get-Command node.exe -ErrorAction SilentlyContinue)) {
 New-Item -ItemType Directory -Force -Path $ResultsDir | Out-Null
 Remove-Item -LiteralPath $OutputLog, $ErrorLog -Force -ErrorAction SilentlyContinue
 $DashboardProcess = Start-Process -FilePath 'node.exe' `
-    -ArgumentList @($DashboardServer) `
+    -ArgumentList @($DashboardServer, $Feature) `
     -WorkingDirectory $PSScriptRoot `
     -WindowStyle Hidden `
     -RedirectStandardOutput $OutputLog `
