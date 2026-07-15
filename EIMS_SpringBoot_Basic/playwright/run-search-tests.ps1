@@ -7,7 +7,7 @@ $ErrorActionPreference = 'Stop'
 $PlaywrightDir = $PSScriptRoot
 $ProjectRoot = Split-Path -Parent $PlaywrightDir
 $ResultsDir = Join-Path $PlaywrightDir 'results'
-$ReportPath = Join-Path $ResultsDir 'search-report.html'
+$ReportPath = Join-Path $ResultsDir 'eims-report.html'
 $StdoutLog = Join-Path $ResultsDir 'spring-boot.out.log'
 $StderrLog = Join-Path $ResultsDir 'spring-boot.err.log'
 $SpringProcess = $null
@@ -52,9 +52,9 @@ function Write-FriendlyFailureReport {
     $EncodedDetail = [System.Net.WebUtility]::HtmlEncode($Detail)
     $Html = @"
 <!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>EIMS 共通機能・検索機能 実装診断レポート</title><style>
+<title>EIMS 共通機能 実装診断レポート</title><style>
 body{margin:0;background:#f4f7fa;color:#1f2937;font-family:"Yu Gothic UI","Meiryo",sans-serif;line-height:1.75}header{background:linear-gradient(135deg,#102b45,#285d8d);color:#fff;padding:40px 24px 70px}main,header div{width:min(900px,calc(100% - 32px));margin:auto}main{margin-top:-40px}.card{background:#fff;border-radius:18px;padding:30px;box-shadow:0 12px 30px #17324d20;border-left:7px solid #c43232}.badge{display:inline-block;background:#fee2e2;color:#a51d1d;border-radius:99px;padding:7px 15px;font-weight:800}h1{margin:0}h2{margin:16px 0 5px}.hint{background:#eff6ff;border-radius:12px;padding:14px 18px;margin:20px 0}details{margin-top:18px}pre{white-space:pre-wrap;overflow:auto;background:#111827;color:#e5e7eb;padding:18px;border-radius:10px;font:12px/1.6 Consolas,monospace}
-</style></head><body><header><div><h1>EIMS 共通機能 実装診断レポート</h1><p>共通機能 ＞ 検索機能</p></div></header><main><section class="card"><span class="badge">テストを開始できませんでした</span><h2>$EncodedTitle</h2><p>$EncodedMessage</p><div class="hint"><strong>まず確認してください</strong><ul><li>MySQLが起動しているか</li><li>Java 17とNode.jsがインストールされているか</li><li>Spring Bootのコンパイルエラーがないか</li><li>application.propertiesのDB設定が正しいか</li></ul></div><details open><summary>技術的な詳細を見る</summary><pre>$EncodedDetail</pre></details></section></main></body></html>
+</style></head><body><header><div><h1>EIMS 共通機能 実装診断レポート</h1><p>検索・登録・更新・削除</p></div></header><main><section class="card"><span class="badge">テストを開始できませんでした</span><h2>$EncodedTitle</h2><p>$EncodedMessage</p><div class="hint"><strong>まず確認してください</strong><ul><li>MySQLが起動しているか</li><li>Java 17とNode.jsがインストールされているか</li><li>Spring Bootのコンパイルエラーがないか</li><li>application.propertiesのDB設定が正しいか</li></ul></div><details open><summary>技術的な詳細を見る</summary><pre>$EncodedDetail</pre></details></section></main></body></html>
 "@
     Set-Content -LiteralPath $ReportPath -Value $Html -Encoding UTF8
 }
@@ -139,11 +139,11 @@ try {
 
     if (-not $Started) {
         $Log = ((Get-Content -LiteralPath $StdoutLog, $StderrLog -ErrorAction SilentlyContinue) -join [Environment]::NewLine)
-        Write-FriendlyFailureReport -Title 'EIMSを起動できませんでした' -Message '検索機能のテストを開始できません。下のログを確認してください。' -Detail $Log
+        Write-FriendlyFailureReport -Title 'EIMSを起動できませんでした' -Message '共通機能のテストを開始できません。下のログを確認してください。' -Detail $Log
         throw 'Spring Bootの起動に失敗しました。'
     }
 
-    Write-DashboardProgress 30 '検索機能' 'EIMSが起動しました。検索機能の全29件を確認します。'
+    Write-DashboardProgress 30 '共通機能' 'EIMSが起動しました。共通機能の全113件を確認します。'
     Push-Location $PlaywrightDir
     try {
         $env:EIMS_BASE_URL = $BaseUrl

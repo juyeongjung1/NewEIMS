@@ -6,7 +6,7 @@ import { spawn } from 'node:child_process';
 
 const root = dirname(fileURLToPath(import.meta.url));
 const dashboardPath = join(root, 'dashboard.html');
-const reportPath = join(root, 'results', 'search-report.html');
+const reportPath = join(root, 'results', 'eims-report.html');
 const clients = new Set();
 const history = [];
 let running = false;
@@ -15,7 +15,7 @@ let finished = false;
 function publish(event) {
   const normalized = { time: new Date().toISOString(), ...event };
   history.push(normalized);
-  if (history.length > 100) history.shift();
+  if (history.length > 300) history.shift();
   const message = `data: ${JSON.stringify(normalized)}\n\n`;
   clients.forEach((client) => client.write(message));
 }

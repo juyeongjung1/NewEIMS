@@ -1,7 +1,9 @@
 export type AssessmentLevel = 'common' | 'standard' | 'reference';
+export type FeatureId = 'search' | 'registration' | 'update' | 'delete';
 
-export type SearchTestCase = {
+export type EimsTestCase = {
   id: string;
+  feature: FeatureId;
   title: string;
   description: string;
   input: string;
@@ -11,7 +13,9 @@ export type SearchTestCase = {
   hints: string[];
 };
 
-export const searchTestCases: SearchTestCase[] = [
+export type SearchTestCase = EimsTestCase;
+
+const searchTestCasesWithoutFeature: Omit<EimsTestCase, 'feature'>[] = [
   {
     id: 'TC001', title: '検索画面表示', level: 'common',
     description: 'トップページから検索画面へ遷移できることを確認する。',
@@ -245,5 +249,10 @@ export const searchTestCases: SearchTestCase[] = [
     hints: ['search.htmlにトップページへの導線を配置してください。'],
   },
 ];
+
+export const searchTestCases: SearchTestCase[] = searchTestCasesWithoutFeature.map((testCase) => ({
+  ...testCase,
+  feature: 'search',
+}));
 
 export const searchTestCaseMap = new Map(searchTestCases.map((testCase) => [testCase.id, testCase]));
