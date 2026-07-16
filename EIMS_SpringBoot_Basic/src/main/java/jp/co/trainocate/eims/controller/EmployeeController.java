@@ -50,25 +50,21 @@ public class EmployeeController {
         if (empNo != null) {
             Employee employee = employeeService.findById(empNo);
             if (employee != null) {
-                // ヒットした場合は詳細画面を直接表示
-                model.addAttribute("employee", employee);
-                return "employee_detail";
+                model.addAttribute("employees", List.of(employee));
+                return "search_result";
             }
-            // ヒットしない場合は結果画面へ（0件表示用）
-            model.addAttribute("employees", new ArrayList<Employee>());
-            return "search_result";
+            model.addAttribute("employee", employee);
+            return "employee_detail";
         }
 
         if (keyword != null && !keyword.isBlank()) {
-            List<Employee> employees = employeeService.findByEmpName(keyword);
-            model.addAttribute("employees", employees);
-            return "search_result";
+            model.addAttribute("departments", departmentService.findAll());
+            return "search";
         }
 
         if (deptNo != null) {
-            List<Employee> employees = employeeService.findByDeptNo(deptNo);
-            model.addAttribute("employees", employees);
-            return "search_result";
+            model.addAttribute("departments", departmentService.findAll());
+            return "search";
         }
 
         model.addAttribute("departments", departmentService.findAll());
