@@ -28,6 +28,29 @@ function Get-AvailableTcpPort {
     }
 }
 
+function Test-TcpPortOpen {
+    param(
+        [string]$HostName,
+        [int]$TcpPort,
+        [int]$TimeoutMilliseconds = 500
+    )
+
+    $Client = [System.Net.Sockets.TcpClient]::new()
+    try {
+        $ConnectTask = $Client.ConnectAsync($HostName, $TcpPort)
+        if (-not $ConnectTask.Wait($TimeoutMilliseconds)) {
+            return $false
+        }
+        return $Client.Connected
+    }
+    catch {
+        return $false
+    }
+    finally {
+        $Client.Dispose()
+    }
+}
+
 function Remove-DiagnosticEmployees {
     $PropertiesPath = Join-Path $ProjectRoot 'src\main\resources\application.properties'
     if (-not (Test-Path -LiteralPath $PropertiesPath)) { return }
@@ -152,7 +175,7 @@ try {
     $env:SPRING_DEVTOOLS_RESTART_ENABLED = 'false'
     try {
         $SpringProcess = Start-Process -FilePath $MavenWrapper `
-            -ArgumentList @('clean', 'spring-boot:run', "-Dspring-boot.run.arguments=--server.port=$Port") `
+            -ArgumentList @('clean', 'spring-boot:run', '-Dmaven.test.skip=true', "-Dspring-boot.run.arguments=--server.port=$Port") `
             -WorkingDirectory $ProjectRoot `
             -WindowStyle Hidden `
             -RedirectStandardOutput $StdoutLog `
@@ -170,22 +193,25 @@ try {
 
     $BaseUrl = "http://127.0.0.1:$Port"
     $Started = $false
-    for ($Attempt = 0; $Attempt -lt 120; $Attempt++) {
+    $StartupWatch = [System.Diagnostics.Stopwatch]::StartNew()
+    $LastProgressSecond = 0
+    while ($StartupWatch.Elapsed.TotalSeconds -lt 180) {
         if ($SpringProcess.HasExited) { break }
-        try {
-            $Response = Invoke-WebRequest -Uri "$BaseUrl/" -UseBasicParsing -TimeoutSec 2
-            if ($Response.StatusCode -lt 500) {
-                $Started = $true
-                break
-            }
+
+        if (Test-TcpPortOpen -HostName '127.0.0.1' -TcpPort $Port) {
+            $Started = $true
+            break
         }
-        catch {
-            if ($Attempt -gt 0 -and $Attempt % 10 -eq 0) {
-                Write-DashboardProgress 25 'サーバー起動' "EIMSの起動を待っています（$Attempt 秒経過）..."
-            }
-            Start-Sleep -Seconds 1
+
+        $ElapsedSecond = [int][Math]::Floor($StartupWatch.Elapsed.TotalSeconds)
+        if ($ElapsedSecond -ge ($LastProgressSecond + 5)) {
+            $StartupPercent = [Math]::Min(29, 26 + [int][Math]::Floor($ElapsedSecond / 10))
+            Write-DashboardProgress $StartupPercent 'サーバー起動' "EIMSを準備しています（$ElapsedSecond 秒経過）..."
+            $LastProgressSecond = $ElapsedSecond
         }
+        Start-Sleep -Seconds 1
     }
+    $StartupWatch.Stop()
 
     if (-not $Started) {
         $Log = ((Get-Content -LiteralPath $StdoutLog, $StderrLog -ErrorAction SilentlyContinue) -join [Environment]::NewLine)
