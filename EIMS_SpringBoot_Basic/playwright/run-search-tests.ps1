@@ -37,6 +37,52 @@ function Get-AvailableTcpPort {
     }
 }
 
+function Remove-DiagnosticEmployees {
+    $PropertiesPath = Join-Path $ProjectRoot 'src\main\resources\application.properties'
+    if (-not (Test-Path -LiteralPath $PropertiesPath)) { return }
+
+    $Properties = @{}
+    foreach ($Line in Get-Content -LiteralPath $PropertiesPath -Encoding UTF8) {
+        if ($Line -match '^\s*([^#=]+?)\s*=\s*(.*)$') {
+            $Properties[$Matches[1]] = $Matches[2]
+        }
+    }
+
+    $DatasourceUrl = $Properties['spring.datasource.url']
+    if ($DatasourceUrl -notmatch '^jdbc:mysql://(?<host>[^/:?]+)(?::(?<port>\d+))?/(?<database>[^?]+)') { return }
+
+    $MysqlCommand = Get-Command mysql.exe -ErrorAction SilentlyContinue
+    if ($null -eq $MysqlCommand) {
+        $DefaultMysqlPath = Join-Path $env:ProgramFiles 'MySQL\MySQL Server 8.0\bin\mysql.exe'
+        if (-not (Test-Path -LiteralPath $DefaultMysqlPath)) { return }
+        $MysqlPath = $DefaultMysqlPath
+    }
+    else {
+        $MysqlPath = $MysqlCommand.Source
+    }
+
+    $HostName = $Matches['host']
+    $DatabaseName = $Matches['database']
+    $DatabasePort = if ($Matches['port']) { $Matches['port'] } else { '3306' }
+    $PreviousMysqlPassword = $env:MYSQL_PWD
+    try {
+        $env:MYSQL_PWD = $Properties['spring.datasource.password']
+        $Sql = "DELETE FROM employee WHERE emp_no > 10020 AND last_name LIKE '診断%' AND first_name = '太郎' AND password = 'pass1234'"
+        & $MysqlPath --host=$HostName --port=$DatabasePort --user=$($Properties['spring.datasource.username']) --database=$DatabaseName --default-character-set=utf8mb4 --execute=$Sql 2>$null
+    }
+    catch {
+        Write-Host '診断用データの後片付けはスキップしました。' -ForegroundColor Yellow
+    }
+    finally {
+        if ($null -eq $PreviousMysqlPassword) {
+            Remove-Item Env:MYSQL_PWD -ErrorAction SilentlyContinue
+        }
+        else {
+            $env:MYSQL_PWD = $PreviousMysqlPassword
+        }
+    }
+}
+
 function Write-DashboardProgress {
     param(
         [int]$Percent,
@@ -97,6 +143,9 @@ try {
     finally {
         Pop-Location
     }
+
+    Write-DashboardProgress 15 'データ準備' '前回の診断用データを整理しています...'
+    Remove-DiagnosticEmployees
 
     $MavenWrapper = Join-Path $ProjectRoot 'mvnw.cmd'
     if (-not (Test-Path -LiteralPath $MavenWrapper)) {
@@ -186,6 +235,7 @@ finally {
     if ($null -ne $SpringProcess -and -not $SpringProcess.HasExited) {
         & taskkill.exe /PID $SpringProcess.Id /T /F 2>$null | Out-Null
     }
+    Remove-DiagnosticEmployees
     if ((Test-Path -LiteralPath $ReportPath) -and -not $NoOpenReport) {
         Write-Host '結果報告書をブラウザーで開きます。' -ForegroundColor Green
         Start-Process -FilePath $ReportPath
