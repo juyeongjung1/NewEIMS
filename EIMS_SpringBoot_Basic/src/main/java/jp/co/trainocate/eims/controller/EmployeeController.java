@@ -168,7 +168,7 @@ public class EmployeeController {
 
     /** 変更内容を確認する */
     @PostMapping("/changeConfirm")
-    public String changeConfirm(@Valid EmployeeForm employeeForm, BindingResult bindingResult, Model model) {
+    public String changeConfirm(EmployeeForm employeeForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("departments", departmentService.findAll());
             return "change";

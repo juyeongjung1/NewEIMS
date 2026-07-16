@@ -24,7 +24,7 @@
                     <tr><th class="bg-light">名（漢字）</th><td th:text="${employeeForm.firstName}"></td></tr>
                     <tr><th class="bg-light">氏（カナ）</th><td th:text="${employeeForm.lastKana}"></td></tr>
                     <tr><th class="bg-light">名（カナ）</th><td th:text="${employeeForm.firstKana}"></td></tr>
-                    <tr><th class="bg-light">パスワード</th><td>********（非表示）</td></tr>
+                    <tr><th class="bg-light">パスワード</th><td th:text="${employeeForm.password}"></td></tr>
                     <tr><th class="bg-light">性別</th><td th:text="${employeeForm.gender == 1 ? '男性' : '女性'}"></td></tr>
                     <tr><th class="bg-light">所属部署</th><td th:text="${department.deptName}"></td></tr>
                 </tbody>
