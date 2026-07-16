@@ -40,6 +40,23 @@ function imageDataUrl(filePath: string | undefined): string | undefined {
   return `data:image/png;base64,${fs.readFileSync(filePath).toString('base64')}`;
 }
 
+function causedByOnly(value: string): string {
+  const causes = value
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => /^Caused by:/i.test(line))
+    .filter((line, index, lines) => lines.indexOf(line) === index);
+  return causes.slice(-8).join('\n');
+}
+
+function springBootLog(): string {
+  return ['spring-boot.out.log', 'spring-boot.err.log']
+    .map((fileName) => path.resolve(process.cwd(), 'results', fileName))
+    .filter((filePath) => fs.existsSync(filePath))
+    .map((filePath) => fs.readFileSync(filePath, 'utf8'))
+    .join('\n');
+}
+
 function displayStatus(result: CaseResult): { label: string; className: string; icon: string } {
   if (result.status === 'passed') return { label: '合格', className: 'pass', icon: '✓' };
   if (result.status === 'skipped') return { label: '対象外', className: 'skip', icon: '−' };
@@ -103,7 +120,10 @@ class EimsReporter implements Reporter {
       definition,
       status,
       duration: result.duration,
-      error: result.errors.map((error) => error.message ?? error.value ?? '').join('\n').replace(ansiPattern, ''),
+      error: causedByOnly([
+        result.errors.map((error) => error.message ?? error.value ?? '').join('\n'),
+        springBootLog(),
+      ].join('\n').replace(ansiPattern, '')),
       screenshot: imageDataUrl(screenshot?.path),
     });
 
