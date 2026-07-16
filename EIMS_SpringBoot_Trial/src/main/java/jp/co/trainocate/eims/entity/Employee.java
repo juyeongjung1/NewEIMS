@@ -38,11 +38,11 @@ public class Employee {
     @Column(name = "gender", nullable = false)
     private Integer gender;
 
-    @Column(name = "dept_no", insertable = false, updatable = false)
+    @Column(name = "dept_no", insertable = false, updatable = false, nullable = false)
     private Integer deptNo;
 
     @ManyToOne
-    @JoinColumn(name = "dept_no")
+    @JoinColumn(name = "dept_no", nullable = false)
     private Department department;
 
     @Column(name = "role", nullable = false)
