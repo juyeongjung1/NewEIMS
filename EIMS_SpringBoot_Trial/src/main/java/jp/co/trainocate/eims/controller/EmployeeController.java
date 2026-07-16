@@ -135,4 +135,49 @@ public class EmployeeController {
         model.addAttribute("employee", employee);
         return "input_complete";
     }
+
+    @RequestMapping(value = "/changeInput/{empNo}", method = { RequestMethod.GET, RequestMethod.POST })
+    public String changeInput(
+            @PathVariable("empNo") Integer empNo,
+            @ModelAttribute("employeeForm") EmployeeForm form,
+            Model model) {
+
+        if (form.getLastName() == null) {
+            Employee employee = employeeService.findById(empNo);
+            if (employee != null) {
+                form.setEmpNo(employee.getEmpNo());
+                form.setLastName(employee.getLastName());
+                form.setFirstName(employee.getFirstName());
+                form.setLastKana(employee.getLastKana());
+                form.setFirstKana(employee.getFirstKana());
+                form.setPassword(employee.getPassword());
+                form.setGender(employee.getGender());
+                form.setDeptNo(employee.getDepartment() != null ? employee.getDepartment().getDeptNo() : null);
+            }
+        }
+
+        model.addAttribute("departments", departmentService.findAll());
+        return "change";
+    }
+
+    @PostMapping("/changeConfirm")
+    public String confirmChange(
+            @Validated @ModelAttribute("employeeForm") EmployeeForm form,
+            BindingResult result,
+            Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("departments", departmentService.findAll());
+            return "change";
+        }
+        Department department = departmentService.findById(form.getDeptNo());
+        model.addAttribute("department", department);
+        return "change_confirm";
+    }
+
+    @PostMapping("/changeEmployee")
+    public String changeEmployee(@ModelAttribute("employeeForm") EmployeeForm form, Model model) {
+        Employee employee = employeeService.update(form);
+        model.addAttribute("employee", employee);
+        return "change_complete";
+    }
 }
