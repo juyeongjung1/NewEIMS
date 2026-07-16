@@ -15,8 +15,8 @@ $StderrLog = Join-Path $ResultsDir 'spring-boot.err.log'
 $SpringProcess = $null
 $ExitCode = 1
 $FeatureSettings = @{
-    all          = @{ Label = '共通機能'; Total = 113; TestFile = $null }
-    search       = @{ Label = '検索機能'; Total = 29; TestFile = 'tests/search.spec.ts' }
+    all          = @{ Label = '共通機能'; Total = 126; TestFile = $null }
+    search       = @{ Label = '検索機能'; Total = 42; TestFile = 'tests/search.spec.ts' }
     registration = @{ Label = '登録機能'; Total = 34; TestFile = 'tests/registration.spec.ts' }
     update       = @{ Label = '更新機能'; Total = 35; TestFile = 'tests/update.spec.ts' }
     delete       = @{ Label = '削除機能'; Total = 15; TestFile = 'tests/delete.spec.ts' }
