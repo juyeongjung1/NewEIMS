@@ -1,4 +1,4 @@
-$ErrorActionPreference = 'Stop'
+﻿$ErrorActionPreference = 'Stop'
 $DashboardServer = Join-Path $PSScriptRoot 'dashboard-server.mjs'
 $ResultsDir = Join-Path $PSScriptRoot 'results'
 $OutputLog = Join-Path $ResultsDir 'dashboard-launch.out.log'
