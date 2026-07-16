@@ -143,6 +143,7 @@ class EimsReporter implements Reporter {
       completed: this.completedCount,
       total: selectedTestCases.length,
       result: status,
+      level: definition.level,
     });
   }
 
@@ -246,6 +247,7 @@ class EimsReporter implements Reporter {
     header { color:white; background:linear-gradient(135deg,#102b45,#285d8d); padding:42px 24px 76px; }
     header .inner, main { width:min(1120px,calc(100% - 32px)); margin:auto; }
     header p { margin:8px 0 0; color:#dbeafe; }
+    .accuracy-note { margin:18px 0 0; padding:11px 14px; color:#fff7d6; background:#78350f99; border:1px solid #fbbf24; border-radius:10px; font-size:13px; font-weight:700; }
     h1 { margin:0; font-size:clamp(25px,4vw,38px); letter-spacing:.02em; }
     main { margin-top:-48px; padding-bottom:60px; }
     .hero { display:grid; grid-template-columns:1.25fr 2fr; gap:20px; margin-bottom:22px; }
@@ -304,7 +306,7 @@ class EimsReporter implements Reporter {
   </style>
 </head>
 <body>
-  <header><div class="inner"><h1>EIMS 共通機能 実装診断レポート</h1><p>${assessmentLabel}</p></div></header>
+  <header><div class="inner"><h1>EIMS 共通機能 実装診断レポート</h1><p>${assessmentLabel}</p><div class="accuracy-note">この診断レポートは100%正確とは限りません。実際の動作やテスト結果と差異がある場合は、講師へ確認してください。</div></div></header>
   <main>
     <section class="hero">
       <div class="panel overall ${overall.className}"><span class="badge">${overall.label}</span><p>${overall.description}</p></div>
