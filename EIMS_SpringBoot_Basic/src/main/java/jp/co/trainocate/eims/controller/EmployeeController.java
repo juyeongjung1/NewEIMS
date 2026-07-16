@@ -134,11 +134,8 @@ public class EmployeeController {
     @PostMapping("/deleteEmployee")
     public String deleteEmployee(Integer empNo, Model model) {
         if (empNo == null || employeeService.findById(empNo) == null) {
-            model.addAttribute("employees", new ArrayList<Employee>());
-            model.addAttribute("message", "指定された社員情報は存在しないため、削除できません。");
-            return "search_result";
+            throw new IllegalArgumentException("社員番号を確認してください");
         }
-        employeeService.deleteById(empNo);
         return "delete_complete";
     }
 
