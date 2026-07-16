@@ -24,12 +24,12 @@
                     <tr><th class="bg-light">氏（カナ）</th><td th:text="${employee.lastKana}"></td></tr>
                     <tr><th class="bg-light">名（カナ）</th><td th:text="${employee.firstKana}"></td></tr>
                     <tr><th class="bg-light">性別</th><td th:text="${employee.gender == 1 ? '男性' : '女性'}"></td></tr>
-                    <tr><th class="bg-light">所属部署</th><td th:text="${employee.department.deptName}"></td></tr>
+                    <tr><th class="bg-light">部署</th><td th:text="${employee.department.deptName}"></td></tr>
                 </tbody>
             </table>
             <div class="d-flex gap-2">
-                <a th:href="@{/changeInput/{id}(id=${employee.empNo})}" class="btn btn-warning">情報を変更する</a>
-                <a th:href="@{/deleteConfirm/{id}(id=${employee.empNo})}" class="btn btn-danger">削除する</a>
+                <a th:href="@{/changeInput/99999}" class="btn btn-warning">情報を変更する</a>
+                <a th:href="@{/deleteConfirm/99999}" class="btn btn-danger">削除する</a>
             </div>
         </div>
         <div class="mb-5">

@@ -33,7 +33,7 @@ public class EmployeeController {
     /** 社員一覧を表示する */
     @GetMapping("/employeeList")
     public String showEmployeeList(Model model) {
-        model.addAttribute("employees", employeeService.findAll());
+        model.addAttribute("employees", employeeService.findAll().stream().limit(10).toList());
         return "employee_list";
     }
 
