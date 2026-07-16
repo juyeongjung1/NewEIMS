@@ -8,8 +8,8 @@ const root = dirname(fileURLToPath(import.meta.url));
 const dashboardPath = join(root, 'dashboard.html');
 const reportPath = join(root, 'results', 'eims-report.html');
 const featureSettings = {
-  all: { label: '検索・登録・更新・削除', total: 113 },
-  search: { label: '検索機能', total: 29 },
+  all: { label: '検索・登録・更新・削除', total: 126 },
+  search: { label: '検索機能', total: 42 },
   registration: { label: '登録機能', total: 34 },
   update: { label: '更新機能', total: 35 },
   delete: { label: '削除機能', total: 15 },
@@ -21,6 +21,8 @@ const clients = new Set();
 const history = [];
 let running = false;
 let finished = false;
+let commonFailures = 0;
+let standardFailures = 0;
 
 function publish(event) {
   const normalized = { time: new Date().toISOString(), ...event };
@@ -41,7 +43,10 @@ function readProgress(stream) {
       const marker = line.indexOf('@@EIMS@@');
       if (marker < 0) continue;
       try {
-        publish(JSON.parse(line.slice(marker + 8)));
+        const event = JSON.parse(line.slice(marker + 8));
+        if (event.result === 'failed' && event.level === 'common') commonFailures += 1;
+        if (event.result === 'failed' && event.level === 'standard') standardFailures += 1;
+        publish(event);
       } catch {
         // Playwright以外の出力は画面へ表示しない。
       }
@@ -69,11 +74,20 @@ function startDiagnostics() {
   child.on('exit', (code) => {
     running = false;
     finished = true;
+    const status = commonFailures > 0 || (code !== 0 && standardFailures === 0)
+      ? 'failed'
+      : standardFailures > 0
+        ? 'simplified'
+        : 'completed';
     publish({
       percent: 100,
-      phase: code === 0 ? '完了' : '要確認',
-      message: code === 0 ? 'すべての確認が完了しました。' : '確認中に問題が見つかりました。結果報告書をご覧ください。',
-      status: code === 0 ? 'completed' : 'failed',
+      phase: status === 'completed' ? '完了' : status === 'simplified' ? '簡易仕様達成' : '要確認',
+      message: status === 'completed'
+        ? '一般仕様まで、すべての確認が完了しました。'
+        : status === 'simplified'
+          ? '簡易仕様は達成できましたが、一般仕様には未達成の項目があります。'
+          : '確認中に問題が見つかりました。結果報告書をご覧ください。',
+      status,
       reportReady: existsSync(reportPath),
     });
     setTimeout(() => server.close(), 60 * 60 * 1000).unref();
