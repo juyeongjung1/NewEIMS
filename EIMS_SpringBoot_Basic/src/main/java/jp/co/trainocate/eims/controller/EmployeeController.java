@@ -162,8 +162,7 @@ public class EmployeeController {
     /** 確認画面から「修正する」で変更画面へ戻る（POST：DBから取り直さず入力値を保持） */
     @PostMapping("/changeInput/{empNo}")
     public String backToChangeInput(@PathVariable("empNo") Integer empNo, EmployeeForm employeeForm, Model model) {
-        model.addAttribute("departments", departmentService.findAll());
-        return "change";
+        return changeInput(empNo, employeeForm, model);
     }
 
     /** 変更内容を確認する */
