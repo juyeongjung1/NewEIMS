@@ -156,14 +156,31 @@ class EimsReporter implements Reporter {
       ? '<button data-filter="search">検索</button><button data-filter="registration">登録</button><button data-filter="update">更新</button><button data-filter="delete">削除</button>'
       : '';
 
+    const screenshotCounts = new Map<string, number>();
+    results.forEach((item) => {
+      if (item.screenshot) screenshotCounts.set(item.screenshot, (screenshotCounts.get(item.screenshot) ?? 0) + 1);
+    });
+
     const cards = results.map((item) => {
       const status = displayStatus(item);
       const detailOpen = item.status === 'failed' ? ' open' : '';
       const errorBlock = item.error
         ? `<details class="technical"><summary>技術的な詳細を見る</summary><pre>${escapeHtml(item.error)}</pre></details>`
         : '';
+      const sameScreenshotCount = item.screenshot ? screenshotCounts.get(item.screenshot) ?? 1 : 0;
+      const duplicateScreenshotNote = sameScreenshotCount > 1
+        ? `<p class="duplicate-note">この画面と同じ状態で停止した確認が、全部で${sameScreenshotCount}件あります。画像の使い回しではなく、異なる操作が同じ画面で失敗した結果です。</p>`
+        : '';
       const screenshot = item.screenshot
-        ? `<div class="screenshot"><p>問題が発生したときの画面</p><a href="${item.screenshot}" target="_blank"><img src="${item.screenshot}" alt="${escapeHtml(item.definition.id)}の失敗時スクリーンショット"></a></div>`
+        ? `<div class="screenshot">
+            <p>問題が発生したときの画面</p>
+            <div class="shot-context"><strong>この画像の確認内容</strong><span>${escapeHtml(item.definition.input)} → ${escapeHtml(item.definition.expected)}</span></div>
+            <a class="shot-frame" href="${item.screenshot}" target="_blank">
+              <strong class="shot-label">確認${escapeHtml(item.definition.id.slice(3))}・${escapeHtml(item.definition.title)}</strong>
+              <img src="${item.screenshot}" alt="${escapeHtml(item.definition.id)}の失敗時スクリーンショット">
+            </a>
+            ${duplicateScreenshotNote}
+          </div>`
         : '';
       const hints = item.definition.hints.map((hint) => `<li>${escapeHtml(hint)}</li>`).join('');
       return `
@@ -242,7 +259,13 @@ class EimsReporter implements Reporter {
     .note { margin-top:14px!important; color:var(--muted); font-size:13px; }
     .screenshot { margin-top:18px; padding:14px; background:#111827; border-radius:12px; }
     .screenshot p { color:white; margin:0 0 9px; font-weight:700; }
+    .shot-context { display:flex; gap:10px; align-items:baseline; margin:0 0 10px; padding:10px 12px; color:#dbeafe; background:#1e3a5f; border-radius:8px; }
+    .shot-context strong { flex:none; color:white; }
+    .shot-context span { color:#dbeafe; font-size:13px; }
+    .shot-frame { position:relative; display:block; }
+    .shot-label { position:absolute; z-index:1; top:10px; left:10px; max-width:calc(100% - 20px); padding:7px 11px; color:white; background:#b42318e8; border-radius:7px; box-shadow:0 2px 8px #0008; }
     .screenshot img { display:block; max-width:100%; max-height:560px; margin:auto; border-radius:7px; background:white; }
+    .screenshot .duplicate-note { margin:10px 0 0; padding:9px 12px; color:#fde68a; background:#422006; border-radius:8px; font-size:13px; font-weight:600; }
     .technical { margin-top:14px; padding:10px 14px; background:#fff5f5; border-radius:9px; }
     .technical summary { padding:0; font-size:13px; color:#8b2525; font-weight:700; }
     pre { overflow:auto; white-space:pre-wrap; font:12px/1.6 Consolas,monospace; }
