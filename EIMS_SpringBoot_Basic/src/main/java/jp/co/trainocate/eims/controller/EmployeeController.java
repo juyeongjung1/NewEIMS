@@ -99,7 +99,7 @@ public class EmployeeController {
 
     /** 登録内容を確認する */
     @PostMapping("/inputConfirm")
-    public String confirmRegistration(@Valid EmployeeForm employeeForm, BindingResult bindingResult, Model model) {
+    public String confirmRegistration(EmployeeForm employeeForm, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("departments", departmentService.findAll());
             return "input";
