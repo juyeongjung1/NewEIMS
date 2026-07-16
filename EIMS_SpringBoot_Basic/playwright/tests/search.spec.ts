@@ -288,3 +288,108 @@ test(caseTitle('search', 'TC029'), async ({ page }) => {
   await page.getByRole('link', { name: 'メニューに戻る' }).click();
   await expect(page.getByRole('heading', { name: /EIMS|社員情報管理/ }), '検索画面からトップページへ戻れませんでした。').toBeVisible();
 });
+
+async function openEmployeeList(page: Page) {
+  await page.goto('/employeeList');
+  await expect(page.getByRole('heading', { name: '社員一覧' }), '社員一覧画面が表示されませんでした。').toBeVisible();
+}
+
+function employeeRow(page: Page, empNo: string) {
+  return page.locator('table tbody tr').filter({ hasText: empNo });
+}
+
+test(caseTitle('search', 'TC030'), async ({ page }) => {
+  await page.goto('/');
+  await expect(page.getByRole('link', { name: '社員一覧', exact: true }), 'トップページに社員一覧への導線がありません。').toBeVisible();
+  await expect(page.getByRole('link', { name: '社員検索', exact: true }), 'トップページに社員検索への導線がありません。').toBeVisible();
+  await expect(page.getByRole('link', { name: '新規登録', exact: true }), 'トップページに新規登録への導線がありません。').toBeVisible();
+});
+
+test(caseTitle('search', 'TC031'), async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('link', { name: '社員一覧', exact: true }).click();
+  await expect(page, '社員一覧ボタンから/employeeListへ遷移していません。').toHaveURL(/\/employeeList$/);
+  await expect(page.getByRole('heading', { name: '社員一覧' }), '社員一覧画面が表示されませんでした。').toBeVisible();
+});
+
+test(caseTitle('search', 'TC032'), async ({ page }) => {
+  await openEmployeeList(page);
+  const rows = page.locator('table tbody tr');
+  expect(await rows.count(), '初期社員20件が一覧に表示されていません。').toBeGreaterThanOrEqual(20);
+  for (let empNo = 10001; empNo <= 10020; empNo++) {
+    await expect(employeeRow(page, String(empNo)), `社員番号${empNo}が一覧に表示されていません。`).toHaveCount(1);
+  }
+});
+
+test(caseTitle('search', 'TC033'), async ({ page }) => {
+  await openEmployeeList(page);
+  const headers = (await page.locator('table thead th').allTextContents()).map((text) => text.replace(/\s/g, ''));
+  expect(headers, '社員一覧の列数は4列です。').toHaveLength(4);
+  expect(headers[0]).toContain('社員番号');
+  expect(headers[1]).toMatch(/氏名.*カナ/);
+  expect(headers[2]).toContain('性別');
+  expect(headers[3]).toContain('部署名');
+});
+
+test(caseTitle('search', 'TC034'), async ({ page }) => {
+  await openEmployeeList(page);
+  await expect(employeeRow(page, '10001'), '社員番号10001の氏名・カナの表示形式が正しくありません。')
+    .toContainText('長嶋 陽翔 (ナガシマ ヒナタ)');
+});
+
+test(caseTitle('search', 'TC035'), async ({ page }) => {
+  await openEmployeeList(page);
+  const body = page.locator('table tbody');
+  await expect(body, '性別1が「男性」と表示されていません。').toContainText('男性');
+  await expect(body, '性別2が「女性」と表示されていません。').toContainText('女性');
+});
+
+test(caseTitle('search', 'TC036'), async ({ page }) => {
+  await openEmployeeList(page);
+  const body = page.locator('table tbody');
+  for (const department of ['人事部', '経理部', '営業部', '総務部', '開発部', '企画部']) {
+    await expect(body, `部署名「${department}」が社員一覧に表示されていません。`).toContainText(department);
+  }
+});
+
+test(caseTitle('search', 'TC037'), async ({ page }) => {
+  await openEmployeeList(page);
+  await employeeRow(page, '10001').getByRole('link').click();
+  await expect(page, '社員番号10001の詳細画面へ遷移していません。').toHaveURL(/\/detail\/10001$/);
+  await expect(page.getByRole('heading', { name: /社員詳細/ }), '社員詳細画面が表示されていません。').toBeVisible();
+});
+
+test(caseTitle('search', 'TC038'), async ({ page }) => {
+  await page.goto('/detail/10001');
+  const detail = page.locator('table tbody');
+  for (const label of ['社員番号', '氏（漢字）', '名（漢字）', '氏（カナ）', '名（カナ）', '性別', '所属部署']) {
+    await expect(detail, `社員詳細画面に「${label}」がありません。`).toContainText(label);
+  }
+  await expect(detail, '社員番号10001の情報が表示されていません。').toContainText('10001');
+});
+
+test(caseTitle('search', 'TC039'), async ({ page }) => {
+  await page.goto('/detail/10001');
+  await page.getByRole('link', { name: /変更/ }).click();
+  await expect(page, '社員番号10001の変更画面へ遷移していません。').toHaveURL(/\/changeInput\/10001$/);
+  await expect(page.locator('[name="lastName"]'), '変更画面の入力項目が表示されていません。').toBeVisible();
+});
+
+test(caseTitle('search', 'TC040'), async ({ page }) => {
+  await page.goto('/detail/10001');
+  await page.getByRole('link', { name: /削除/ }).click();
+  await expect(page, '社員番号10001の削除確認画面へ遷移していません。').toHaveURL(/\/deleteConfirm\/10001$/);
+  await expect(page.getByRole('heading', { name: /削除/ }), '削除確認画面が表示されていません。').toBeVisible();
+});
+
+test(caseTitle('search', 'TC041'), async ({ page }) => {
+  await openEmployeeList(page);
+  await page.getByRole('link', { name: 'メニューに戻る' }).click();
+  await expect(page.getByRole('heading', { name: /EIMS|社員情報管理/ }), '社員一覧からトップページへ戻れませんでした。').toBeVisible();
+});
+
+test(caseTitle('search', 'TC042'), async ({ page }) => {
+  await openEmployeeList(page);
+  await page.getByRole('link', { name: /検索画面/ }).click();
+  await expectSearchPage(page, '社員一覧から検索画面へ遷移できませんでした。');
+});
