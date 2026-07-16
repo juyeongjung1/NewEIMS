@@ -163,23 +163,21 @@ test(caseTitle('search', 'TC012'), async ({ page }) => {
 
 test(caseTitle('search', 'TC013'), async ({ page }) => {
   await searchByDepartment(page, '100');
-  const texts = await page.locator('table tbody tr').allTextContents();
-  expect(texts.length, '人事部の検索結果が0件でした。').toBeGreaterThan(0);
-  const allowed = new Set(['10001', '10003', '10004', '10006', '10013', '10019']);
-  for (const text of texts) {
-    const employeeNumber = text.match(/100\d{2}/)?.[0];
-    expect(allowed.has(employeeNumber ?? ''), '人事部以外の社員が検索結果に含まれています。').toBeTruthy();
+  const rows = page.locator('table tbody tr');
+  const rowCount = await rows.count();
+  expect(rowCount, '人事部の検索結果が0件でした。').toBeGreaterThan(0);
+  for (let index = 0; index < rowCount; index++) {
+    await expect(rows.nth(index).locator('td').last(), '人事部以外の社員が検索結果に含まれています。').toHaveText('人事部');
   }
 });
 
 test(caseTitle('search', 'TC014'), async ({ page }) => {
   await searchByDepartment(page, '300');
-  const texts = await page.locator('table tbody tr').allTextContents();
-  expect(texts.length, '営業部の検索結果が0件でした。').toBeGreaterThan(0);
-  const allowed = new Set(['10005', '10009', '10015']);
-  for (const text of texts) {
-    const employeeNumber = text.match(/100\d{2}/)?.[0];
-    expect(allowed.has(employeeNumber ?? ''), '営業部以外の社員が検索結果に含まれています。').toBeTruthy();
+  const rows = page.locator('table tbody tr');
+  const rowCount = await rows.count();
+  expect(rowCount, '営業部の検索結果が0件でした。').toBeGreaterThan(0);
+  for (let index = 0; index < rowCount; index++) {
+    await expect(rows.nth(index).locator('td').last(), '営業部以外の社員が検索結果に含まれています。').toHaveText('営業部');
   }
 });
 
