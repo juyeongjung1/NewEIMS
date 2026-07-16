@@ -138,7 +138,6 @@ public class EmployeeController {
             model.addAttribute("message", "指定された社員情報は存在しないため、削除できません。");
             return "search_result";
         }
-        employeeService.deleteById(empNo);
         return "delete_complete";
     }
 
