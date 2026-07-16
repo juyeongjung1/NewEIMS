@@ -180,4 +180,26 @@ public class EmployeeController {
         model.addAttribute("employee", employee);
         return "change_complete";
     }
+
+    @GetMapping("/deleteConfirm/{empNo}")
+    public String deleteConfirm(@PathVariable("empNo") Integer empNo, Model model, Locale locale) {
+        Employee employee = employeeService.findById(empNo);
+        if (employee == null) {
+            model.addAttribute("errorMessage", messageSource.getMessage("E002", null, locale));
+            return "search_result";
+        }
+        model.addAttribute("employee", employee);
+        return "delete_confirm";
+    }
+
+    @PostMapping("/deleteEmployee")
+    public String deleteEmployee(@RequestParam("empNo") Integer empNo, Model model, Locale locale) {
+        Employee employee = employeeService.findById(empNo);
+        if (employee == null) {
+            model.addAttribute("errorMessage", messageSource.getMessage("E002", null, locale));
+            return "search_result";
+        }
+        employeeService.deleteById(empNo);
+        return "delete_complete";
+    }
 }

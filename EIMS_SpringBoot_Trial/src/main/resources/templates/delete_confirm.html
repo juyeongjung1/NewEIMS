@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EIMS 社員削除の確認</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-header bg-danger text-white text-center">
+                        <h1 class="h3 mb-0">社員削除の確認</h1>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="alert alert-danger text-center fw-bold" th:text="${#messages.msg('C003')}">
+                            この社員情報を削除します。この操作は取り消せません。よろしいですか？
+                        </div>
+                        
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th class="table-light" style="width: 30%;">社員番号</th>
+                                    <td th:text="${employee.empNo}">10001</td>
+                                </tr>
+                                <tr>
+                                    <th class="table-light">氏名</th>
+                                    <td th:text="${employee.lastName + ' ' + employee.firstName}">山田 太郎</td>
+                                </tr>
+                                <tr>
+                                    <th class="table-light">氏名 (カナ)</th>
+                                    <td th:text="${employee.lastKana + ' ' + employee.firstKana}">ヤマダ タロウ</td>
+                                </tr>
+                                <tr>
+                                    <th class="table-light">性別</th>
+                                    <td th:text="${employee.gender == 1 ? '男性' : (employee.gender == 2 ? '女性' : '')}">男性</td>
+                                </tr>
+                                <tr>
+                                    <th class="table-light">所属部署</th>
+                                    <td th:text="${employee.department != null ? employee.department.deptName : ''}">人事部</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <form th:action="@{/deleteEmployee}" method="post">
+                            <input type="hidden" name="empNo" th:value="${employee.empNo}">
+                            
+                            <div class="d-flex justify-content-between mt-4">
+                                <a th:href="@{/detail/{empNo}(empNo=${employee.empNo})}" class="btn btn-secondary px-4">詳細に戻る</a>
+                                <button type="submit" class="btn btn-danger fw-bold px-4">削除実行する</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
