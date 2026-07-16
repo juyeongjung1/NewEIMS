@@ -6,10 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import jp.co.trainocate.eims.entity.Department;
 import jp.co.trainocate.eims.entity.Employee;
+import jp.co.trainocate.eims.form.EmployeeForm;
 import jp.co.trainocate.eims.service.DepartmentService;
 import jp.co.trainocate.eims.service.EmployeeService;
 
@@ -99,5 +107,32 @@ public class EmployeeController {
         // 何も指定がない場合は検索画面に戻す
         model.addAttribute("departments", departmentService.findAll());
         return "search";
+    }
+
+    @RequestMapping(value = "/input", method = { RequestMethod.GET, RequestMethod.POST })
+    public String showInputPage(@ModelAttribute("employeeForm") EmployeeForm form, Model model) {
+        model.addAttribute("departments", departmentService.findAll());
+        return "input";
+    }
+
+    @PostMapping("/inputConfirm")
+    public String confirmRegistration(
+            @Validated @ModelAttribute("employeeForm") EmployeeForm form,
+            BindingResult result,
+            Model model) {
+        if (result.hasErrors()) {
+            model.addAttribute("departments", departmentService.findAll());
+            return "input";
+        }
+        Department department = departmentService.findById(form.getDeptNo());
+        model.addAttribute("department", department);
+        return "input_confirm";
+    }
+
+    @PostMapping("/saveEmployee")
+    public String saveEmployee(@ModelAttribute("employeeForm") EmployeeForm form, Model model) {
+        Employee employee = employeeService.save(form);
+        model.addAttribute("employee", employee);
+        return "input_complete";
     }
 }
