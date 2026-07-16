@@ -77,6 +77,7 @@ class EimsReporter implements Reporter {
   private results = new Map<string, CaseResult>();
   private outputFile = path.resolve(process.cwd(), 'results', 'eims-report.html');
   private completedCount = 0;
+  private logOffsets = new Map<string, number>();
 
   private sendProgress(payload: Record<string, unknown>): void {
     console.log(`@@EIMS@@${JSON.stringify(payload)}`);
@@ -85,11 +86,13 @@ class EimsReporter implements Reporter {
   onBegin(_config: FullConfig): void {
     this.startedAt = new Date();
     this.completedCount = 0;
+    this.logOffsets.clear();
     fs.mkdirSync(path.dirname(this.outputFile), { recursive: true });
     this.sendProgress({ percent: 30, phase: assessmentLabel, message: `全${selectedTestCases.length}件の確認を開始します。`, completed: 0, total: selectedTestCases.length });
   }
 
   onTestBegin(test: TestCase): void {
+    this.logOffsets.set(test.id, springBootLog().length);
     const match = test.title.match(/\[(search|registration|update|delete):(TC\d{3})\]/);
     const definition = match ? testCaseMap.get(`${match[1]}:${match[2]}`) : undefined;
     if (!definition) return;
@@ -115,15 +118,20 @@ class EimsReporter implements Reporter {
       : result.status === 'skipped'
         ? 'skipped'
         : 'failed';
+    const log = springBootLog();
+    const logOffset = this.logOffsets.get(test.id) ?? log.length;
+    this.logOffsets.delete(test.id);
 
     this.results.set(`${definition.feature}:${definition.id}`, {
       definition,
       status,
       duration: result.duration,
-      error: causedByOnly([
-        result.errors.map((error) => error.message ?? error.value ?? '').join('\n'),
-        springBootLog(),
-      ].join('\n').replace(ansiPattern, '')),
+      error: status === 'failed'
+        ? causedByOnly([
+          result.errors.map((error) => error.message ?? error.value ?? '').join('\n'),
+          log.slice(logOffset),
+        ].join('\n').replace(ansiPattern, ''))
+        : '',
       screenshot: imageDataUrl(screenshot?.path),
     });
 
