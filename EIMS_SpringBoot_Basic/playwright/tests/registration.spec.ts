@@ -155,6 +155,10 @@ for (const item of [
 test(caseTitle('registration', 'TC021'), async ({ page }) => {
   await openRegistration(page);
   await fillEmployeeForm(page, { ...diagnosticEmployee('21'), gender: '' });
+  await expect(
+    page.locator('[name="gender"]:checked'),
+    '性別未選択テストの送信前に、ラジオボタンが選択されたままです。',
+  ).toHaveCount(0);
   await submitInputForm(page);
   await expectRegistrationError(page, 'gender');
 });
