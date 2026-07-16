@@ -161,7 +161,7 @@ try {
     $env:SPRING_DEVTOOLS_RESTART_ENABLED = 'false'
     try {
         $SpringProcess = Start-Process -FilePath $MavenWrapper `
-            -ArgumentList @('spring-boot:run', "-Dspring-boot.run.arguments=--server.port=$Port") `
+            -ArgumentList @('clean', 'spring-boot:run', "-Dspring-boot.run.arguments=--server.port=$Port") `
             -WorkingDirectory $ProjectRoot `
             -WindowStyle Hidden `
             -RedirectStandardOutput $StdoutLog `
