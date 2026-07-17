@@ -1,4 +1,4 @@
-package jp.co.trainocate.enshu.controller;
+package jp.co.trainocate.eims.controller;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -15,10 +15,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import jp.co.trainocate.enshu.entity.Department;
-import jp.co.trainocate.enshu.entity.Employee;
-import jp.co.trainocate.enshu.service.DepartmentService;
-import jp.co.trainocate.enshu.service.EmployeeService;
+import jp.co.trainocate.eims.entity.Department;
+import jp.co.trainocate.eims.entity.Employee;
+import jp.co.trainocate.eims.service.DepartmentService;
+import jp.co.trainocate.eims.service.EmployeeService;
 
 @WebMvcTest(EmployeeController.class)
 @ActiveProfiles("test")
@@ -68,17 +68,19 @@ class EmployeeControllerMaintenanceTest {
 	}
 
 	@Test
-	@DisplayName("削除実行：削除して delete_complete を返す")
+	@DisplayName("削除実行：削除リクエストで delete_complete を返す")
 	void testDeleteEmployee_PerformsDeleteAndReturnsComplete() throws Exception {
 		Mockito.when(employeeService.findById(10001)).thenReturn(empList.get(0));
 
+		// 本テストは画面遷移（delete_complete）までを検証する。
+		// サービス呼び出し（deleteById）の検証には Mockito.verify が必要で、本演習の範囲外。
 		mockMvc.perform(post("/deleteEmployee")
 				.param("empNo", "10001")
 				.param("lastName", "山田")
-				.param("firstName", "太郎")
+				.param("firstName", "陽翔")
 				.param("lastKana", "ヤマダ")
-				.param("firstKana", "タロウ")
-				.param("password", "passwords")
+				.param("firstKana", "ヒナタ")
+				.param("password", "password")
 				.param("gender", "1")
 				.param("deptNo", "100"))
 				.andExpect(status().isOk())
@@ -134,7 +136,7 @@ class EmployeeControllerMaintenanceTest {
 				.andExpect(view().name("change"))
 				.andExpect(model().attributeExists("departments"))
 				.andExpect(model().attributeHasFieldErrors(
-						"employeeForm", "lastName", "firstName", "lastKana", "password", "gender", "deptNo"));
+						"employeeForm", "lastName", "firstName", "lastKana", "firstKana", "password", "gender", "deptNo"));
 	}
 
 	@Test
@@ -143,16 +145,16 @@ class EmployeeControllerMaintenanceTest {
 		mockMvc.perform(post("/changeConfirm")
 				.param("lastName", "氏".repeat(11))
 				.param("firstName", "名".repeat(11))
-				.param("lastKana", "し".repeat(11))
-				.param("firstKana", "め".repeat(11))
-				.param("password", "p".repeat(7))
+				.param("lastKana", "し".repeat(21))
+				.param("firstKana", "め".repeat(21))
+				.param("password", "p".repeat(17))
 				.param("gender", "1")
 				.param("deptNo", "100"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("change"))
 				.andExpect(model().attributeExists("departments"))
 				.andExpect(model().attributeHasFieldErrors(
-						"employeeForm", "lastName", "firstName", "lastKana", "password"));
+						"employeeForm", "lastName", "firstName", "lastKana", "firstKana", "password"));
 	}
 
 	@Test
@@ -160,18 +162,54 @@ class EmployeeControllerMaintenanceTest {
 	void testChangeEmployee_UpdatesAndReturnsComplete() throws Exception {
 		Mockito.when(employeeService.update(Mockito.any())).thenReturn(empList.get(0));
 
+		// 本テストは更新結果のモデル格納と画面遷移（change_complete）までを検証する。
+		// フォーム値がサービスへ正しく渡ったか（引数検証）は Mockito.verify/ArgumentCaptor を要し、本演習の範囲外。
 		mockMvc.perform(post("/changeEmployee")
 				.param("empNo", "10001")
 				.param("lastName", "山田")
-				.param("firstName", "太郎")
+				.param("firstName", "陽翔")
 				.param("lastKana", "ヤマダ")
-				.param("firstKana", "タロウ")
-				.param("password", "passwords")
+				.param("firstKana", "ヒナタ")
+				.param("password", "password")
 				.param("gender", "1")
 				.param("deptNo", "100"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("change_complete"))
 				.andExpect(model().attributeExists("employee"))
 				.andExpect(model().attribute("employee", hasProperty("empNo", is(10001))));
+	}
+
+	@Test
+	@DisplayName("変更確認から「修正する」（POST /changeInput/{empNo}）：入力値を保持して change に戻る")
+	void testBackToChangeInput_ReturnsChangeWithDepartments() throws Exception {
+		Mockito.when(departmentService.findAll()).thenReturn(deptList);
+
+		mockMvc.perform(post("/changeInput/10001")
+				.param("empNo", "10001")
+				.param("lastName", "山田")
+				.param("firstName", "陽翔")
+				.param("lastKana", "ヤマダ")
+				.param("firstKana", "ヒナタ")
+				.param("password", "password")
+				.param("gender", "1")
+				.param("deptNo", "100"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("change"))
+				.andExpect(model().attributeExists("departments"))
+				.andExpect(model().attribute("departments", hasSize(3)))
+				// 「修正する」で戻る際、入力値が保持されている（employeeForm に反映）
+				.andExpect(model().attribute("employeeForm", hasProperty("empNo", is(10001))));
+	}
+
+	@Test
+	@DisplayName("削除実行（対象なし）：削除できない旨を表示")
+	void testDeleteEmployee_NotFound_ReturnsSearchResult() throws Exception {
+		Mockito.when(employeeService.findById(99999)).thenReturn(null);
+
+		mockMvc.perform(post("/deleteEmployee").param("empNo", "99999"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("search_result"))
+				.andExpect(model().attributeExists("employees", "message"))
+				.andExpect(model().attribute("employees", hasSize(0)));
 	}
 }

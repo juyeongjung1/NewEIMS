@@ -100,6 +100,10 @@ public class EmployeeController {
     @GetMapping("/detail/{empNo}")
     public String showDetail(@PathVariable Integer empNo, Model model) {
         Employee employee = employeeService.findById(empNo);
+        if (employee == null) {
+            // 対象が存在しない場合は検索画面へ戻す
+            return "redirect:/search";
+        }
         model.addAttribute("employee", employee);
         return "employee_detail";
     }
@@ -167,6 +171,10 @@ public class EmployeeController {
     @GetMapping("/changeInput/{empNo}")
     public String changeInput(@PathVariable Integer empNo, EmployeeForm employeeForm, Model model) {
         Employee employee = employeeService.findById(empNo);
+        if (employee == null) {
+            // 対象が存在しない場合は検索画面へ戻す
+            return "redirect:/search";
+        }
         employeeForm.setEmpNo(employee.getEmpNo());
         employeeForm.setLastName(employee.getLastName());
         employeeForm.setFirstName(employee.getFirstName());

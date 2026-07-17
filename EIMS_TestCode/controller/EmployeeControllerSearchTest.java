@@ -1,4 +1,4 @@
-package jp.co.trainocate.enshu.controller;
+package jp.co.trainocate.eims.controller;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -15,10 +15,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import jp.co.trainocate.enshu.entity.Department;
-import jp.co.trainocate.enshu.entity.Employee;
-import jp.co.trainocate.enshu.service.DepartmentService;
-import jp.co.trainocate.enshu.service.EmployeeService;
+import jp.co.trainocate.eims.entity.Department;
+import jp.co.trainocate.eims.entity.Employee;
+import jp.co.trainocate.eims.service.DepartmentService;
+import jp.co.trainocate.eims.service.EmployeeService;
 
 @WebMvcTest(EmployeeController.class)
 @ActiveProfiles("test")
@@ -119,5 +119,17 @@ class EmployeeControllerSearchTest {
 				.andExpect(view().name("search_result"))
 				.andExpect(model().attributeExists("employees"))
 				.andExpect(model().attribute("employees", hasSize(2)));
+	}
+
+	@Test
+	@DisplayName("社員詳細（/detail/{empNo}）：詳細を employee_detail に表示")
+	void testShowDetail_ReturnsEmployeeDetail() throws Exception {
+		Mockito.when(employeeService.findById(10001)).thenReturn(empList.get(0));
+
+		mockMvc.perform(get("/detail/10001"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("employee_detail"))
+				.andExpect(model().attributeExists("employee"))
+				.andExpect(model().attribute("employee", hasProperty("empNo", is(10001))));
 	}
 }

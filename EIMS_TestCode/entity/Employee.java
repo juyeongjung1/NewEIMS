@@ -1,4 +1,4 @@
-package jp.co.trainocate.enshu.entity;
+package jp.co.trainocate.eims.entity;
 
 /**
  * 従業員エンティティ。
@@ -18,11 +18,10 @@ import lombok.Data;
 @Data
 @Table(name = "employee")
 public class Employee {
-	// 主キーに自動採番を使用
+	/** 社員番号（主キー・自動採番） */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "emp_no")
-	/** 社員番号 */
 	private Integer empNo;
 
 	/** 氏 */
@@ -55,7 +54,7 @@ public class Employee {
 	private Department department;
 
 	/** 部署番号 (外部キー) */
-	@Column(name = "dept_no")
+	@Column(name = "dept_no", nullable = false)
 	private Integer deptNo;
 
 	// ★追加：全主要フィールドを同時設定するコンストラクタ。departmentを初期化するパターン
@@ -70,6 +69,10 @@ public class Employee {
 		this.password = password;
 		this.gender = gender;
 		this.department = department;
+		// departmentが渡された場合、deptNo（FK列）も同期させる
+		if (department != null) {
+			this.deptNo = department.getDeptNo();
+		}
 	}
 
 	// ★追加：全主要同時設定するコンストラクタ。deptNoを初期化するパターン

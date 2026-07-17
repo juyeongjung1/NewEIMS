@@ -1,4 +1,4 @@
-package jp.co.trainocate.enshu.controller;
+package jp.co.trainocate.eims.controller;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -15,10 +15,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import jp.co.trainocate.enshu.entity.Department;
-import jp.co.trainocate.enshu.entity.Employee;
-import jp.co.trainocate.enshu.service.DepartmentService;
-import jp.co.trainocate.enshu.service.EmployeeService;
+import jp.co.trainocate.eims.entity.Department;
+import jp.co.trainocate.eims.entity.Employee;
+import jp.co.trainocate.eims.service.DepartmentService;
+import jp.co.trainocate.eims.service.EmployeeService;
 
 @WebMvcTest(EmployeeController.class)
 @ActiveProfiles("test")
@@ -42,6 +42,14 @@ class EmployeeControllerPageTest {
 	@DisplayName("index画面の表示：index ビューが返る")
 	void testIndex_ReturnsIndexView() throws Exception {
 		mockMvc.perform(get("/index"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("index"));
+	}
+
+	@Test
+	@DisplayName("トップページの表示（/）：index ビューが返る（/index の別名）")
+	void testRoot_ReturnsIndexView() throws Exception {
+		mockMvc.perform(get("/"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("index"));
 	}

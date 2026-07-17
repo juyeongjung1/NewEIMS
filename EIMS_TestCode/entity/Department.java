@@ -1,4 +1,4 @@
-package jp.co.trainocate.enshu.entity;
+package jp.co.trainocate.eims.entity;
 
 /**
  * 部署エンティティ。
@@ -17,10 +17,9 @@ import lombok.Data;
 @Data
 @Table(name = "department")
 public class Department {
-    // 主キーの部署番号。
+    /** 部署番号（主キー） */
     @Id
     @Column(name = "dept_no")
-    /** 部署番号 */
     private Integer deptNo;
 	
     /** 部署名 */
