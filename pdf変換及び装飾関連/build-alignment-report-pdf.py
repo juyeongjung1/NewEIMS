@@ -37,6 +37,13 @@ def convert_markdown() -> str:
     start = source_text.index("## 2. ページ増減の概要")
     end = source_text.index("## 5. 関連コミット")
     source_text = source_text[start:end].rstrip()
+    heading_numbers = {"2": "1", "3": "2", "4": "3"}
+    source_text = re.sub(
+        r"^## ([234])\.",
+        lambda match: f"## {heading_numbers[match.group(1)]}.",
+        source_text,
+        flags=re.MULTILINE,
+    )
 
     result = subprocess.run(
         [
