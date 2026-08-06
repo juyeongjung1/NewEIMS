@@ -33,10 +33,14 @@ def find_edge() -> Path:
 
 
 def convert_markdown() -> str:
+    source_text = SOURCE.read_text(encoding="utf-8")
+    start = source_text.index("## 2. ページ増減の概要")
+    end = source_text.index("## 5. 関連コミット")
+    source_text = source_text[start:end].rstrip()
+
     result = subprocess.run(
         [
             "pandoc",
-            str(SOURCE),
             "--from=gfm",
             "--to=html5",
             "--standalone",
@@ -52,42 +56,24 @@ def convert_markdown() -> str:
         capture_output=True,
         text=True,
         encoding="utf-8",
+        input=source_text,
     )
     return result.stdout
 
 
 def decorate_html(html: str) -> str:
-    cover = """
-<section class="cover">
-  <div class="cover-copy">
-    <div class="eyebrow">EIMS DOCUMENT CHANGE REPORT</div>
-    <h1>アプリ総合演習ガイド<span>PDFページ差分・整合表</span></h1>
-    <p class="cover-lead">
-      2026年6月15日版と現行版をPDFページ単位で照合し、
-      どのページがどこへ移動し、仕様がどう変わったかを整理した比較資料です。
-    </p>
-  </div>
-  <div class="cover-aside">
-    <div class="cover-stat"><strong>62 → 75</strong><span>PDFページ数</span></div>
-    <div class="cover-stat"><strong>+13</strong><span>増加ページ</span></div>
-    <div class="cover-stat"><strong>48</strong><span>ページ対応項目</span></div>
-  </div>
-  <div class="cover-note">
-    <span>比較基準：2026年6月15日版 → 2026年7月22日現行版</span>
-    <span>社員情報管理システム（EIMS）</span>
-  </div>
-</section>
-"""
-    html = re.sub(r"<h1[^>]*>.*?</h1>", cover, html, count=1, flags=re.DOTALL)
-    # Pandocの文書タイトルとは別に、Markdown本文の先頭見出しが残るため除去する。
-    html = re.sub(r'<h1 id="[^"]+">.*?</h1>', "", html, count=1, flags=re.DOTALL)
+    html = re.sub(
+        r'<header id="title-block-header">.*?</header>',
+        "",
+        html,
+        count=1,
+        flags=re.DOTALL,
+    )
 
     table_classes = [
-        "meta-table",
         "delta-table",
         "alignment-table",
         "focus-table",
-        "commit-table",
     ]
     table_index = 0
 
@@ -102,21 +88,6 @@ def decorate_html(html: str) -> str:
     html = html.replace("<td>中</td>", '<td><span class="badge badge-medium">中</span></td>')
     html = html.replace("<td>小</td>", '<td><span class="badge badge-minor">小</span></td>')
     html = html.replace("<td>新規</td>", '<td><span class="badge badge-new">新規</span></td>')
-
-    note = """
-<div class="callout">
-  <strong>ページ番号の見方：</strong>
-  本資料では、PDFビューワーで表紙を1ページ目として数えた物理ページ番号を使用しています。
-  本文下部に印刷される番号とは異なる場合があります。
-</div>
-"""
-    html = re.sub(
-        r"<p>本表のページ番号は、.*?</p>",
-        note,
-        html,
-        count=1,
-        flags=re.DOTALL,
-    )
     return html
 
 

@@ -291,28 +291,33 @@ tbody tr:nth-child(even) td {
 
 .alignment-table {
   table-layout: fixed;
-  font-size: 7.35pt;
-  line-height: 1.43;
+  font-size: 7.15pt;
+  line-height: 1.38;
 }
 
 .alignment-table th,
 .alignment-table td {
-  padding: 1.75mm 1.9mm;
+  padding: 1.45mm 1.8mm;
 }
 
 .alignment-table th:nth-child(1),
 .alignment-table td:nth-child(1) {
-  width: 8mm;
+  width: 12mm;
   text-align: center;
+  white-space: nowrap;
+  word-break: keep-all;
+  overflow-wrap: normal;
 }
 
 .alignment-table th:nth-child(2),
 .alignment-table td:nth-child(2),
 .alignment-table th:nth-child(3),
 .alignment-table td:nth-child(3) {
-  width: 23mm;
+  width: 31mm;
   text-align: center;
   white-space: nowrap;
+  word-break: keep-all;
+  overflow-wrap: normal;
 }
 
 .alignment-table th:nth-child(4),
