@@ -199,6 +199,25 @@ li {
   margin: 1mm 0;
 }
 
+blockquote {
+  margin: 3mm 0 5mm;
+  padding: 3mm 4mm;
+  color: #553b0f;
+  background: var(--amber-soft);
+  border: 0.3mm solid #efd99c;
+  border-left: 1.5mm solid var(--amber);
+  border-radius: 1.5mm;
+  break-inside: avoid;
+}
+
+blockquote p {
+  margin: 0;
+}
+
+blockquote strong {
+  color: #8a5708;
+}
+
 code {
   padding: 0.35mm 1mm;
   color: #174b65;
@@ -261,6 +280,14 @@ td:last-child {
 
 tbody tr:nth-child(even) td {
   background: var(--wash);
+}
+
+tr.optional-row td {
+  background: #f3eefb !important;
+}
+
+tr.optional-row td:first-child {
+  border-left: 1.2mm solid #7a5aa6;
 }
 
 .meta-table {

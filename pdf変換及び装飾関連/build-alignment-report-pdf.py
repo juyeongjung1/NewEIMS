@@ -44,6 +44,45 @@ def convert_markdown() -> str:
         source_text,
         flags=re.MULTILINE,
     )
+    source_text = source_text.replace(
+        "## 1. ページ増減の概要",
+        "## 1. ページ増減の概要\n\n"
+        "> **任意項目について**：コンポーネントテストと発展課題は必須ではありません。"
+        "基本機能の実装とシステムテストを優先し、時間に余裕がある場合に取り組むオプションです。",
+        1,
+    )
+    source_text = source_text.replace(
+        "| コンポーネントテスト | +2ページ |",
+        "| コンポーネントテスト（任意） | +2ページ |",
+    )
+    source_text = source_text.replace(
+        "| 発展課題 | +2ページ |",
+        "| 発展課題（任意） | +2ページ |",
+    )
+    source_text = source_text.replace(
+        "テスト環境設定とテストケースの拡充",
+        "任意項目として、テスト環境設定とテストケースを拡充",
+    )
+    source_text = source_text.replace(
+        "二重ポスト対策と社員一覧ソートを新設",
+        "任意の発展課題として、二重ポスト対策と社員一覧ソートを新設",
+    )
+    source_text = source_text.replace(
+        "完了画面の再読み込み等でPOSTが再実行される問題",
+        "【任意】完了画面の再読み込み等でPOSTが再実行される問題",
+    )
+    source_text = source_text.replace(
+        "社員一覧を社員番号昇順などで安定して表示する",
+        "【任意】社員一覧を社員番号昇順などで安定して表示する",
+    )
+    source_text = source_text.replace(
+        "テスト環境、テストケース、共通メッセージ",
+        "【任意】コンポーネントテスト：テスト環境、テストケース、共通メッセージ",
+    )
+    source_text = source_text.replace(
+        "新設された発展課題",
+        "【任意】発展課題：二重ポスト対策、社員一覧ソート",
+    )
 
     result = subprocess.run(
         [
@@ -95,6 +134,23 @@ def decorate_html(html: str) -> str:
     html = html.replace("<td>中</td>", '<td><span class="badge badge-medium">中</span></td>')
     html = html.replace("<td>小</td>", '<td><span class="badge badge-minor">小</span></td>')
     html = html.replace("<td>新規</td>", '<td><span class="badge badge-new">新規</span></td>')
+
+    optional_terms = (
+        "<td>コンポーネントテスト（任意）</td>",
+        "<td>発展課題（任意）</td>",
+        "コンポーネントテスト仕様（任意）",
+        "【任意】",
+    )
+
+    def mark_optional_row(match: re.Match[str]) -> str:
+        row = match.group(0)
+        if not any(term in row for term in optional_terms):
+            return row
+        if 'class="' in row.split(">", 1)[0]:
+            return row.replace('class="', 'class="optional-row ', 1)
+        return row.replace("<tr", '<tr class="optional-row"', 1)
+
+    html = re.sub(r"<tr(?:\s[^>]*)?>.*?</tr>", mark_optional_row, html, flags=re.DOTALL)
     return html
 
 
