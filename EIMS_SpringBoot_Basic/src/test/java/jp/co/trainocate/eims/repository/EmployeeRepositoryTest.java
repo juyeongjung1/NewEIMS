@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import jp.co.trainocate.eims.entity.Department;
 import jp.co.trainocate.eims.entity.Employee;
@@ -20,6 +21,7 @@ import jp.co.trainocate.eims.entity.Employee;
  * - 各テストはトランザクションで実行され、終了時にロールバックされる（@DataJpaTest の既定）。
  */
 @DataJpaTest
+@ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 class EmployeeRepositoryTest {
 

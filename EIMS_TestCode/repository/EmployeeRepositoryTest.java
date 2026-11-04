@@ -11,16 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import jp.co.trainocate.eims.entity.Department;
 import jp.co.trainocate.eims.entity.Employee;
 /**
  * EmployeeRepository の振る舞いを検証する JPA 用テストクラス。
- * - テスト用の application.properties（src/test/resources）に従い、実際の MySQL に接続する
+ * - テスト用の application-test.properties（src/test/resources）に従い、実際の MySQL に接続する
  *   （@AutoConfigureTestDatabase(replace = NONE) により組み込みDBへ差し替えない）。
  * - 各テストはトランザクションで実行され、終了時にロールバックされる（@DataJpaTest の既定）。
  */
 @DataJpaTest // Repository/JPA の最小構成だけ起動し、DB操作をロールバック付きでテストする
+@ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = Replace.NONE) // 組み込みDBへ差し替えず、プロパティの実DB設定をそのまま使う
 class EmployeeRepositoryTest {
 

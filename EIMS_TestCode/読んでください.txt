@@ -10,3 +10,10 @@ attributeとか、attributeExistsの部分です。
 また、各ファイル冒頭の package 宣言と import は、皆さんのプロジェクトのパッケージ名に合わせて修正してください（本解答例は StarterKit と同じ jp.co.trainocate.eims で記述しています）。
 
 ４．repositoryテスト内のリスト内の値の検証は、コンポーネントテストのrepositoryテストの演習の解説でご紹介した、「tuple」の書き方で記述しています。
+
+５．Repositoryテストの実行前に、DBSET/EIMS_TEST_DBSETでテスト用DB（eimsdb_test）を構築してください。
+src/test/resources/application-test.propertiesの接続先がeimsdb_test、spring.jpa.hibernate.ddl-autoがvalidateであることを確認してください。
+同設定ファイルがない場合は、StarterKitから同じパスへコピーしてください。
+テストクラスの@ActiveProfiles("test")でテスト用設定を有効にします。通常用DB（eimsdb）の設定は流用しないでください。
+validateではテーブルを自動作成しないため、テスト用DBは事前に構築する必要があります。
+Repositoryテストは実際にDBを操作し、各テスト終了時に変更をロールバックします。

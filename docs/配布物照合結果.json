@@ -2,18 +2,18 @@
   "pdfs": [
     {
       "path": "EIMS_Comprehensive_Exercise_Guide.pdf",
-      "sha256": "90122236db00e307cd087cdcae929401b5ff453af13b7fc54c46aab523a22e6e"
+      "sha256": "af53c9e11edc2c604026e4822a4a05bfa6dee31c7100c71857e709165df10a8c"
     },
     {
       "path": "EIMS_追加機能設計書.pdf",
-      "sha256": "e38c2afaeaf6f07a81edba07397d44a12a63807e6ac9f0e577c79f20cdbfbc07"
+      "sha256": "5af2beea9115734e683dcb7759bc51e24a9dbe5586565452bad9bdce4bed1633"
     }
   ],
   "archives": [
     {
       "path": "EIMS_SpringBoot_Basic(解答).zip",
       "files": 97,
-      "sha256": "14164a1c94d6ba87875dbee34e298bd03cbe11bb21d2b5378351af4bd97d0bbe"
+      "sha256": "9c04823f49a05e52a37a835f0552e9e59659d8f454544b058f985e9345b7b8c1"
     },
     {
       "path": "EIMS_SpringBoot_Additional(追加機能解答).zip",
@@ -23,17 +23,17 @@
     {
       "path": "EIMS_TestCode(解答).zip",
       "files": 8,
-      "sha256": "de9730ef828845a8b330637ec1d3e5afb253de75b6bdb0d4d3d26bbdf097753a"
+      "sha256": "c29d6299092903f42fc5f0a5783409f442a18b07801dca1779e8544739abe46d"
     },
     {
       "path": "DBSET.zip",
-      "files": 14,
-      "sha256": "7686c53d52548f5dc7d281525901942265dd490e70eaa2227175245f15578ad1"
+      "files": 12,
+      "sha256": "43941f9e683014f5716162b9606bf548e4a11e3a862bfa03adde46fe8f8c882f"
     },
     {
       "path": "EIMS_StarterKits.zip",
-      "files": 87,
-      "sha256": "0e67a4df95571df8fa151ec17af6dc40b5e48715b74a5bc2c614139408b8a90d"
+      "files": 85,
+      "sha256": "32669a55d6d4fea8c3b6be3a48c7a12c590d04978e7b91e8998c7ec439acca2d"
     },
     {
       "path": "テスト関連のテンプレート.zip",
@@ -42,8 +42,8 @@
     },
     {
       "path": "EIMS_受講者配布資料/EIMS_受講者配布資料.zip",
-      "files": 92,
-      "sha256": "8bb56b213add9a97fc81601fb9cc92fefd1fd9b97f2208678a91b1020ab39e70"
+      "files": 90,
+      "sha256": "ffc171928b45a3ee5377e9324e7a9f14a8b4ffd388e1fb6951810645e7bf641b"
     }
   ]
 }

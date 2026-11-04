@@ -6,7 +6,7 @@ import shutil
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-EXCLUDED = {"target", "node_modules", ".git", ".settings", "__pycache__"}
+EXCLUDED = {"target", "node_modules", ".git", ".settings", "__pycache__", "old"}
 
 
 def digest(data):
@@ -58,6 +58,17 @@ copy_pdf("output/pdf/EIMS_Comprehensive_Exercise_Guide.pdf", [
 copy_pdf("追加機能の設計書/output/EIMS_追加機能設計書.pdf", [
     "EIMS_追加機能設計書.pdf", "EIMS_受講者配布資料/アプリ総合演習ガイド(追加機能設計書).pdf",
 ])
+# ルートのDBSETを正本とし、スターターの同種SQL・バッチを配布前に同期する。
+# スターターだけにある任意課題用のページングSQLは、そのまま残す。
+for source in (ROOT / "DBSET").rglob("*"):
+    relative = source.relative_to(ROOT / "DBSET")
+    if not source.is_file() or "old" in relative.parts or source.suffix == ".zip":
+        continue
+    target = ROOT / "EIMS_受講者配布資料/EIMS_StarterKits/EIMS_SpringBoot/DBSET" / relative
+    target.parent.mkdir(parents=True, exist_ok=True)
+    if not target.is_file() or target.read_bytes() != source.read_bytes():
+        shutil.copyfile(source, target)
+
 archives = [
     archive("EIMS_SpringBoot_Basic", "EIMS_SpringBoot_Basic(解答).zip", "EIMS_SpringBoot_Basic", True),
     archive("EIMS_SpringBoot_Additional", "EIMS_SpringBoot_Additional(追加機能解答).zip", "EIMS_SpringBoot_Additional", True),

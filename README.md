@@ -4,7 +4,7 @@
 このページは、何を読む・編集する・配布するためのファイルなのかを案内します。
 
 **今回の指摘に対する判断は [指摘事項の検証結果](docs/指摘事項の検証結果.md) にまとめています。**
-2026年11月4日の指摘に対応し、仕様原稿・解答コード・画面画像・配布PDF・ZIPを更新しました。追加確認では承認済みの退職確認項目と仕様表記を揃え、同一内容の別名コピー3件を整理しています。
+2026年11月4日の指摘に対応し、仕様原稿・解答コード・画面画像・配布PDF・ZIPを更新しました。追加確認では承認済みの退職確認項目と仕様表記を揃え、同一内容の別名コピー3件を整理しています。さらに、配布SQLの正本・同期方法、共通機能テストの設定を統一し、DBSET内の `old` を削除しました。
 
 ## 最初に見る場所
 
@@ -15,7 +15,7 @@
 | 共通機能の解答を確認する | [EIMS_SpringBoot_Basic](EIMS_SpringBoot_Basic/) | 講師用の動作例・テストを含むMavenプロジェクト |
 | 追加機能の解答を確認する | [EIMS_SpringBoot_Additional](EIMS_SpringBoot_Additional/) | 共通機能に追加機能を組み込んだ解答プロジェクト |
 | 受講者向けの資料一式を確認する | `EIMS_受講者配布資料/` | スターター、共通・追加仕様PDF、テスト書式、予実管理表と一式ZIP |
-| DBの構造・初期化方法を確認する | [DBSET](DBSET/) | 通常用とテスト用のSQL・実行バッチ |
+| DBの構造・初期化方法を確認する | [DBSET](DBSET/) | 通常用とテスト用のSQL・実行バッチの正本 |
 | テストコードの配布元を確認する | [EIMS_TestCode](EIMS_TestCode/) | コピーして利用するテスト解答とテスト用Entity。独立したアプリではない |
 
 > 配布対象のZIPとPDFはGit管理しています。作業記録や旧版など、ローカルに存在する資料すべてをGit管理しているわけではありません。
@@ -45,15 +45,17 @@
 | `EIMS_SpringBoot_Additional/src/test/` | 追加機能のJavaテスト |
 | `EIMS_TestCode/controller/`、`repository/` | 受講者がコピーして利用するテスト解答。Basic内のテストと常に同一ではない |
 | `EIMS_TestCode/entity/` | テストデータ作成用コンストラクターを含むEntity。テストクラスではなく `src/main/java` 側に置くもの |
-| `DBSET/EIMS_DBSET/`、`DBSET/EIMS_TEST_DBSET/` | 通常DB・テストDBの作成や初期化用。内容確認だけでバッチを実行しない |
+| `DBSET/EIMS_DBSET/`、`DBSET/EIMS_TEST_DBSET/` | 通常DB・テストDBのSQL・バッチの正本。同種のファイルをスターターへ同期する。本番用とテスト用の初期データは用途別。内容確認だけでバッチを実行しない |
 | 各プロジェクトの `target/` | ビルド生成物。編集するソースではない |
+
+共通解答 `EIMS_SpringBoot_Basic` と配布テストコード `EIMS_TestCode` は、`@ActiveProfiles("test")` でテスト用設定を使います。Repositoryテストの実行前に `EIMS_TEST_DBSET` で `eimsdb_test` を構築し、`src/test/resources/application-test.properties` の接続先と `spring.jpa.hibernate.ddl-auto=validate` を確認してください。`validate` はテーブルを自動作成しません。配布テストコードのコピー先に設定ファイルがない場合は、スターターから同じパスへコピーします。
 
 ### 配布用の資料と圧縮ファイル
 
 | ファイル・フォルダー | 内容・注意点 |
 | --- | --- |
 | `EIMS_受講者配布資料/EIMS_受講者配布資料.zip` | 受講者用の一式。更新PDFを含め、ZIP内の全ファイルと配布元のバイト一致を確認 |
-| `EIMS_受講者配布資料/EIMS_StarterKits/` | 未完成のスタータープロジェクト。DBSETは `EIMS_SpringBoot/DBSET/` 内にある |
+| `EIMS_受講者配布資料/EIMS_StarterKits/` | 未完成のスタータープロジェクト。DBSETは `EIMS_SpringBoot/DBSET/` 内にあり、同種SQL・バッチを正本と同期する。任意課題用の `addEmployeesForPaging.sql` は維持 |
 | `EIMS_StarterKits.zip` | 受講者一式のスターターと同じ内容・配置に統一。DBSETはアプリ内にある |
 | `EIMS_SpringBoot_Additional(追加機能解答).zip` | 追加機能のソース配布版。現在のソース・テストから生成し、ビルド生成物は含めない |
 | `EIMS_TestCode(解答).zip` | 更新済み `EIMS_TestCode/` と同期。パッケージ名は `jp.co.trainocate.eims` |
@@ -94,7 +96,7 @@
 
 ## 次に配置を整理する場合
 
-承認に基づき、同じ場所の別名コピー（共通PDF2件・追加解答ZIP1件）を削除しました。原稿・ソースなどの原本と、PDF・ZIPの配布用コピーは別ファイルで残しています。内容の異なる旧版の削除や、大幅な配置変更は行っていません。
+承認に基づき、同じ場所の別名コピー（共通PDF2件・追加解答ZIP1件）を削除しました。原稿・ソースなどの原本と、PDF・ZIPの配布用コピーは別ファイルで残しています。追加承認の対象であるルートDBSETとスターター内DBSETの `old` 配下は削除し、任意課題用の `addEmployeesForPaging.sql` は残しています。それ以外の内容の異なる旧版の削除や、大幅な配置変更は行っていません。
 次の順番で整理すると、必要な原本や配布物を誤って失うのを防げます。
 
 1. このREADMEの現行原稿・配布PDFを基準として、旧版の保管先を決める。
@@ -116,7 +118,7 @@ node "追加機能の設計書/build-additional-pdf.js"
 python tools/package-distribution.py
 ```
 
-PDFを修正した場合は、配布前に画像へ変換して図表・改ページを確認してください。最後のコマンドでPDFのコピー、7種類のZIP生成、ZIP内全ファイルと配布元の照合を行います。
+PDFを修正した場合は、配布前に画像へ変換して図表・改ページを確認してください。最後のコマンドで、ルートDBSETからスターターへの同種SQL・バッチの同期、PDFのコピー、7種類のZIP生成、ZIP内全ファイルと配布元の照合を行います。`old` は配布ZIPから除外し、スターター固有の `addEmployeesForPaging.sql` は残します。
 結果のSHA-256とファイル件数は [配布物照合結果](docs/配布物照合結果.json) に出力します。
 
 解答ZIPは `src/`、Maven Wrapper、`pom.xml`、案内を収録し、`target/`、IDE設定、バックアップテスト、ブラウザテストの作業環境を除外します。
