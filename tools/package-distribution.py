@@ -52,7 +52,7 @@ def archive(source, destination, prefix, project=False):
 
 
 copy_pdf("output/pdf/EIMS_Comprehensive_Exercise_Guide.pdf", [
-    "EIMS_Comprehensive_Exercise_Guide.pdf", "EIMS_演習ガイド.pdf", "EIMS_演習ガイド (1).pdf",
+    "EIMS_Comprehensive_Exercise_Guide.pdf",
     "EIMS_受講者配布資料/アプリ総合演習ガイド(共通機能).pdf",
 ])
 copy_pdf("追加機能の設計書/output/EIMS_追加機能設計書.pdf", [
@@ -61,7 +61,6 @@ copy_pdf("追加機能の設計書/output/EIMS_追加機能設計書.pdf", [
 archives = [
     archive("EIMS_SpringBoot_Basic", "EIMS_SpringBoot_Basic(解答).zip", "EIMS_SpringBoot_Basic", True),
     archive("EIMS_SpringBoot_Additional", "EIMS_SpringBoot_Additional(追加機能解答).zip", "EIMS_SpringBoot_Additional", True),
-    archive("EIMS_SpringBoot_Additional", "EIMS_SpringBoot_Additional.zip", "EIMS_SpringBoot_Additional", True),
     archive("EIMS_TestCode", "EIMS_TestCode(解答).zip", "EIMS_TestCode"),
     archive("DBSET", "DBSET.zip", "DBSET"),
     archive("EIMS_受講者配布資料/EIMS_StarterKits", "EIMS_StarterKits.zip", "EIMS_StarterKits"),

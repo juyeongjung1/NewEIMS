@@ -251,6 +251,10 @@ hr {
 }
 
 @media print {
+    /* 章境界の区切り線だけが次ページへ送られるのを防ぐ。 */
+    hr {
+        display: none;
+    }
     body {
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;

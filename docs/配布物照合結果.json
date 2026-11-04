@@ -2,11 +2,11 @@
   "pdfs": [
     {
       "path": "EIMS_Comprehensive_Exercise_Guide.pdf",
-      "sha256": "2b0c9918fc55090da217a383c1446c763b4c50a48393be299d79cf781f7d5a5f"
+      "sha256": "90122236db00e307cd087cdcae929401b5ff453af13b7fc54c46aab523a22e6e"
     },
     {
       "path": "EIMS_追加機能設計書.pdf",
-      "sha256": "077b68d8663f0e5e2ac2913925617cded720293f1ef66632494f7330c6cd8f98"
+      "sha256": "e38c2afaeaf6f07a81edba07397d44a12a63807e6ac9f0e577c79f20cdbfbc07"
     }
   ],
   "archives": [
@@ -18,12 +18,7 @@
     {
       "path": "EIMS_SpringBoot_Additional(追加機能解答).zip",
       "files": 99,
-      "sha256": "212e54c79baea43aed75b5680bf582444cf5cd81d076aea23cac74e8f83d1b05"
-    },
-    {
-      "path": "EIMS_SpringBoot_Additional.zip",
-      "files": 99,
-      "sha256": "212e54c79baea43aed75b5680bf582444cf5cd81d076aea23cac74e8f83d1b05"
+      "sha256": "d6977dab0b632589855a805b760f971d1c92660a037aaab89b64e95478f2fdae"
     },
     {
       "path": "EIMS_TestCode(解答).zip",
@@ -48,7 +43,7 @@
     {
       "path": "EIMS_受講者配布資料/EIMS_受講者配布資料.zip",
       "files": 92,
-      "sha256": "b7fda53c28e713af455eee40ae302fdeed588eaf2d535d7e6eae17b9ffb223d0"
+      "sha256": "8bb56b213add9a97fc81601fb9cc92fefd1fd9b97f2208678a91b1020ab39e70"
     }
   ]
 }

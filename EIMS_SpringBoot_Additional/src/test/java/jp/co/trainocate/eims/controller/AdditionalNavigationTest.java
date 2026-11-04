@@ -108,6 +108,17 @@ class AdditionalNavigationTest {
                 .andExpect(content().string(not(containsString("指定された社員情報は存在しないため、削除できません。"))));
     }
 
+    @Test
+    @DisplayName("退職確認画面に対象社員のカナと性別を表示する")
+    void retirementConfirmationShowsKanaAndGender() throws Exception {
+        when(employeeService.findById(10019)).thenReturn(employee(0));
+
+        mockMvc.perform(get("/deleteConfirm/10019"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("ヤマダ タロウ")))
+                .andExpect(content().string(containsString("<td>男性</td>")));
+    }
+
     private Employee employee(Integer deleteFlg) {
         Employee employee = new Employee();
         employee.setEmpNo(10019);

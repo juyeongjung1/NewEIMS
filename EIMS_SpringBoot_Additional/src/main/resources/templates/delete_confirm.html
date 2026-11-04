@@ -18,6 +18,8 @@
                 <tbody>
                     <tr><th class="bg-light w-25">社員番号</th><td th:text="${employee.empNo}"></td></tr>
                     <tr><th class="bg-light">氏名</th><td th:text="${employee.lastName + ' ' + employee.firstName}"></td></tr>
+                    <tr><th class="bg-light">氏名（カナ）</th><td th:text="${employee.lastKana + ' ' + employee.firstKana}"></td></tr>
+                    <tr><th class="bg-light">性別</th><td th:text="${employee.gender == 1 ? '男性' : '女性'}"></td></tr>
                     <tr><th class="bg-light">所属部署</th><td th:text="${employee.department.deptName}"></td></tr>
                 </tbody>
             </table>
