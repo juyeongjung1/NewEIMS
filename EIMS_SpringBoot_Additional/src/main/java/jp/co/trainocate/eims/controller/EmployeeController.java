@@ -88,6 +88,7 @@ public class EmployeeController {
     /** 氏名で検索 */
     @GetMapping("/selectByEmpName")
     public String searchByEmpName(String keyword, Model model) {
+        // isBlank() は、空文字または空白（半角・全角など）だけの場合に true を返す
         if (keyword == null || keyword.isBlank()) {
             model.addAttribute("message", "社員名を入力してください。");
             model.addAttribute("departments", departmentService.findAll());
