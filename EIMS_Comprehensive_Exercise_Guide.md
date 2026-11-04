@@ -14,62 +14,62 @@
 
 <h2 style="margin-top: 0 !important; border-bottom: 2px solid #007bff; padding-bottom: 10px; color: #1a365d;">目次</h2>
 
-- 1\. 演習概要 ...... p.3
-  - 1.1 社員一覧・検索・表示機能の仕様定義 ...... p.3
-  - 1.2 社員情報の登録機能 ...... p.6
-  - 1.3 社員情報の変更機能 ...... p.8
-  - 1.4 社員情報の削除機能 ...... p.10
-  - 1.5 開発・実行環境 ...... p.11
-- 2\. 演習の進め方 ...... p.12
-  - 2.1 開発手順 ...... p.12
-  - 2.2 提供物について ...... p.13
-  - 2.3 ドキュメントについて ...... p.14
-- 3\. ユースケース ...... p.15
-  - 3.1 ユースケース図 ...... p.15
-  - 3.2 ユースケース仕様書 ...... p.16
-- 4\. 画面一覧およびUIフロー図 ...... p.24
-  - 4.1 画面(HTML)一覧表 ...... p.24
-  - 4.2 全体UIフロー図 ...... p.25
-  - 4.3 機能別UIフロー図 ...... p.26
-- 5\. 画面レイアウト図 ...... p.30
-  - 5.1 共通・検索機能 ...... p.30
-  - 5.2 登録機能 ...... p.40
-  - 5.3 変更機能 ...... p.43
-  - 5.4 削除機能 ...... p.46
-  - 5.5 入力チェック仕様 ...... p.48
-- 6\. データベース仕様 ...... p.49
-  - 6.1 データベース概要 ...... p.49
-  - 6.2 テーブルの関係性 (実体関連図) ...... p.49
-  - 6.3 テーブル定義 ...... p.50
-  - 6.4 初期データ仕様 ...... p.50
-- 7\. クラス図 (分析レベル) ...... p.51
-- 8\. シーケンス図 (分析レベル) ...... p.52
-  - 8.1 UC001:社員一覧を表示する ...... p.52
-  - 8.2 UC002:社員情報を検索する ...... p.53
-  - 8.3 UC003:社員情報を登録する ...... p.54
-  - 8.4 UC004:社員情報を変更する ...... p.54
-  - 8.5 UC005:社員情報を削除する ...... p.55
-- 9\. クラス図(設計レベル) ...... p.56
-  - 9.1 UC001:社員一覧を表示する ...... p.56
-  - 9.2 UC002:社員情報を検索する ...... p.57
-  - 9.3 UC003:社員情報を登録する ...... p.57
-  - 9.4 UC004:社員情報を変更する ...... p.58
-  - 9.5 UC005:社員情報を削除する ...... p.58
-  - 9.6 全体クラス図 ...... p.60
-- 10\. シーケンス図 (設計レベル) ...... p.61
-  - 10.1 URLマッピング (インターフェース仕様) 一覧 ...... p.61
-  - 10.2 UC001:社員一覧を表示する ...... p.64
-  - 10.3 UC002:社員情報を検索する ...... p.65
-  - 10.4 UC003:社員情報を登録する ...... p.66
-  - 10.5 UC004:社員情報を変更する ...... p.67
-  - 10.6 UC005:社員情報を削除する ...... p.68
-- 11\. コンポーネントテスト仕様(任意) ...... p.69
-  - 11.1 Repository テストケース (任意) ...... p.69
-  - 11.2 Controller テストケース (任意) ...... p.70
-- 12\. 共通メッセージ一覧 ...... p.72
-- 13\. 発展課題（任意） ...... p.73
-  - 13.1 二重ポスト（ダブルサブミット）対策 ...... p.73
-  - 13.2 社員一覧の並び替え（ソート） ...... p.74
+- [1. 演習概要](#section-1)
+  - [1.1 社員一覧・検索・表示機能の仕様定義](#section-1-1)
+  - [1.2 社員情報の登録機能](#section-1-2)
+  - [1.3 社員情報の変更機能](#section-1-3)
+  - [1.4 社員情報の削除機能](#section-1-4)
+  - [1.5 開発・実行環境](#section-1-5)
+- [2. 演習の進め方](#section-2)
+  - [2.1 開発手順](#section-2-1)
+  - [2.2 提供物について](#section-2-2)
+  - [2.3 ドキュメントについて](#section-2-3)
+- [3. ユースケース](#section-3)
+  - [3.1 ユースケース図](#section-3-1)
+  - [3.2 ユースケース仕様書](#section-3-2)
+- [4. 画面一覧およびUIフロー図](#section-4)
+  - [4.1 画面(HTML)一覧表](#section-4-1)
+  - [4.2 全体UIフロー図](#section-4-2)
+  - [4.3 機能別UIフロー図](#section-4-3)
+- [5. 画面レイアウト図](#section-5)
+  - [5.1 共通・検索機能](#section-5-1)
+  - [5.2 登録機能](#section-5-2)
+  - [5.3 変更機能](#section-5-3)
+  - [5.4 削除機能](#section-5-4)
+  - [5.5 入力チェック仕様](#section-5-5)
+- [6. データベース仕様](#section-6)
+  - [6.1 データベース概要](#section-6-1)
+  - [6.2 テーブルの関係性 (実体関連図)](#section-6-2)
+  - [6.3 テーブル定義](#section-6-3)
+  - [6.4 初期データ仕様](#section-6-4)
+- [7. クラス図 (分析レベル)](#section-7)
+- [8. シーケンス図 (分析レベル)](#section-8)
+  - [8.1 UC001:社員一覧を表示する](#section-8-1)
+  - [8.2 UC002:社員情報を検索する](#section-8-2)
+  - [8.3 UC003:社員情報を登録する](#section-8-3)
+  - [8.4 UC004:社員情報を変更する](#section-8-4)
+  - [8.5 UC005:社員情報を削除する](#section-8-5)
+- [9. クラス図(設計レベル)](#section-9)
+  - [9.1 UC001:社員一覧を表示する](#section-9-1)
+  - [9.2 UC002:社員情報を検索する](#section-9-2)
+  - [9.3 UC003:社員情報を登録する](#section-9-3)
+  - [9.4 UC004:社員情報を変更する](#section-9-4)
+  - [9.5 UC005:社員情報を削除する](#section-9-5)
+  - [9.6 全体クラス図](#section-9-6)
+- [10. シーケンス図 (設計レベル)](#section-10)
+  - [10.1 URLマッピング (インターフェース仕様) 一覧](#section-10-1)
+  - [10.2 UC001:社員一覧を表示する](#section-10-2)
+  - [10.3 UC002:社員情報を検索する](#section-10-3)
+  - [10.4 UC003:社員情報を登録する](#section-10-4)
+  - [10.5 UC004:社員情報を変更する](#section-10-5)
+  - [10.6 UC005:社員情報を削除する](#section-10-6)
+- [11. コンポーネントテスト仕様(任意)](#section-11)
+  - [11.1 Repository テストケース (任意)](#section-11-1)
+  - [11.2 Controller テストケース (任意)](#section-11-2)
+- [12. 共通メッセージ一覧](#section-12)
+- [13. 発展課題（任意）](#section-13)
+  - [13.1 二重ポスト（ダブルサブミット）対策](#section-13-1)
+  - [13.2 社員一覧の並び替え（ソート）](#section-13-2)
 
 </div>
 
@@ -80,12 +80,16 @@
   <span style="font-size: 1.2em; color: #666;">社員情報管理システム (EIMS)</span>
 </div>
 
+<a id="section-1"></a>
+
 ## 1. 演習概要
 
 この演習では、社員情報を管理する Web ベースのアプリケーションを構築する。
 システム名は **EIMS (Employee Information Management System)** である。
 
 ---
+
+<a id="section-1-1"></a>
 
 ### 1.1 社員一覧・検索・表示機能の仕様定義
 
@@ -123,7 +127,9 @@ EIMSデータベースに登録されているすべての社員を一覧で表�
 
 ##### 【共通の挙動ルール】
 
-- **入力値の検証（各検索フォーム共通）**: 検索条件が未入力のまま検索した場合は、検索を行わず検索画面に留まること。具体的には、**社員番号が未入力**／**社員名キーワードが null または空文字**／**部署が未選択（「部署を選択してください」のまま）** のいずれの場合も、検索結果画面へ遷移せず検索画面を再表示する。
+- **入力値の検証（各検索フォーム共通）**: 社員番号が未入力、社員名キーワードが `null`・空文字・空白のみ、または部署が未選択の場合は、社員の検索を行わず検索画面を再表示する。検索に対応するメッセージを `Model` の `message` に格納し、プルダウン用の部署一覧を `departments` に再設定する。画面には「社員番号を入力してください。」「社員名を入力してください。」「部署を選択してください。」のいずれかを表示する。
+- **社員名の文字数**: 検索キーワードの文字数上限は設けない。ただし、未入力・空文字・空白のみは検索しない。前後の空白は除去せず、入力された値をそのまま検索条件に使う。登録・変更時の氏・名の10文字制限とは別の規則である。具体的な入力条件は5.5.1節、文言は12章を参照する。
+- **検索処理の分離**: 社員番号・社員名・部署の各フォームは専用URLへ送信し、Controllerも `searchByEmpNo`・`searchByEmpName`・`searchByDeptNo` に分ける。他の検索項目が送られても別の検索へ切り替えない。
 
 #### 1.1.3 一覧画面および社員詳細画面
 
@@ -149,10 +155,12 @@ EIMSデータベースに登録されているすべての社員を一覧で表�
 
 チームの進捗状況に合わせ、以下のいずれかの方針を選択すること。
 
+標準実装と講師用解答では、1.1.2節・5.5.1節の入力チェックとメッセージ表示を必須とする。簡略版でも、検索の未入力チェックとメッセージ表示は省略しない。
+
 
 | 項目               | 標準的な実装（推奨）                   | 簡略化された実装                     |
 | ------------------ | -------------------------------------- | ------------------------------------ |
-| **バリデーション** | null・空文字の入力チェックを実装       | 特になし（エラーを回避できれば可）   |
+| **バリデーション** | 未入力チェックとメッセージ表示を実装 | 標準実装と同じ（省略しない） |
 | **0件時の制御**    | メッセージ表示による分岐処理を実装     | 特になし（空の表を表示）             |
 | **氏名検索範囲**   | **氏** または **名** の 2 項目 OR 検索 | **氏（漢字）** のみの単一項目検索    |
 | **部署検索方式**   | **部署名** をプルダウンで選択          | **部署コード** をテキストで入力      |
@@ -161,6 +169,8 @@ EIMSデータベースに登録されているすべての社員を一覧で表�
 <div style="page-break-before: always;"></div>
 
 ---
+
+<a id="section-1-2"></a>
 
 ### 1.2 社員情報の登録機能
 
@@ -219,6 +229,8 @@ EIMSデータベースに登録されているすべての社員を一覧で表�
 <div style="page-break-before: always;"></div>
 
 ---
+
+<a id="section-1-3"></a>
 
 ### 1.3 社員情報の変更機能
 
@@ -281,6 +293,8 @@ EIMSデータベースに登録されているすべての社員を一覧で表�
 
 ---
 
+<a id="section-1-4"></a>
+
 ### 1.4 社員情報の削除機能
 
 指定された社員情報をデータベースから削除（物理削除）するための機能群。
@@ -318,6 +332,8 @@ EIMSデータベースに登録されているすべての社員を一覧で表�
 
 <div style="page-break-before: always;"></div>
 
+<a id="section-1-5"></a>
+
 ### 1.5 開発・実行環境
 
 本演習で構築するシステムの開発および実行環境は以下の通りとする。
@@ -341,9 +357,13 @@ EIMSデータベースに登録されているすべての社員を一覧で表�
 
 ---
 
+<a id="section-2"></a>
+
 ## 2. 演習の進め方
 
 <br>
+
+<a id="section-2-1"></a>
 
 ### 2.1 開発手順
 
@@ -369,6 +389,8 @@ EIMSデータベースに登録されているすべての社員を一覧で表�
 
 <br>
 
+<a id="section-2-2"></a>
+
 ### 2.2 提供物について
 
 本演習では、以下のものが事前に提供される。
@@ -384,6 +406,8 @@ EIMSデータベースに登録されているすべての社員を一覧で表�
 <div style="page-break-before: always;"></div>
 
 <br>
+
+<a id="section-2-3"></a>
 
 ### 2.3 ドキュメントについて
 
@@ -425,7 +449,11 @@ EIMSデータベースに登録されているすべての社員を一覧で表�
 
 ---
 
+<a id="section-3"></a>
+
 ## 3. ユースケース
+
+<a id="section-3-1"></a>
 
 ### 3.1 ユースケース図
 
@@ -456,6 +484,8 @@ flowchart LR
 - **UC004（変更）** および **UC005（削除）** は、対象社員を特定するために **UC002（検索）** を包含（include）する。
 
 <div style="page-break-before: always;"></div>
+
+<a id="section-3-2"></a>
 
 ### 3.2 ユースケース仕様書
 
@@ -515,13 +545,14 @@ flowchart LR
 1. [人事部管理者]は、システムに「社員の検索」を指示する。
 2. システムは、EIMSデータベースからプルダウン用の部署一覧を取得し、検索画面を表示する。
 3. [人事部管理者]は、社員番号・社員名・部署名のいずれかの入力条件で検索を指示する。
-4. システムは、検索条件を用いて[EIMSデータベース]の検索を行い、検索結果一覧を表示する。（代替フロー alt4-1, alt4-2 参照）
+4. システムは、送信先URLに対応する検索条件を検証し、有効な場合に[EIMSデータベース]の検索を行い、検索結果一覧を表示する。（代替フロー alt4-1, alt4-2, alt4-3 参照）
 5. [人事部管理者]は、表示された検索結果を確認し、ユースケースを終了する。（代替フロー alt5-1, alt5-2, alt5-3 参照）
 
 **代替フロー:**
 
 - **alt4-1.** 基本フロー4で該当する社員がいない（検索結果0件）場合、システムは、「検索条件に一致する社員は見つかりませんでした。」を検索結果画面に表示する。
-- **alt4-2.** 基本フロー3で社員番号による検索の場合、システムは、検索結果一覧を経由せず直接「社員詳細画面」を表示する。
+- **alt4-2.** 基本フロー3で社員番号による検索の場合、該当する社員がいれば、検索結果一覧を経由せず直接「社員詳細画面」を表示する。該当しない場合はalt4-1に従う。
+- **alt4-3.** 基本フロー4で未入力・未選択を検出した場合、システムは社員の検索を行わず、部署一覧を再取得して検索画面に戻る。5.5.1節の対応メッセージを表示し、再入力を受け付ける。
 - **alt5-1.** 基本フロー5で[人事部管理者]が再検索を指示した場合は、基本フロー2に戻り、システムは部署一覧を取得し、検索画面を表示する。
 - **alt5-2.** 基本フロー5で[人事部管理者]はトップページに遷移することができる。
 - **alt5-3.** 基本フロー5で[人事部管理者]が検索結果一覧の氏名+カナをクリックした場合、システムは対象社員の「社員詳細画面」を表示する。
@@ -674,7 +705,11 @@ flowchart LR
 
 ---
 
+<a id="section-4"></a>
+
 ## 4. 画面一覧およびUIフロー図
+
+<a id="section-4-1"></a>
 
 ### 4.1 画面（HTML）一覧表
 
@@ -696,6 +731,8 @@ flowchart LR
 | UI11   | 変更完了画面     | `change_complete.html` | 変更処理が正常に完了したことを通知する画面。                         |
 | UI_L   | 社員一覧画面     | `employee_list.html`   | 全社員のリストを表示する画面。                                       |
 | UI_D   | 社員詳細画面     | `employee_detail.html` | 特定の社員の詳細情報を表示する画面。                                 |
+
+<a id="section-4-2"></a>
 
 ### 4.2 全体UIフロー図
 
@@ -726,6 +763,8 @@ flowchart TD
 ※「検索画面に戻る」「修正する」等による検索画面や入力画面への遷移は、ブラウザバック等ではなく必ずControllerへリクエストを送信し、毎回プルダウン用の部署一覧を再取得する設計とします。
 
 <div style="page-break-before: always;"></div>
+
+<a id="section-4-3"></a>
 
 ### 4.3 機能別UIフロー図
 
@@ -807,6 +846,8 @@ flowchart TD
 
 ---
 
+<a id="section-5"></a>
+
 ## 5. 画面レイアウト図
 
 各画面のレイアウト仕様を以下に定義する。
@@ -815,6 +856,8 @@ flowchart TD
 > 本設計書に記載されている画面レイアウト図は、視認性向上のために Bootstrap5 を適用した状態を参考として掲載しています。
 > 共通機能の実装課題においては、**デザイン（CSS/レイアウト）の適用は必須ではありません。**
 > 画面の各機能が仕様通りに動作することが最優先であり、デザインの微調整や装飾は「追加機能」の範囲として扱います。
+
+<a id="section-5-1"></a>
 
 ### 5.1 共通・検索機能
 
@@ -870,6 +913,8 @@ flowchart TD
 
 <div style="page-break-before: always;"></div>
 
+<a id="section-5-2"></a>
+
 ### 5.2 登録機能
 
 #### UI4: 社員情報登録画面
@@ -892,6 +937,8 @@ flowchart TD
 ![登録完了画面](./images/UI6_input_complete.png)
 
 <div style="page-break-before: always;"></div>
+
+<a id="section-5-3"></a>
 
 ### 5.3 変更機能
 
@@ -916,6 +963,8 @@ flowchart TD
 
 <div style="page-break-before: always;"></div>
 
+<a id="section-5-4"></a>
+
 ### 5.4 削除機能
 
 #### UI7: 削除確認画面
@@ -932,7 +981,27 @@ flowchart TD
 
 <div style="page-break-before: always;"></div>
 
+<a id="section-5-5"></a>
+
 ### 5.5 入力チェック仕様
+
+#### 5.5.1 検索
+
+検索フォームごとに、対応するControllerメソッドで次の条件を確認する。入力エラー時は `message` と部署一覧 `departments` をModelに設定して `search` を返す。検索画面は `message` がある場合に文言を表示する。入力エラーではEmployeeServiceの検索メソッドを呼び出さない。
+
+| 検索条件 | 入力条件 | 入力エラー時のメッセージ |
+| --- | --- | --- |
+| 社員番号 `empNo` | 必須。未送信・空文字・空白のみ（半角・全角）で `Integer` の値が得られない場合は未入力として扱う | V013：社員番号を入力してください。 |
+| 社員名 `keyword` | 必須、文字数上限なし。`null`・空文字・空白のみ（半角・全角スペース等）は未入力として扱う。前後の空白は保持する | V014：社員名を入力してください。 |
+| 部署 `deptNo` | プルダウンで選択必須。未選択・未送信・空文字・空白のみ（半角・全角）は未選択として扱う | V015：部署を選択してください。 |
+
+- 社員名は未入力のみを判定し、有効なキーワードは長さにかかわらずそのまま検索へ渡す。前後空白は除去せず、検索条件に含める。
+- 社員名入力欄には `maxlength` を設定せず、サーバー側でもキーワードの長さを理由に検索を拒否しない。検索キーワードはDBに保存しないため、登録・変更時の氏・名の10文字制限およびDB列の `VARCHAR(10)` とは区別する。10文字を超える入力も通常どおり検索し、該当社員がいなければ0件を表示する。
+- 社員番号は5桁固定ではない。`Integer` の範囲（-2147483648～2147483647）で受け取り、0・負数も通常検索と同じく該当社員がなければ0件として扱う。整数に変換できない文字列や範囲外の値は従来どおりHTTP 400となり、独自エラー画面は追加しない。
+- プルダウン値の改ざんなど、2.1節でテスト対象外とした操作の扱いは変更しない。
+- **未入力と検索結果0件は区別する。** 有効な条件で検索を実行し、該当社員がない場合は `search_result` にE001を表示する。
+
+#### 5.5.2 登録・変更
 
 「社員登録」および「社員変更」において実施する入力チェックルールを以下に定義する。
 
@@ -953,7 +1022,11 @@ flowchart TD
 
 ---
 
+<a id="section-6"></a>
+
 ## 6. データベース仕様
+
+<a id="section-6-1"></a>
 
 ### 6.1 データベース概要
 
@@ -964,6 +1037,8 @@ flowchart TD
 | DBMS           | MySQL              |
 | 文字コード     | utf8mb4            |
 | 照合順序       | utf8mb4_unicode_ci |
+
+<a id="section-6-2"></a>
 
 ### 6.2 テーブルの関係性（実体関連図）
 
@@ -986,12 +1061,16 @@ erDiagram
     }
 ```
 
+<a id="section-6-3"></a>
+
 ### 6.3 テーブル定義
+
+**`Field` はデータベースのテーブルの列名であり、Javaのフィールド名ではない。** DBでは `emp_no`、Javaでは `empNo` のように使い分ける。DBの列名をJavaへそのまま転記せず、Entityの属性名は9章のクラス図に従う。
 
 #### 【部署情報テーブル】(department)
 
 
-| Field     | Type        | Null     | Key         | Default | 説明       |
+| Field（テーブルの列名） | Type        | Null     | Key         | Default | 説明       |
 | --------- | ----------- | -------- | ----------- | ------- | ---------- |
 | dept_no   | INTEGER     | NOT NULL | PRIMARY KEY | なし    | 部署コード |
 | dept_name | VARCHAR(10) | NOT NULL |             | なし    | 部署名     |
@@ -999,7 +1078,7 @@ erDiagram
 #### 【社員情報テーブル】(employee)
 
 
-| Field      | Type        | Null     | Key         | Default        | 説明                  |
+| Field（テーブルの列名） | Type        | Null     | Key         | Default        | 説明                  |
 | ---------- | ----------- | -------- | ----------- | -------------- | --------------------- |
 | emp_no     | INTEGER     | NOT NULL | PRIMARY KEY | AUTO_INCREMENT | 社員番号（自動採番）  |
 | last_name  | VARCHAR(10) | NOT NULL |             | なし           | 氏                    |
@@ -1015,6 +1094,24 @@ erDiagram
 - 制約名: `fk_employee_department`
 - employee.dept_no → department.dept_no を参照
 
+#### DB列名とJavaフィールド名の対応
+
+| DBの列名 | Javaのフィールド名 | Entity |
+| --- | --- | --- |
+| `emp_no` | `empNo` | Employee |
+| `last_name` | `lastName` | Employee |
+| `first_name` | `firstName` | Employee |
+| `last_kana` | `lastKana` | Employee |
+| `first_kana` | `firstKana` | Employee |
+| `password` | `password` | Employee |
+| `gender` | `gender` | Employee |
+| `dept_no` | `deptNo` | Employee・Department |
+| `dept_name` | `deptName` | Department |
+
+例えば、Employeeの `empNo` には `@Column(name = "emp_no")` を付けてDB列に対応付ける。`department` と `employees` はEntity間の関連を表すJavaフィールドであり、同名のDB列は作らない。
+
+<a id="section-6-4"></a>
+
 ### 6.4 初期データ仕様
 
 
@@ -1026,6 +1123,8 @@ erDiagram
 <div style="page-break-before: always;"></div>
 
 ---
+
+<a id="section-7"></a>
 
 ## 7. クラス図（分析レベル）
 
@@ -1066,9 +1165,13 @@ classDiagram
 
 ---
 
+<a id="section-8"></a>
+
 ## 8. シーケンス図（分析レベル）
 
 各ユースケースが実現されるまでのオブジェクト間のメッセージのやり取り（処理の流れ）を以下に定義する。
+
+<a id="section-8-1"></a>
 
 ### 8.1 UC001: 社員一覧を表示する
 
@@ -1106,63 +1209,97 @@ sequenceDiagram
     deactivate UI
 ```
 
+<a id="section-8-2"></a>
+
 ### 8.2 UC002: 社員情報を検索する
+
+初回表示では、プルダウン用の部署一覧を取得して検索画面を表示する。以下は、検索画面から各条件を送信した後の流れである。入力エラー時は社員を検索せず、部署一覧を再取得して検索画面にメッセージを表示する。
+
+#### 社員番号で検索する
 
 ```mermaid
 sequenceDiagram
     actor Admin as 人事部管理者
     participant UI as 画面
     participant Ctrl as EmployeeController
-    participant Dept as Department(エンティティ)
     participant Emp as Employee(エンティティ)
 
-    Admin ->> UI: 検索画面の表示を要求
-    activate UI
-    UI ->> Ctrl: 検索画面表示を依頼
-    activate Ctrl
-    Ctrl ->> Dept: プルダウン用の部署情報を取得
-    activate Dept
-    Dept -->> Ctrl: 部署情報リスト
-    deactivate Dept
-    Ctrl -->> UI: 検索画面を返す
-    deactivate Ctrl
-    UI -->> Admin: 検索条件入力画面を表示
-  
-    Admin ->> UI: 検索条件を入力し、検索を指示
-    UI ->> Ctrl: 検索処理を依頼
-    activate Ctrl
-  
-    alt 社員番号で検索した場合
+    Admin ->> UI: 社員番号を入力して検索
+    UI ->> Ctrl: 社員番号検索を依頼
+    alt 社員番号が未入力
+        Ctrl ->> Ctrl: 部署一覧を再取得
+        Ctrl -->> UI: 検索画面とV013を返す
+        UI -->> Admin: 社員番号の入力を案内
+    else 社員番号が入力されている
         Ctrl ->> Emp: 該当社員情報を取得
-        activate Emp
-        Emp -->> Ctrl: 単一の社員情報
-        deactivate Emp
-        Ctrl -->> UI: 詳細情報を返す
-        UI -->> Admin: 社員詳細画面を表示
-    else 氏名・部署で検索した場合
-        Ctrl ->> Emp: 検索条件に合致する社員情報を取得
-        activate Emp
-        Emp -->> Ctrl: 社員情報リスト
-        deactivate Emp
-      
-        Ctrl -->> UI: 検索結果一覧を返す
-        UI -->> Admin: 検索結果一覧画面を表示
-      
-        opt 詳細画面を表示する場合
-            Admin ->> UI: 一覧から社員を選択
-            UI ->> Ctrl: 詳細情報の取得を依頼
-            Ctrl ->> Emp: 該当社員情報を取得
-            activate Emp
-            Emp -->> Ctrl: 社員情報
-            deactivate Emp
-            Ctrl -->> UI: 詳細情報を返す
-            UI -->> Admin: 社員詳細画面を表示
+        Emp -->> Ctrl: 社員情報または該当なし
+        alt 該当する社員がいる
+            Ctrl -->> UI: 社員詳細を返す
+            UI -->> Admin: 詳細画面を表示
+        else 該当する社員がいない
+            Ctrl -->> UI: 0件の検索結果を返す
+            UI -->> Admin: E001を表示
         end
     end
-  
-    deactivate Ctrl
-    deactivate UI
 ```
+
+#### 社員名で検索する
+
+```mermaid
+sequenceDiagram
+    actor Admin as 人事部管理者
+    participant UI as 画面
+    participant Ctrl as EmployeeController
+    participant Emp as Employee(エンティティ)
+
+    Admin ->> UI: 社員名を入力して検索
+    UI ->> Ctrl: 社員名検索を依頼
+    alt 未入力・空白のみ
+        Ctrl ->> Ctrl: 部署一覧を再取得
+        Ctrl -->> UI: 検索画面とV014を返す
+        UI -->> Admin: 未入力メッセージを表示
+    else 有効なキーワード
+        Ctrl ->> Emp: 氏または名を部分一致で検索
+        Emp -->> Ctrl: 社員情報リスト
+        Ctrl -->> UI: 検索結果一覧を返す
+        alt 検索結果が0件
+            UI -->> Admin: E001を表示
+        else 検索結果が1件以上
+            UI -->> Admin: 社員一覧を表示
+        end
+    end
+```
+
+#### 部署で検索する
+
+```mermaid
+sequenceDiagram
+    actor Admin as 人事部管理者
+    participant UI as 画面
+    participant Ctrl as EmployeeController
+    participant Emp as Employee(エンティティ)
+
+    Admin ->> UI: 部署を選択して検索
+    UI ->> Ctrl: 部署検索を依頼
+    alt 部署が未選択
+        Ctrl ->> Ctrl: 部署一覧を再取得
+        Ctrl -->> UI: 検索画面とV015を返す
+        UI -->> Admin: 部署の選択を案内
+    else 部署が選択されている
+        Ctrl ->> Emp: 選択部署の社員情報を取得
+        Emp -->> Ctrl: 社員情報リスト
+        Ctrl -->> UI: 検索結果一覧を返す
+        alt 検索結果が0件
+            UI -->> Admin: E001を表示
+        else 検索結果が1件以上
+            UI -->> Admin: 社員一覧を表示
+        end
+    end
+```
+
+検索結果一覧の氏名を選択した場合は、対象社員の情報を取得して社員詳細画面を表示する。各メッセージの文言は12章を参照する。
+
+<a id="section-8-3"></a>
 
 ### 8.3 UC003: 社員情報を登録する
 
@@ -1206,6 +1343,8 @@ sequenceDiagram
     UI -->> Admin: 登録完了画面を表示
     deactivate UI
 ```
+
+<a id="section-8-4"></a>
 
 ### 8.4 UC004: 社員情報を変更する
 
@@ -1255,6 +1394,8 @@ sequenceDiagram
     deactivate UI
 ```
 
+<a id="section-8-5"></a>
+
 ### 8.5 UC005: 社員情報を削除する
 
 ```mermaid
@@ -1286,9 +1427,13 @@ sequenceDiagram
 
 ---
 
+<a id="section-9"></a>
+
 ## 9. クラス図（設計レベル）
 
 Spring Bootのアーキテクチャに基づき、各ユースケースの実装に必要なクラスとその依存関係を機能単位で定義する。
+
+<a id="section-9-1"></a>
 
 ### 9.1 UC001: 社員一覧を表示する
 
@@ -1314,8 +1459,24 @@ classDiagram
     class EmployeeRepository {
         <<Repository>>
     }
-    class Employee { <<Entity>> }
-    class Department { <<Entity>> }
+    class Employee {
+        <<Entity>>
+        -Integer empNo
+        -String lastName
+        -String firstName
+        -String lastKana
+        -String firstKana
+        -String password
+        -Integer gender
+        -Integer deptNo
+        -Department department
+    }
+    class Department {
+        <<Entity>>
+        -Integer deptNo
+        -String deptName
+        -List~Employee~ employees
+    }
 
     EmployeeController ..> EmployeeService : 依存(DI)
     EmployeeServiceImpl ..|> EmployeeService : 実現
@@ -1323,6 +1484,8 @@ classDiagram
     EmployeeRepository ..> Employee : 操作
     Employee --> Department : 関連(ManyToOne)
 ```
+
+<a id="section-9-2"></a>
 
 ### 9.2 UC002: 社員情報を検索する
 
@@ -1334,7 +1497,9 @@ classDiagram
         <<Controller>>
         +index() String
         +showSearch(Model) String
-        +search(Integer, String, Integer, Model) String
+        +searchByEmpNo(Integer, Model) String
+        +searchByEmpName(String, Model) String
+        +searchByDeptNo(Integer, Model) String
         +showDetail(Integer, Model) String
     }
     class EmployeeService {
@@ -1367,8 +1532,24 @@ classDiagram
     class DepartmentRepository {
         <<Repository>>
     }
-    class Employee { <<Entity>> }
-    class Department { <<Entity>> }
+    class Employee {
+        <<Entity>>
+        -Integer empNo
+        -String lastName
+        -String firstName
+        -String lastKana
+        -String firstKana
+        -String password
+        -Integer gender
+        -Integer deptNo
+        -Department department
+    }
+    class Department {
+        <<Entity>>
+        -Integer deptNo
+        -String deptName
+        -List~Employee~ employees
+    }
 
     EmployeeController ..> EmployeeService : 依存(DI)
     EmployeeController ..> DepartmentService : 依存(DI)
@@ -1380,6 +1561,8 @@ classDiagram
     DepartmentRepository ..> Department : 操作
     Employee --> Department : 関連(ManyToOne)
 ```
+
+<a id="section-9-3"></a>
 
 ### 9.3 UC003: 社員情報を登録する
 
@@ -1415,8 +1598,24 @@ classDiagram
     }
     class EmployeeRepository { <<Repository>> }
     class DepartmentRepository { <<Repository>> }
-    class Employee { <<Entity>> }
-    class Department { <<Entity>> }
+    class Employee {
+        <<Entity>>
+        -Integer empNo
+        -String lastName
+        -String firstName
+        -String lastKana
+        -String firstKana
+        -String password
+        -Integer gender
+        -Integer deptNo
+        -Department department
+    }
+    class Department {
+        <<Entity>>
+        -Integer deptNo
+        -String deptName
+        -List~Employee~ employees
+    }
 
     EmployeeController ..> EmployeeService : 依存(DI)
     EmployeeController ..> DepartmentService : 依存(DI)
@@ -1428,6 +1627,8 @@ classDiagram
     EmployeeRepository ..> Employee : 操作
     DepartmentRepository ..> Department : 操作
 ```
+
+<a id="section-9-4"></a>
 
 ### 9.4 UC004: 社員情報を変更する
 
@@ -1454,7 +1655,18 @@ classDiagram
         +update(EmployeeForm) Employee
     }
     class EmployeeRepository { <<Repository>> }
-    class Employee { <<Entity>> }
+    class Employee {
+        <<Entity>>
+        -Integer empNo
+        -String lastName
+        -String firstName
+        -String lastKana
+        -String firstKana
+        -String password
+        -Integer gender
+        -Integer deptNo
+        -Department department
+    }
     class DepartmentService {
         <<Interface>>
         +findAll() List~Department~
@@ -1466,7 +1678,12 @@ classDiagram
         +findById(Integer) Department
     }
     class DepartmentRepository { <<Repository>> }
-    class Department { <<Entity>> }
+    class Department {
+        <<Entity>>
+        -Integer deptNo
+        -String deptName
+        -List~Employee~ employees
+    }
 
     EmployeeController ..> EmployeeService : 依存(DI)
     EmployeeController ..> DepartmentService : 依存(DI)
@@ -1478,6 +1695,8 @@ classDiagram
     EmployeeRepository ..> Employee : 操作
     DepartmentRepository ..> Department : 操作
 ```
+
+<a id="section-9-5"></a>
 
 ### 9.5 UC005: 社員情報を削除する
 
@@ -1501,8 +1720,24 @@ classDiagram
         +deleteById(Integer) void
     }
     class EmployeeRepository { <<Repository>> }
-    class Employee { <<Entity>> }
-    class Department { <<Entity>> }
+    class Employee {
+        <<Entity>>
+        -Integer empNo
+        -String lastName
+        -String firstName
+        -String lastKana
+        -String firstKana
+        -String password
+        -Integer gender
+        -Integer deptNo
+        -Department department
+    }
+    class Department {
+        <<Entity>>
+        -Integer deptNo
+        -String deptName
+        -List~Employee~ employees
+    }
 
     EmployeeController ..> EmployeeService : 依存(DI)
     EmployeeServiceImpl ..|> EmployeeService : 実現
@@ -1512,6 +1747,8 @@ classDiagram
 ```
 
 <div style="page-break-before: always;"></div>
+
+<a id="section-9-6"></a>
 
 ### 9.6 全体クラス図
 
@@ -1529,7 +1766,9 @@ classDiagram
         +index() String
         +showSearch(Model) String
         +showEmployeeList(Model) String
-        +search(Integer, String, Integer, Model) String
+        +searchByEmpNo(Integer, Model) String
+        +searchByEmpName(String, Model) String
+        +searchByDeptNo(Integer, Model) String
         +showDetail(Integer, Model) String
         +showInputPage(EmployeeForm, Model) String
         +backToInputPage(EmployeeForm, Model) String
@@ -1643,7 +1882,11 @@ classDiagram
 
 ---
 
+<a id="section-10"></a>
+
 ## 10. シーケンス図（設計レベル）
+
+<a id="section-10-1"></a>
 
 ### 10.1 URLマッピング（インターフェース仕様）一覧
 
@@ -1657,9 +1900,9 @@ classDiagram
 | UC001        | 社員一覧表示     | GET  | `/employeeList`          | `showEmployeeList`     | `employee_list`                        |
 | UC001・002   | 社員詳細画面表示 | GET  | `/detail/{empNo}`        | `showDetail`           | `employee_detail`                      |
 | UC002        | 検索画面表示     | GET  | `/search`                | `showSearch`           | `search`                               |
-| UC002        | 氏名で検索       | GET  | `/selectByEmpName`       | `search`               | `search_result`／`search`（未入力時）  |
-| UC002        | 部署で検索       | GET  | `/selectByDeptNo`        | `search`               | `search_result`／`search`（未入力時）  |
-| UC002        | 社員番号で検索   | GET  | `/selectByEmpNo`         | `search`               | `employee_detail`（該当あり）／`search_result`（該当なし・0件）／`search`（社員番号が未入力のとき） |
+| UC002        | 氏名で検索       | GET  | `/selectByEmpName`       | `searchByEmpName`               | `search_result`／`search`（未入力時） |
+| UC002        | 部署で検索       | GET  | `/selectByDeptNo`        | `searchByDeptNo`               | `search_result`／`search`（未入力時）  |
+| UC002        | 社員番号で検索   | GET  | `/selectByEmpNo`         | `searchByEmpNo`               | `employee_detail`（該当あり）／`search_result`（該当なし・0件）／`search`（社員番号が未入力のとき） |
 | UC003        | 登録画面表示     | GET  | `/input`                 | `showInputPage`        | `input`                                |
 | UC003        | 登録画面へ戻る（修正） | POST | `/input`                 | `backToInputPage`      | `input`                                |
 | UC003        | 登録確認処理     | POST | `/inputConfirm`          | `confirmRegistration`  | `input_confirm` (エラー時は `input`)   |
@@ -1679,6 +1922,8 @@ classDiagram
 > **HTTP メソッドの使い分け**：画面の表示・検索は **GET**、登録・変更・削除の確認/確定、および確認画面からの「修正する」による入力画面への戻りは **POST** を用いる。特に `/input`・`/changeInput/{empNo}` は、**初回表示（GET）では DB の現在値（変更時）または空のフォームをセット**し、**確認画面からの「修正する」（POST）では利用者が入力した値を保持したまま再表示**する（DB の値で上書きしない）。GET と POST はそれぞれ別のコントローラーメソッド（例：`changeInput` と `backToChangeInput`）で受ける。
 
 各ユースケースの具体的なメソッド呼び出し、およびMVCモデル間（View, Controller, Service, Repository）のデータの流れを以下に定義する。
+
+<a id="section-10-2"></a>
 
 ### 10.2 UC001: 社員一覧を表示する
 
@@ -1726,109 +1971,116 @@ sequenceDiagram
     end
 ```
 
+<a id="section-10-3"></a>
+
 ### 10.3 UC002: 社員情報を検索する
 
-<div class="scaled-mermaid">
+初回の `GET /search` は `showSearch(Model)` が受ける。`DepartmentServiceImpl.findAll()` から `DepartmentRepository.findAll()` を呼び、取得した部署一覧をModelの `departments` に設定して `search` を返す。
+
+各検索URLは専用メソッドで受け、対応する条件だけを検証・検索する。以下の図中の `message`・`departments`・`employees`・`employee` は、`model.addAttribute(...)` で設定するModel属性である。入力エラー時の部署取得も、上記と同じService・Repositoryの経路を使う。メッセージ文言は12章を参照する。
+
+#### 社員番号検索：searchByEmpNo(Integer, Model)
 
 ```mermaid
-%%{init: {'theme': 'default', 'sequence': {'messageMarginBottom': 10, 'actorMargin': 20, 'boxMargin': 5}}}%%
 sequenceDiagram
-    actor Admin as 人事部管理者
-    participant View as Thymeleaf(画面)
+    participant View as 検索画面
     participant Ctrl as EmployeeController
     participant DSvc as DepartmentServiceImpl
-    participant DRep as DepartmentRepository
     participant Svc as EmployeeServiceImpl
     participant Rep as EmployeeRepository
-    participant Model as Model
 
-    Admin ->> View: トップページから「検索」を選択
-    View ->> Ctrl: GET /search
-    activate Ctrl
-    Ctrl ->> DSvc: findAll()
-    activate DSvc
-    DSvc ->> DRep: findAll()
-    activate DRep
-    DRep -->> DSvc: List~Department~
-    deactivate DRep
-    DSvc -->> Ctrl: List~Department~
-    deactivate DSvc
-    Ctrl ->> Model: addAttribute("departments", List)
-    Ctrl -->> View: return "search"
-    deactivate Ctrl
-    View -->> Admin: 検索条件入力画面を表示
-  
-    Admin ->> View: 検索条件を入力、検索を指示
-  
-    alt 氏名で検索した場合
-        View ->> Ctrl: GET /selectByEmpName (keyword)
-        activate Ctrl
-        Ctrl ->> Svc: findByEmpName(keyword)
-        activate Svc
-        Svc ->> Rep: findByLastNameContainingOrFirstNameContaining()
-        activate Rep
-        Rep -->> Svc: List~Employee~
-        deactivate Rep
-        Svc -->> Ctrl: List~Employee~
-        deactivate Svc
-        Ctrl ->> Model: addAttribute("employees", List)
-        Ctrl -->> View: return "search_result"
-        deactivate Ctrl
-        View -->> Admin: 検索結果一覧画面を表示
-      
-    else 部署で検索した場合
-        View ->> Ctrl: GET /selectByDeptNo (deptNo)
-        activate Ctrl
-        Ctrl ->> Svc: findByDeptNo(deptNo)
-        activate Svc
-        Svc ->> Rep: findByDeptNo()
-        activate Rep
-        Rep -->> Svc: List~Employee~
-        deactivate Rep
-        Svc -->> Ctrl: List~Employee~
-        deactivate Svc
-        Ctrl ->> Model: addAttribute("employees", List)
-        Ctrl -->> View: return "search_result"
-        deactivate Ctrl
-        View -->> Admin: 検索結果一覧画面を表示
-      
-    else 社員番号で検索した場合
-        View ->> Ctrl: GET /selectByEmpNo (empNo)
-        activate Ctrl
+    View ->> Ctrl: GET /selectByEmpNo (empNo)
+    alt empNoがnull
+        Ctrl ->> DSvc: findAll()
+        DSvc -->> Ctrl: 部署一覧
+        Ctrl ->> Ctrl: message = V013の文言<br/>departments = 部署一覧
+        Ctrl -->> View: return "search"
+        Note over View,Ctrl: V013を表示。社員の検索は行わない。
+    else empNoに値がある
         Ctrl ->> Svc: findById(empNo)
-        activate Svc
-        Svc ->> Rep: findById()
-        activate Rep
-        Rep -->> Svc: Employee
-        deactivate Rep
-        Svc -->> Ctrl: Employee
-        deactivate Svc
-        Ctrl ->> Model: addAttribute("employee", Employee)
-        Ctrl -->> View: return "employee_detail"
-        deactivate Ctrl
-        View -->> Admin: 社員詳細画面を表示
-    end
-  
-    opt 一覧画面から詳細画面の表示
-        Admin ->> View: 一覧から社員氏名を選択
-        View ->> Ctrl: GET /detail/{empNo}
-        activate Ctrl
-        Ctrl ->> Svc: findById(empNo)
-        activate Svc
         Svc ->> Rep: findById(empNo)
-        activate Rep
-        Rep -->> Svc: Employee
-        deactivate Rep
-        Svc -->> Ctrl: Employee
-        deactivate Svc
-        Ctrl ->> Model: addAttribute("employee", Employee)
-        Ctrl -->> View: return "employee_detail"
-        deactivate Ctrl
-        View -->> Admin: 社員詳細画面を表示
+        Rep -->> Svc: Optional~Employee~
+        Svc -->> Ctrl: Employeeまたはnull
+        alt 該当社員がいる
+            Ctrl ->> Ctrl: employee = 対象社員
+            Ctrl -->> View: return "employee_detail"
+        else 該当社員がいない
+            Ctrl ->> Ctrl: employees = 空のリスト
+            Ctrl -->> View: return "search_result"
+            Note over View: E001（検索結果0件）を表示
+        end
     end
 ```
 
-</div>
+#### 社員名検索：searchByEmpName(String, Model)
+
+未入力（`null`・空文字・空白のみ）を判定する。検索キーワードの文字数上限は設けず、前後空白も除去しない。
+
+```mermaid
+sequenceDiagram
+    participant View as 検索画面
+    participant Ctrl as EmployeeController
+    participant DSvc as DepartmentServiceImpl
+    participant Svc as EmployeeServiceImpl
+    participant Rep as EmployeeRepository
+
+    View ->> Ctrl: GET /selectByEmpName (keyword)
+    alt 未入力・空白のみ
+        Ctrl ->> DSvc: findAll()
+        DSvc -->> Ctrl: 部署一覧
+        Ctrl ->> Ctrl: message = V014の文言<br/>departments = 部署一覧
+        Ctrl -->> View: return "search"
+        Note over View,Ctrl: messageを表示。社員の検索は行わない。
+    else 入力チェック成功
+        Ctrl ->> Svc: findByEmpName(keyword)
+        Svc ->> Rep: findByLastNameContainingOr<br/>FirstNameContaining(keyword, keyword)
+        Rep -->> Svc: List~Employee~
+        Svc -->> Ctrl: List~Employee~
+        Ctrl ->> Ctrl: employees = 検索結果
+        Ctrl -->> View: return "search_result"
+        alt 検索結果が0件
+            Note over View: E001を表示
+        else 検索結果が1件以上
+            Note over View: 社員一覧を表示
+        end
+    end
+```
+
+#### 部署検索：searchByDeptNo(Integer, Model)
+
+```mermaid
+sequenceDiagram
+    participant View as 検索画面
+    participant Ctrl as EmployeeController
+    participant DSvc as DepartmentServiceImpl
+    participant Svc as EmployeeServiceImpl
+    participant Rep as EmployeeRepository
+
+    View ->> Ctrl: GET /selectByDeptNo (deptNo)
+    alt deptNoがnull
+        Ctrl ->> DSvc: findAll()
+        DSvc -->> Ctrl: 部署一覧
+        Ctrl ->> Ctrl: message = V015の文言<br/>departments = 部署一覧
+        Ctrl -->> View: return "search"
+        Note over View,Ctrl: V015を表示。社員の検索は行わない。
+    else deptNoに値がある
+        Ctrl ->> Svc: findByDeptNo(deptNo)
+        Svc ->> Rep: findByDeptNo(deptNo)
+        Rep -->> Svc: List~Employee~
+        Svc -->> Ctrl: List~Employee~
+        Ctrl ->> Ctrl: employees = 検索結果
+        Ctrl -->> View: return "search_result"
+        alt 検索結果が0件
+            Note over View: E001を表示
+        else 検索結果が1件以上
+            Note over View: 社員一覧を表示
+        end
+    end
+```
+
+検索結果一覧の氏名リンクから `GET /detail/{empNo}` を送ると、`showDetail` が `EmployeeServiceImpl.findById(empNo)` を呼ぶ。ServiceはRepositoryから対象社員を取得し、ControllerはModelの `employee` に設定して `employee_detail` を返す。
+
+<a id="section-10-4"></a>
 
 ### 10.4 UC003: 社員情報を登録する
 
@@ -1895,6 +2147,8 @@ sequenceDiagram
     deactivate Ctrl
     View -->> Admin: 登録完了画面を表示
 ```
+
+<a id="section-10-5"></a>
 
 ### 10.5 UC004: 社員情報を変更する
 
@@ -1967,6 +2221,8 @@ sequenceDiagram
     View -->> Admin: 変更完了画面を表示
 ```
 
+<a id="section-10-6"></a>
+
 ### 10.6 UC005: 社員情報を削除する
 
 ```mermaid
@@ -2013,6 +2269,8 @@ sequenceDiagram
 
 <div style="page-break-before: always;"></div>
 
+<a id="section-11"></a>
+
 ## 11. コンポーネントテスト仕様（任意）
 
 本章では、余裕がある場合に実装するコンポーネントテスト（JUnit）の参考ケースを定義する。単体テストは必須課題ではないため、基本機能の実装とシステムテストを優先し、時間に余裕がある場合に取り組むこと。
@@ -2030,6 +2288,8 @@ sequenceDiagram
 3. テストクラスに `@ActiveProfiles("test")` が付与されていること
 4. `spring.jpa.hibernate.ddl-auto=validate` の検証エラーが発生していないこと
 
+<a id="section-11-1"></a>
+
 ### 11.1 Repository テストケース（任意） (EmployeeRepository)
 
 
@@ -2038,6 +2298,8 @@ sequenceDiagram
 | CT-R-001 | findById                    | 存在する社員番号を指定して検索する。   | 指定した社員番号の社員情報が1件取得できること。            |
 | CT-R-002 | findByLastNameContaining... | 氏名の一部（漢字）を指定して検索する。 | 氏または名にキーワードを含むすべての社員が取得できること。 |
 | CT-R-003 | findByDeptNo                | 存在する部署番号を指定して検索する。   | その部署に所属するすべての社員が取得できること。           |
+
+<a id="section-11-2"></a>
 
 ### 11.2 Controller テストケース（任意） (EmployeeController)
 
@@ -2052,7 +2314,7 @@ sequenceDiagram
 | CT-C-005   | 番号検索 | GET /selectByEmpNo (正常系)        | 指定した社員の詳細情報が Model に設定され、employee_detail ビューが返されること。                        |
 | CT-C-005-2 | 詳細     | GET /detail/{id}                   | 指定した社員の詳細情報が Model に設定され、employee_detail ビューが返されること。                        |
 | CT-C-006   | 番号検索 | GET /selectByEmpNo (該当なし)      | search_result ビューが返され、画面に「検索条件に一致する社員は見つかりませんでした。」と表示されること。 |
-| CT-C-006-2 | 番号検索 | GET /selectByEmpNo (検索条件なし)  | 部署リストが Model に設定され、search ビューが返されること。                                             |
+| CT-C-006-2 | 番号検索 | GET /selectByEmpNo (未送信・空文字・空白のみ（半角・全角）) | 社員を検索せず、部署リストとV013がModelに設定され、searchに「社員番号を入力してください。」と表示されること。 |
 | CT-C-007   | 登録画面 | GET /input                         | 部署リストが Model に設定され、input ビューが返されること。                                              |
 | CT-C-008   | 登録確認 | POST /inputConfirm (正常)          | 入力内容が保持され、input_confirm ビューが返されること。                                                 |
 | CT-C-009   | 登録確認 | POST /inputConfirm (必須エラー)    | 必須項目未入力時に、input ビューに戻りエラーが表示されること。                                           |
@@ -2067,10 +2329,17 @@ sequenceDiagram
 | CT-C-016-2 | 変更確認 | POST /changeConfirm (サイズエラー) | 文字数制限違反時に、change ビューに戻りエラーが表示されること。                                          |
 | CT-C-017   | 変更実行 | POST /changeEmployee               | 社員情報が変更され、change_complete ビューが返されること。                                               |
 | CT-C-018   | 部署検索 | GET /selectByDeptNo (正常系)       | 指定した部署に所属する社員リストが取得され、search_result ビューが返されること。                         |
+| CT-C-019 | 氏名検索 | GET /selectByEmpName (未送信・空文字・空白のみ) | 社員を検索せず、部署リストとV014がModelに設定され、searchに「社員名を入力してください。」と表示されること。 |
+| CT-C-020 | 部署検索 | GET /selectByDeptNo (未送信・空文字・空白のみ) | 社員を検索せず、部署リストとV015がModelに設定され、searchに「部署を選択してください。」と表示されること。 |
+| CT-C-021 | 氏名検索 | GET /selectByEmpName (11文字・256文字) | 長いキーワードも拒否・切り詰めをせず、そのまま検索へ渡してsearch_resultを表示すること。該当社員がなければ0件を表示すること。 |
+| CT-C-022 | 検索分離 | 各検索URLへ他の検索条件も送信する | URLに対応する条件だけを使い、他の検索へ切り替わらないこと。対象項目が未入力なら対応するメッセージを表示すること。 |
+| CT-C-023 | 氏名検索 | 前後に空白を含む条件を送信する | 空白を除去せず、入力値をそのまま検索に渡すこと。 |
 
-> ※ 検索条件が未入力（条件なし）の場合、社員番号・氏名・部署のいずれも**同一の処理（検索画面に留まる）**となる。したがって条件なしの検証は **CT-C-006-2（社員番号 検索条件なし）で代表**し、氏名・部署検索の条件なしは個別のケースを設けない。
+> ※ 未入力の判定は3つの検索メソッドがそれぞれ行うため、社員番号のケースだけで代表せず、全検索のメッセージ表示と「社員の検索を呼ばないこと」を個別に確認する。コンポーネントテストの実装は任意だが、検索の入力チェック自体は標準・簡略実装とも必須である。
 
 <div style="page-break-before: always;"></div>
+
+<a id="section-12"></a>
 
 ## 12. 共通メッセージ一覧
 
@@ -2102,14 +2371,21 @@ sequenceDiagram
 | **V010**     | パスワードは4文字以上16文字以内で入力してください                    | パスワードの文字数不足・超過   |
 | **V011**     | 性別は必須項目です                                                   | 性別の未選択                   |
 | **V012**     | 部署は必須項目です                                                   | 部署の未選択                   |
+| **V013**     | 社員番号を入力してください。                                         | 社員番号検索の未入力           |
+| **V014**     | 社員名を入力してください。                                           | 社員名検索の未入力             |
+| **V015**     | 部署を選択してください。                                             | 部署検索の未選択               |
 
 <div style="page-break-before: always;"></div>
 
 ---
 
+<a id="section-13"></a>
+
 ## 13. 発展課題（任意）
 
 本章の課題は必須ではない。基本機能（登録・変更・削除・検索）の実装とシステムテストを優先し、**時間に余裕がある場合**に取り組むこと。
+
+<a id="section-13-1"></a>
 
 ### 13.1 二重ポスト（ダブルサブミット）対策
 
@@ -2129,6 +2405,8 @@ sequenceDiagram
 **なぜ二重ポストを防げるのか**：リダイレクトを行うと、ブラウザに表示される URL が「完了画面を表示する GET の URL」に変わる。そのため、利用者が更新ボタンを押しても **再実行されるのは GET（完了画面の再表示）だけ** となり、登録・変更・削除を行う POST は再送されない。
 
 <div style="page-break-before: always;"></div>
+
+<a id="section-13-2"></a>
 
 ### 13.2 社員一覧の並び替え（ソート）
 

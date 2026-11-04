@@ -1,0 +1,31 @@
+EIMS 追加機能 解答例（配布用）
+============================================================
+
+追加機能（発展課題：①ログイン ②デザイン改良 ③退職者管理
+④権限による画面制御 ⑤詳細画面及び画面遷移改善）の解答例プロジェクトです。
+
+■ 対象環境
+    OS            : Windows
+    IDE           : Eclipse（Maven プロジェクトとしてインポート）
+    フレームワーク: Spring Boot 4.0.2 / Java 17
+    ビルドツール  : Maven
+    データベース  : MySQL 8（データベース名 eimsdb）
+
+■ Eclipse への取り込み
+    [ファイル]→[インポート]→[Maven]→[既存 Maven プロジェクト] で、
+    このフォルダ（EIMS_SpringBoot_Additional）を選択してください。
+
+■ データベース接続
+    src/main/resources/application.properties に設定済みです
+    （localhost / eimsdb、ユーザー eimsuser、パスワード Pa$$w0rd）。
+    データベースはスターターキットの DBSET で構築してください。
+
+■ 起動
+    EimsSpringBootApplication を実行し、
+    ブラウザで http://localhost:8080 を開きます。
+
+■ 備考
+    ・本配布物にはソースのみを収録しています。
+      ビルド成果物（target/）、Git 情報、IDE 固有の設定ファイルは
+      含めていません。
+    ・文字コードは UTF-8 です。

@@ -1,0 +1,30 @@
+EIMS 配布ファイル案内（2026年11月4日更新）
+
+【受講者に配布するもの】
+EIMS_受講者配布資料/EIMS_受講者配布資料.zip
+・アプリ総合演習ガイド(共通機能).pdf
+・アプリ総合演習ガイド(追加機能設計書).pdf
+・EIMS_StarterKits（DBSETはEIMS_SpringBoot内）
+・テスト関連のテンプレート
+・予実管理表.xlsx
+
+【講師用の解答】
+EIMS_SpringBoot_Basic(解答).zip：共通機能の解答ソースとテスト
+EIMS_SpringBoot_Additional(追加機能解答).zip：追加機能を含む解答ソースとテスト
+EIMS_TestCode(解答).zip：必要に応じて配布するテストコードとテスト用Entity
+テストケース仕様書兼結果報告書(EIMS)_解答例/：テストケースの解答Excel
+
+【編集する原本】
+共通仕様：EIMS_Comprehensive_Exercise_Guide.md
+追加仕様：追加機能の設計書/追加機能設計書.md
+共通解答：EIMS_SpringBoot_Basic/
+追加解答：EIMS_SpringBoot_Additional/
+
+【現行のPDF】
+EIMS_Comprehensive_Exercise_Guide.pdf
+EIMS_追加機能設計書.pdf
+受講者一式のPDFは、上記と同一内容に同期しています。
+追加機能の設計書/EIMS_追加機能設計書_260722.pdf と親フォルダーの基本解答ZIPは旧版です。
+
+詳しい用途分類、修正結果、再生成手順はREADME.mdを参照してください。
+配布物のファイル件数・ハッシュはdocs/配布物照合結果.jsonにあります。

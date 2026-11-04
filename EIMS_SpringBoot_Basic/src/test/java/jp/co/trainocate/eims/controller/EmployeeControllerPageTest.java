@@ -50,7 +50,8 @@ class EmployeeControllerPageTest {
 				.andExpect(status().isOk())
 				.andExpect(view().name("search"))
 				.andExpect(model().attributeExists("departments"))
-				.andExpect(model().attribute("departments", hasSize(3)));
+				.andExpect(model().attribute("departments", hasSize(3)))
+				.andExpect(content().string(not(containsString(" required"))));
 	}
 
 	@Test

@@ -1,0 +1,28 @@
+@page { size: A4; margin: 15mm 14mm 17mm; }
+html { font-family: "Yu Gothic", "Meiryo", sans-serif; font-size: 10pt; color: #253247; }
+body { max-width: none; padding: 0; margin: 0; line-height: 1.65; overflow-wrap: anywhere; }
+h1,h2,h3,h4,h5 { color: #1a365d; line-height: 1.4; break-after: avoid; }
+h1 { font-size: 23pt; } h2 { font-size: 18pt; } h3 { font-size: 14pt; } h4 { font-size: 11pt; }
+p { margin: 2mm 0 3mm; } ul,ol { padding-left: 6mm; margin: 2mm 0 4mm; }
+a { color: #1452a0; text-decoration: none; }
+table { border-collapse: collapse; width: 100%; font-size: 8.5pt; margin: 4mm 0; }
+th,td { border: 1px solid #c7d2df; padding: 1.5mm 2mm; vertical-align: top; }
+th { background: #eaf1f8; font-weight: bold; }
+thead { display: table-header-group; } tr { break-inside: avoid; }
+blockquote { background: #f3f6fa; border-left: 3px solid #527fa9; padding: 2mm 4mm; margin: 4mm 0; }
+pre { white-space: pre-wrap; font-size: 8.5pt; padding: 3mm; background: #f3f6fa; }
+code { font-family: Consolas,"Yu Gothic",monospace; overflow-wrap: anywhere; }
+img { max-width: 100%; max-height: 185mm; object-fit: contain; break-inside: avoid; }
+p:has(>img) { break-inside: avoid; text-align: center; }
+.mermaid { break-inside: avoid; margin: 4mm 0; text-align: center; }
+.mermaid svg { max-width: 100%; max-height: 215mm; height: auto; }
+hr { border: 0; border-top: 1px solid #d7dfe8; }
+@media print { body { print-color-adjust: exact; -webkit-print-color-adjust: exact; } }
+
+@page wideDiagram { size: A3 landscape; margin: 14mm; }
+.wide-diagram { page: wideDiagram; break-before: page; margin: 0; }
+.wide-diagram svg { width: 100%; max-height: 225mm; }
+.mermaid > h3,.mermaid > h4,.mermaid > p { text-align: left; }
+
+figure { margin: 4mm 0; break-inside: avoid; text-align: center; }
+figcaption { margin: 1mm 0 2mm; font-size: 8pt; color: #617084; }

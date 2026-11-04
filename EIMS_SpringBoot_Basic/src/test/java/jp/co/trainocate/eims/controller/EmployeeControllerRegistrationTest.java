@@ -43,7 +43,9 @@ class EmployeeControllerRegistrationTest {
 				.andExpect(status().isOk())
 				.andExpect(view().name("input"))
 				.andExpect(model().attributeExists("departments"))
-				.andExpect(model().attribute("departments", hasSize(3)));
+				.andExpect(model().attribute("departments", hasSize(3)))
+				.andExpect(content().string(not(containsString(" required"))))
+				.andExpect(content().string(containsString("value=\"\"")));
 	}
 
 	@Test
@@ -108,6 +110,26 @@ class EmployeeControllerRegistrationTest {
 				.andExpect(content().string(containsString("氏は10文字以内で入力してください")))
 				.andExpect(content().string(containsString("名は10文字以内で入力してください")))
 				.andExpect(content().string(containsString("パスワードは4文字以上16文字以内で入力してください")));
+	}
+
+	@Test
+	@DisplayName("確認画面から「修正する」で登録画面へ戻る（入力値を保持）")
+	void testBackToInputPage() throws Exception {
+		when(departmentService.findAll()).thenReturn(departments());
+
+		mockMvc.perform(post("/input")
+				.param("lastName", "Yamada")
+				.param("firstName", "Taro")
+				.param("lastKana", "Yamada")
+				.param("firstKana", "Taro")
+				.param("password", "password")
+				.param("gender", "1")
+				.param("deptNo", "100"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("input"))
+				.andExpect(model().attributeExists("departments"))
+				.andExpect(model().attribute("employeeForm", hasProperty("lastName", is("Yamada"))))
+				.andExpect(model().attribute("employeeForm", hasProperty("deptNo", is(100))));
 	}
 
 	@Test

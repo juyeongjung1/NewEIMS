@@ -28,7 +28,7 @@
                         <tr th:each="emp : ${retirees}" th:if="${emp.deleteFlg == 1}">
                             <td th:text="${emp.empNo}">10001</td>
                             <td>
-                                <span th:text="${emp.lastName + ' ' + emp.firstName}" class="fw-bold">氏名</span>
+                                <a th:href="@{'/detail/' + ${emp.empNo}}" th:text="${emp.lastName + ' ' + emp.firstName}" class="fw-bold">氏名</a>
                                 <br>
                                 <small class="text-secondary" th:text="${emp.lastKana + ' ' + emp.firstKana}">シメイ</small>
                             </td>

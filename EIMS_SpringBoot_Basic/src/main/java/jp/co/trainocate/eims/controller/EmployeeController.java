@@ -44,35 +44,52 @@ public class EmployeeController {
         return "search";
     }
 
-    /** 社員番号・氏名・部署番号で検索 */
-    @GetMapping({"/selectByEmpNo", "/selectByEmpName", "/selectByDeptNo"})
-    public String search(Integer empNo, String keyword, Integer deptNo, Model model) {
-        if (empNo != null) {
-            Employee employee = employeeService.findById(empNo);
-            if (employee != null) {
-                // ヒットした場合は詳細画面を直接表示
-                model.addAttribute("employee", employee);
-                return "employee_detail";
-            }
-            // ヒットしない場合は結果画面へ（0件表示用）
-            model.addAttribute("employees", new ArrayList<Employee>());
-            return "search_result";
+    /** 社員番号で検索 */
+    @GetMapping("/selectByEmpNo")
+    public String searchByEmpNo(Integer empNo, Model model) {
+        if (empNo == null) {
+            model.addAttribute("message", "社員番号を入力してください。");
+            model.addAttribute("departments", departmentService.findAll());
+            return "search";
         }
 
-        if (keyword != null && !keyword.isBlank()) {
-            List<Employee> employees = employeeService.findByEmpName(keyword);
-            model.addAttribute("employees", employees);
-            return "search_result";
+        Employee employee = employeeService.findById(empNo);
+        if (employee != null) {
+            // ヒットした場合は詳細画面を直接表示
+            model.addAttribute("employee", employee);
+            return "employee_detail";
+        }
+        // ヒットしない場合は結果画面へ（0件表示用）
+        model.addAttribute("employees", new ArrayList<Employee>());
+        return "search_result";
+    }
+
+    /** 氏名で検索 */
+    @GetMapping("/selectByEmpName")
+    public String searchByEmpName(String keyword, Model model) {
+        if (keyword == null || keyword.isBlank()) {
+            model.addAttribute("message", "社員名を入力してください。");
+            model.addAttribute("departments", departmentService.findAll());
+            return "search";
         }
 
-        if (deptNo != null) {
-            List<Employee> employees = employeeService.findByDeptNo(deptNo);
-            model.addAttribute("employees", employees);
-            return "search_result";
+        List<Employee> employees = employeeService.findByEmpName(keyword);
+        model.addAttribute("employees", employees);
+        return "search_result";
+    }
+
+    /** 部署番号で検索 */
+    @GetMapping("/selectByDeptNo")
+    public String searchByDeptNo(Integer deptNo, Model model) {
+        if (deptNo == null) {
+            model.addAttribute("message", "部署を選択してください。");
+            model.addAttribute("departments", departmentService.findAll());
+            return "search";
         }
 
-        model.addAttribute("departments", departmentService.findAll());
-        return "search";
+        List<Employee> employees = employeeService.findByDeptNo(deptNo);
+        model.addAttribute("employees", employees);
+        return "search_result";
     }
 
     /** 社員詳細を表示する */

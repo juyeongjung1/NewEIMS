@@ -1,0 +1,6 @@
+{
+  "name": "eims-distribution-tools",
+  "private": true,
+  "scripts": {"pdf:common": "node build-common-pdf.mjs"},
+  "dependencies": {"mermaid": "11.4.1", "playwright": "1.62.1"}
+}

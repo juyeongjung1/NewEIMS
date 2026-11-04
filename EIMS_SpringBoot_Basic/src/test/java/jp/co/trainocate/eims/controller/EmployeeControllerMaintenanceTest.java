@@ -82,7 +82,9 @@ class EmployeeControllerMaintenanceTest {
 				.andExpect(view().name("change"))
 				.andExpect(model().attributeExists("employeeForm", "departments"))
 				.andExpect(model().attribute("employeeForm", hasProperty("empNo", is(10001))))
-				.andExpect(model().attribute("departments", hasSize(3)));
+				.andExpect(model().attribute("departments", hasSize(3)))
+				.andExpect(content().string(not(containsString(" required"))))
+				.andExpect(content().string(containsString("value=\"\"")));
 	}
 
 	@Test
@@ -127,6 +129,52 @@ class EmployeeControllerMaintenanceTest {
 				.andExpect(content().string(containsString("名は必須項目です")))
 				.andExpect(content().string(containsString("性別は必須項目です")))
 				.andExpect(content().string(containsString("部署は必須項目です")));
+	}
+
+	@Test
+	@DisplayName("変更確認で文字数エラーの場合は変更画面に戻る")
+	void testChangeConfirmSizeError() throws Exception {
+		when(departmentService.findAll()).thenReturn(departments());
+
+		mockMvc.perform(post("/changeConfirm")
+				.param("empNo", "10001")
+				.param("lastName", "abcdefghijk")
+				.param("firstName", "abcdefghijk")
+				.param("lastKana", "abcdefghijklmnopqrstu")
+				.param("firstKana", "abcdefghijklmnopqrstu")
+				.param("password", "abc")
+				.param("gender", "1")
+				.param("deptNo", "100"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("change"))
+				.andExpect(model().attributeHasFieldErrors(
+						"employeeForm", "lastName", "firstName", "lastKana", "firstKana", "password"))
+				.andExpect(content().string(containsString("氏は10文字以内で入力してください")))
+				.andExpect(content().string(containsString("名は10文字以内で入力してください")))
+				.andExpect(content().string(containsString("パスワードは4文字以上16文字以内で入力してください")));
+	}
+
+	@Test
+	@DisplayName("確認画面から「修正する」で変更画面へ戻る（DBから取り直さず入力値を保持）")
+	void testBackToChangeInput() throws Exception {
+		when(departmentService.findAll()).thenReturn(departments());
+
+		mockMvc.perform(post("/changeInput/10001")
+				.param("empNo", "10001")
+				.param("lastName", "Suzuki")
+				.param("firstName", "Jiro")
+				.param("lastKana", "Suzuki")
+				.param("firstKana", "Jiro")
+				.param("password", "password")
+				.param("gender", "1")
+				.param("deptNo", "200"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("change"))
+				.andExpect(model().attributeExists("departments"))
+				.andExpect(model().attribute("employeeForm", hasProperty("lastName", is("Suzuki"))))
+				.andExpect(model().attribute("employeeForm", hasProperty("deptNo", is(200))));
+		// POST 側は DB を参照しない（findById は呼ばれない）
+		verify(employeeService, never()).findById(anyInt());
 	}
 
 	@Test
