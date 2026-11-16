@@ -2,7 +2,7 @@
   "pdfs": [
     {
       "path": "EIMS_Comprehensive_Exercise_Guide.pdf",
-      "sha256": "af53c9e11edc2c604026e4822a4a05bfa6dee31c7100c71857e709165df10a8c"
+      "sha256": "e1345277bc7549c5966af6c2a8319610dde982466e643afe17a385b59338cabe"
     },
     {
       "path": "EIMS_追加機能設計書.pdf",
@@ -43,7 +43,7 @@
     {
       "path": "EIMS_受講者配布資料/EIMS_受講者配布資料.zip",
       "files": 90,
-      "sha256": "ffc171928b45a3ee5377e9324e7a9f14a8b4ffd388e1fb6951810645e7bf641b"
+      "sha256": "55501fc7c7d6702277cd153aa90894feedfe995162c91d527871920744bb8f7a"
     }
   ]
 }

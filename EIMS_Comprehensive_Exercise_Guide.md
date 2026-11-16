@@ -155,12 +155,12 @@ EIMSデータベースに登録されているすべての社員を一覧で表�
 
 チームの進捗状況に合わせ、以下のいずれかの方針を選択すること。
 
-標準実装と講師用解答では、1.1.2節・5.5.1節の入力チェックとメッセージ表示を必須とする。簡略版でも、検索の未入力チェックとメッセージ表示は省略しない。
+標準実装と講師用解答では、1.1.2節・5.5.1節の入力チェックとメッセージ表示を必須とする。
 
 
 | 項目               | 標準的な実装（推奨）                   | 簡略化された実装                     |
 | ------------------ | -------------------------------------- | ------------------------------------ |
-| **バリデーション** | 未入力チェックとメッセージ表示を実装 | 標準実装と同じ（省略しない） |
+| **バリデーション** | 未入力チェックとメッセージ表示を実装 | 特になし（エラーを回避できれば可） |
 | **0件時の制御**    | メッセージ表示による分岐処理を実装     | 特になし（空の表を表示）             |
 | **氏名検索範囲**   | **氏** または **名** の 2 項目 OR 検索 | **氏（漢字）** のみの単一項目検索    |
 | **部署検索方式**   | **部署名** をプルダウンで選択          | **部署コード** をテキストで入力      |
@@ -997,7 +997,6 @@ flowchart TD
 
 - 社員名は未入力のみを判定し、有効なキーワードは長さにかかわらずそのまま検索へ渡す。前後空白は除去せず、検索条件に含める。
 - 社員名入力欄には `maxlength` を設定せず、サーバー側でもキーワードの長さを理由に検索を拒否しない。検索キーワードはDBに保存しないため、登録・変更時の氏・名の10文字制限およびDB列の `VARCHAR(10)` とは区別する。10文字を超える入力も通常どおり検索し、該当社員がいなければ0件を表示する。
-- 社員番号は5桁固定ではない。`Integer` の範囲（-2147483648～2147483647）で受け取り、0・負数も通常検索と同じく該当社員がなければ0件として扱う。整数に変換できない文字列や範囲外の値は従来どおりHTTP 400となり、独自エラー画面は追加しない。
 - プルダウン値の改ざんなど、2.1節でテスト対象外とした操作の扱いは変更しない。
 - **未入力と検索結果0件は区別する。** 有効な条件で検索を実行し、該当社員がない場合は `search_result` にE001を表示する。
 
@@ -1964,7 +1963,7 @@ sequenceDiagram
         activate Svc
         Svc ->> Rep: findById(empNo)
         activate Rep
-        Rep -->> Svc: Optional<Employee>
+        Rep -->> Svc: Employee
         deactivate Rep
         Svc -->> Ctrl: Employee
         deactivate Svc
@@ -2003,7 +2002,7 @@ sequenceDiagram
     else empNoに値がある
         Ctrl ->> Svc: findById(empNo)
         Svc ->> Rep: findById(empNo)
-        Rep -->> Svc: Optional<Employee>
+        Rep -->> Svc: Employee
         Svc -->> Ctrl: Employeeまたはnull
         alt 該当社員がいる
             Ctrl ->> Ctrl: employee = 対象社員
@@ -2123,7 +2122,7 @@ sequenceDiagram
     activate DSvc
     DSvc ->> DRep: findById(deptNo)
     activate DRep
-    DRep -->> DSvc: Optional<Department>
+    DRep -->> DSvc: Department
     deactivate DRep
     DSvc -->> Ctrl: Department
     deactivate DSvc
@@ -2175,7 +2174,7 @@ sequenceDiagram
     activate Svc
     Svc ->> Rep: findById(empNo)
     activate Rep
-    Rep -->> Svc: Optional<Employee>
+    Rep -->> Svc: Employee
     deactivate Rep
     Svc -->> Ctrl: Employee
     deactivate Svc
@@ -2199,7 +2198,7 @@ sequenceDiagram
     activate DSvc
     DSvc ->> DRep: findById(deptNo)
     activate DRep
-    DRep -->> DSvc: Optional<Department>
+    DRep -->> DSvc: Department
     deactivate DRep
     DSvc -->> Ctrl: Department
     deactivate DSvc
@@ -2246,7 +2245,7 @@ sequenceDiagram
     activate Svc
     Svc ->> Rep: findById(empNo)
     activate Rep
-    Rep -->> Svc: Optional<Employee>
+    Rep -->> Svc: Employee
     deactivate Rep
     Svc -->> Ctrl: Employee
     deactivate Svc
@@ -2339,7 +2338,7 @@ sequenceDiagram
 | CT-C-022 | 検索分離 | 各検索URLへ他の検索条件も送信する | URLに対応する条件だけを使い、他の検索へ切り替わらないこと。対象項目が未入力なら対応するメッセージを表示すること。 |
 | CT-C-023 | 氏名検索 | 前後に空白を含む条件を送信する | 空白を除去せず、入力値をそのまま検索に渡すこと。 |
 
-> ※ 未入力の判定は3つの検索メソッドがそれぞれ行うため、社員番号のケースだけで代表せず、全検索のメッセージ表示と「社員の検索を呼ばないこと」を個別に確認する。コンポーネントテストの実装は任意だが、検索の入力チェック自体は標準・簡略実装とも必須である。
+> ※ 未入力の判定は3つの検索メソッドがそれぞれ行うため、社員番号のケースだけで代表せず、全検索のメッセージ表示と「社員の検索を呼ばないこと」を個別に確認する。コンポーネントテストの実装は任意である。簡略実装の入力チェックは1.1.4節に従う。
 
 <div style="page-break-before: always;"></div>
 
